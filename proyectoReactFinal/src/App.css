@@ -217,3 +217,57 @@
     z-index: 1;
   }
 }
+
+/*LOGGIN WACHOOO*/
+.login {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--variableUno);
+}
+.login form {
+  background-color: var(--variableDos);
+  padding: 40px;
+  border-radius: 12px;
+  width: 350px;
+}
+.login h1 {
+  font-size: 20px;
+  color: var(--variableCuatro);
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  justify-content: center;
+  left: 40px;
+}
+.login h2 {
+  font-size: 15px;
+  color: var(--variableCuatro);
+  font-family: Arial, Helvetica, sans-serif;
+  left: 40px;
+}
+.login input {
+  background-color: var(--variableTres);
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+.login input::placeholder {
+  color: var(--variableUno);
+}
+.login button {
+    font-size: 15px;
+    color: var(--variableUno);
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: var(--variableCuatro);
+    width: 100%;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+.login button:hover {
+  background-color: var(--variableTres);
+}
