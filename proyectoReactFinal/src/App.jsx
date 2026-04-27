@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { NavLink } from "react-router-dom";
 import { HashRouter } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import Servicios from "./components/services/Services";
 import './App.css';
 
 
@@ -53,6 +55,9 @@ function App() {
           </NavLink>
         </div>
       )}
+      <Routes>
+        <Route path="/servicios" element={<Servicios />} />
+      </Routes>
     </HashRouter>
   </>);
 }
