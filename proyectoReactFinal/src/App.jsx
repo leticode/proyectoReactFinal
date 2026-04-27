@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { NavLink } from "react-router-dom";
 import { HashRouter } from "react-router-dom";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Services from "./components/services/Services";
+import Login from "./components/login/Login";
 import './App.css';
 
 
@@ -10,6 +11,12 @@ function App() {
   // NAV LOGICA
   const [menuOpen, setMenuOpen] = useState(false); //Inicializo el menu en falso primero (por default cerrado)
   const linkClass = ({ isActive }) => isActive ? "link active" : "link"; //OPERADOR TERNARIO(? SIMBOLIZA TRUE Y : SIMBOLIZA FALSE ASI FUNCIONA EN REACT) si se cumple pone esta clase si no se cumple la otra
+  const [LoggedIn, setLoggedIn] = useState(false); //inicializamos el login en falso
+
+  //cambiamos el estado a verdadero para indicar que el usuario esta loggeado
+  const handleLoggedIn = () => {
+    setLoggedIn(true);
+  }
 
   //en realidad deberiamos usar BrowserRouter pero x el momento lo dejamos asi(HashRouter) pq no tiene complejidad el proyecto (sirve para poder navegar entre paginas sin recargar)
   return (<>
@@ -57,6 +64,8 @@ function App() {
       )}
       <Routes>
         <Route path="/servicios" element={<Services />} />
+        <Route path='/' element={<Navigate to='login' />} /> {/*redirige*/}
+        <Route path="/login" element={<Login onLogin={handleLoggedIn}/>}/>
       </Routes>
     </HashRouter>
   </>);
