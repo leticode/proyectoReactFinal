@@ -182,7 +182,7 @@ export default function Services() {
       <h2>{filtro === "Todos" ? "Servicios" : filtro}</h2>
 
       <div className="contenedor-servicios">
-
+      {/* CARDS (LO QUE SE VE)*/}
         <div className="filter">
           <button onClick={() => setFiltro("Todos")}>Todos</button>
           <button onClick={() => setFiltro("Cuidados faciales")}>Cuidados faciales</button>
@@ -192,7 +192,7 @@ export default function Services() {
           <button onClick={() => setFiltro("Depilación definitiva")}>Depilación definitiva</button>
           <button onClick={() => setFiltro("Combos")}>Combos</button>
         </div>
-
+        {/* Cards (MAPEO DE LAS CARDS PARA ACORTAR CODIGO Y NO HACER UNA X UNA ESTO) */}
         <div className="grid-servicios">
           {services
             .filter(service =>

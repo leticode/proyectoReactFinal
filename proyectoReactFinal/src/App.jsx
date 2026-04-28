@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { NavLink } from "react-router-dom";
 import { HashRouter } from "react-router-dom";
 import { Routes, Route, Navigate } from "react-router-dom";
+import Home from "./components/home/Home";
 import Services from "./components/services/Services";
 import Login from "./components/login/Login";
 import './App.css';
@@ -64,7 +65,8 @@ function App() {
       )}
       <Routes>
         <Route path='/' element={<Navigate to='home' />} /> {/*redirige*/}
-        <Route path="/servicios" element={<Services/>} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/servicios" element={<Services />} />
         <Route path="/login" element={<Login onLogin={handleLoggedIn}/>}/>
       </Routes>
     </HashRouter>
