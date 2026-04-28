@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&family=Charmonman:wght@700&display=swap');
 /* LO QUE AFECTA A TODO EL CODIGO (*, BODY, VARIABLES, LINKS, ETIQUETAS, ESPECIFICAS)*/
 
 /* VARIABLES */
@@ -7,4 +8,20 @@
   --variableTres: #BF8B78;
   --variableCuatro: #8C4830;
   --variableCinco: #591914;
+
+  --brandFont: "Charmonman", cursive;
+  --textFont: "Afacad", sans-serif;
+}
+
+.brandFont {
+    font-family: var(--brandFont);
+    font-weight: 700;
+    font-style: normal;
+  }
+  
+.textFont {
+  font-family: var(--textFont);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
