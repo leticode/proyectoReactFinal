@@ -63,8 +63,8 @@ function App() {
         </div>
       )}
       <Routes>
-        <Route path="/servicios" element={<Services />} />
-        <Route path='/' element={<Navigate to='login' />} /> {/*redirige*/}
+        <Route path='/' element={<Navigate to='home' />} /> {/*redirige*/}
+        <Route path="/servicios" element={<Services/>} />
         <Route path="/login" element={<Login onLogin={handleLoggedIn}/>}/>
       </Routes>
     </HashRouter>
