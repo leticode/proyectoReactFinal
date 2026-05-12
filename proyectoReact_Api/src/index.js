@@ -5,6 +5,15 @@ import { PORT } from "./config.js";
 
 //creamos la aplicacion express donde app es nuestro servidor backend
 const app = express();
+// ENDPOINTS ---------------
+
+// ruta root (entras a la url sin nada mas, es la ruta raiz)
+app.get("/", (req, res) => {
+  res.send("Servidor funcionando");
+});
+
+
+// FIN ENDPOINTS ---------------
 
 //el servidor empieza a escuchar en ese puerto 
 app.listen(PORT);
