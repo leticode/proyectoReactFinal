@@ -2,16 +2,17 @@ import { useState, useRef } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({onLogin})=>{
+const Register = ()=>{
     const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState({email: false, password: false});
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [error, setError] = useState({email: false, password: false, confirmPassword: false});
 
-    //el useRef sirve para obtener referencia directa a un elemento HTML real
-    const emailRef = useRef(null);
-    const passwordRef = useRef(null);
+    const emailRef = useRef(null)
+    const passwordRef = useRef(null)
+    const confirmPasswordRef = useRef(null)
 
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
@@ -25,29 +26,43 @@ const Login = ({onLogin})=>{
 	
     }
 
+    const handleConfirmPasswordChange = (event) =>{
+        setConfirmPassword(event.target.value);
+        setError({...error, confirmPassword: false});
+    }
     const handleSubmit = async (event) => {
 		event.preventDefault();
 
 		if (!email.length) {
-			setError({ email: true, password: false });
-            //focus() mueve automáticamente el cursor al input
-            //si el usuario no puso el email por ej
+			setError({email: true, password: false, confirmPassword: false});
 			emailRef.current.focus();
 			return;
 		}
 
 		if (!password.length || password.length < 7) {
-			setError({ email: false, password: true });
+			setError({email: false, password: true, confirmPassword: false});
 			passwordRef.current.focus();
 			return;
 		}
 
+        if (password !== confirmPassword) {
+
+            setError({email: false, password: false, confirmPassword: true});
+            confirmPasswordRef.current.focus();
+            return;
+        }
+
+        //cree objeto para ver si se registraba bien
+        const usuario = {email, password};
+
+        console.log("Usuario registrado:", usuario);
+        navigate("/login");
     }
 
     return(
         <section className="login">
             <form onSubmit = {handleSubmit}>
-                <h1>Inicia Sesión</h1>
+                <h1>Registrate</h1>
 
                 <h2>Email Address</h2>
 
@@ -66,19 +81,29 @@ const Login = ({onLogin})=>{
                     type="password"
                     placeholder="Ingresar Contraseña"
                     value={password}
-                    //onchange se ejecuta cada vez que el usuario cambiar el input 
                     onChange={handlePasswordChange}
                 />
                 {error.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres.</p>}
-                <button type="submit">Iniciar</button>
+                
+                <h2>Confirm Password</h2>
+                <input
+                    ref={confirmPasswordRef}
+                    type="password"
+                    placeholder="Ingresar Contraseña"
+                    value={confirmPassword}
+                    onChange={handleConfirmPasswordChange}
+                />
+                {error.confirmPassword && <p className="errors" >La contraseña debe ser igual</p>}
 
-                {/*si no tenes cuenta te redirige a la pagina del register*/}
-                <p className="register-text" onClick={() => navigate("/register")}>
-                    ¿No tenes cuenta? Registrate
+                <button type="submit">Registrase</button>
+
+                <p className="register-text" onClick={() => navigate("/login")}>
+                    ¿Ya tenes cuenta? Inicia sesion
                 </p>
+
             </form>
         </section>
     )
 }
 
-export default Login;
+export default Register;
