@@ -3,8 +3,14 @@ import express from "express";
 //y porq lo dice el pdf
 import { PORT } from "./config.js";
 
+// libreria cors para poder llamar a la api desde un origen distinto (localhost:5173 que es donde esta vite, vs. localhost:3000 que es donde corre este server)
+import cors from "cors";
+
 //creamos la aplicacion express donde app es nuestro servidor backend
 const app = express();
+
+// habilitar CORS
+app.use(cors());
 // ENDPOINTS ---------------
 
 // ruta root (entras a la url sin nada mas, es la ruta raiz)
