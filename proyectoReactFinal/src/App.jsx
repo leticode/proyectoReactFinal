@@ -7,6 +7,7 @@ import Services from "./components/services/Services";
 import Login from "./components/login/Login";
 import AboutUs from "./components/aboutUs/AboutUs";
 import Contacr from "./components/contact/Contact";
+import Register from "./components/Register/Register"; 
 import './App.css';
 import './index.css';
 
@@ -71,6 +72,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/servicios" element={<Services />} />
         <Route path="/login" element={<Login onLogin={handleLoggedIn}/>}/>
+        <Route path="/register" element={<Register/>}/>
       </Routes>
       
       <footer className="footer">
