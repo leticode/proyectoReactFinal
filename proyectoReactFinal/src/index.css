@@ -33,7 +33,7 @@
 }
 
 .footer{
-  width: 1920px;
+  width: auto;
   padding:50px 70px 30px;
   background-color: var(--variableCinco);
 }

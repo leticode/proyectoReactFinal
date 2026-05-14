@@ -296,3 +296,9 @@ input:focus{
   color: var(--variableCinco);
   cursor: pointer;
 }
+
+/*home styles*/
+.home-body{
+  background-color: var(--variableCuatro);
+  background-image: "/public/img/homeImg/woman-home.webp";
+}

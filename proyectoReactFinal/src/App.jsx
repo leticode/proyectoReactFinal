@@ -5,8 +5,6 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./components/home/Home";
 import Services from "./components/services/Services";
 import Login from "./components/login/Login";
-import AboutUs from "./components/aboutUs/AboutUs";
-import Contacr from "./components/contact/Contact";
 import Register from "./components/Register/Register"; 
 import './App.css';
 import './index.css';
@@ -87,8 +85,6 @@ function App() {
             <h3 className="title-footer">EXPLORAR</h3>
             <NavLink to="/Home">Inicio</NavLink>
             <NavLink to="/Servicios">Servicios</NavLink>
-            <NavLink to="/aboutUs">Nosotros</NavLink>
-            <NavLink to="/contact">Contacto</NavLink>
           </div>
 
             <div className="column-footer">
