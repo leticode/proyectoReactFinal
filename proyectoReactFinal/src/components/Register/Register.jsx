@@ -69,7 +69,7 @@ const Register = ()=>{
                 <input
                     ref={emailRef}
                     type="email"
-                    placeholder="Ingresar email"
+                    placeholder="Ingresar Email"
                     value={email}
                     onChange={handleEmailChange}
                 />
@@ -95,7 +95,7 @@ const Register = ()=>{
                 />
                 {error.confirmPassword && <p className="errors" >La contraseña debe ser igual</p>}
 
-                <button type="submit">Registrase</button>
+                <button type="submit">Registrarse</button>
 
                 <p className="register-text" onClick={() => navigate("/login")}>
                     ¿Ya tenes cuenta? Inicia sesion

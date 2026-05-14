@@ -41,7 +41,7 @@ const Login = ({onLogin})=>{
 			passwordRef.current.focus();
 			return;
 		}
-
+        navigate("/home");
     }
 
     return(
@@ -54,7 +54,7 @@ const Login = ({onLogin})=>{
                 <input
                     ref={emailRef}
                     type="email"
-                    placeholder="Ingresar email"
+                    placeholder="Ingresar Email"
                     value={email}
                     onChange={handleEmailChange}
                 />
@@ -70,6 +70,7 @@ const Login = ({onLogin})=>{
                     onChange={handlePasswordChange}
                 />
                 {error.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres.</p>}
+
                 <button type="submit">Iniciar</button>
 
                 {/*si no tenes cuenta te redirige a la pagina del register*/}
