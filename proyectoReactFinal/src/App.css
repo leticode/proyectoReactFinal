@@ -224,14 +224,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--variableUno);
 }
 .login form {
-  background-color: var(--variableDos);
+  background-color: var(--variableUno);
   padding: 40px;
   border-radius: 12px;
   width: 350px;
+  box-shadow:  8px 8px 0 0 var(--variableTres);
 }
+
 .login h1 {
   font-size: 20px;
   color: var(--variableCuatro);
@@ -248,7 +249,7 @@
 }
 .login input {
   background-color: var(--variableTres);
-  width: 100%;
+  width: 91%;
   padding: 12px;
   margin-bottom: 15px;
   border-radius: 8px;
@@ -268,7 +269,7 @@ input:focus{
   color: var(--variableUno);
   font-family: Arial, Helvetica, sans-serif;
   background-color: var(--variableCuatro);
-  width: 100%;
+  width: 97%;
   margin-bottom: 15px;
   border-radius: 8px;
   border: 1px solid var(--variableCuatro);
@@ -297,8 +298,33 @@ input:focus{
   cursor: pointer;
 }
 
-/*home styles*/
-.home-body{
-  background-color: var(--variableCuatro);
-  background-image: "/public/img/homeImg/woman-home.webp";
+/*para computadoras y tablets*/
+@media (min-width: 768px) {
+  .login {
+    padding: 40px;
+
+  }
+  .login form {
+    padding: 30px;
+  }
+  .login h1 {
+    font-size: 18px;
+  }
+  .login h2 {
+    font-size: 14px;
+  }
+  .login input {
+    font-size: 13px;
+    padding: 10px;
+  }
+  .login button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .register-text{
+    font-size: 14px;
+    text-align: center;
+  }
+ 
 }
