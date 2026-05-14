@@ -25,3 +25,33 @@
   font-weight: 400;
   font-style: normal;
 }
+
+/*Home styles*/
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.footer{
+  width: auto;
+  padding:50px 70px 30px;
+  background-color: var(--variableCinco);
+}
+
+.footer-container{
+  max-width:1200px;
+  margin:auto;
+}
+
+.title-footer{
+  color: var(--variableUno);
+}
+
+.text-footer{
+  color: var(--variableDos);
+}
+
+.link-footer{
+  color: var(--variableDos);
+  text-decoration: none;
+}
