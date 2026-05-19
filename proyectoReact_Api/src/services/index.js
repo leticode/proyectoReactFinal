@@ -7,7 +7,7 @@ import { PORT } from "./config.js";
 import cors from "cors";
 
 // importamos el array de servicios desde otro archivo para mantener este archivo prolijo y solo con cosas de express
-import { services } from "../information.js";
+import { services } from "./information.js";
 
 //creamos la aplicacion express donde app es nuestro servidor backend
 const app = express();
