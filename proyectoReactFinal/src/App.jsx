@@ -6,6 +6,7 @@ import Home from "./components/home/Home";
 import Services from "./components/services/Services";
 import Login from "./components/login/Login";
 import Register from "./components/Register/Register"; 
+import NotFound from './components/notFound/Notfound';
 import './App.css';
 import './index.css';
 
@@ -71,6 +72,7 @@ function App() {
         <Route path="/servicios" element={<Services />} />
         <Route path="/login" element={<Login onLogin={handleLoggedIn}/>}/>
         <Route path="/register" element={<Register/>}/>
+        <Route path="/*" element={<NotFound/>}/>
       </Routes>
       
       <footer className="footer">
