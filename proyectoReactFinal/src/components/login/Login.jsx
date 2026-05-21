@@ -28,7 +28,7 @@ const Login = ({onLogin})=>{
     const handleSubmit = async (event) => {
 		event.preventDefault();
 
-		if (!email.length) {
+		if (!email.length || !email.includes("@")) {
 			setError({ email: true, password: false });
             //focus() mueve automáticamente el cursor al input
             //si el usuario no puso el email por ej
@@ -46,38 +46,44 @@ const Login = ({onLogin})=>{
 
     return(
         <section className="login">
-            <form noValidate onSubmit = {handleSubmit}>
-                <h1>Inicia Sesión</h1>
+            <div class="login-container">
+                <img src="./public/img/loginImg/pureskin.logo.png" alt="login" class="login-img"></img>
 
-                <h2>Email Address</h2>
+                <form noValidate onSubmit = {handleSubmit}>
+                    <h1>Inicia Sesión</h1>
 
-                <input
-                    ref={emailRef}
-                    type="email"
-                    placeholder="Ingresar Email"
-                    value={email}
-                    onChange={handleEmailChange}
-                />
-                {error.email && <p className="errors" >Debes ingresar un email valido.</p>}
-                
-                <h2>Password</h2>
-                <input
-                    ref={passwordRef}
-                    type="password"
-                    placeholder="Ingresar Contraseña"
-                    value={password}
-                    //onchange se ejecuta cada vez que el usuario cambiar el input 
-                    onChange={handlePasswordChange}
-                />
-                {error.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres.</p>}
+                    <div className="input-container">
+                        <label>Email</label>
+                        <input
+                            ref={emailRef}
+                            type="email"
+                            placeholder="Ingresar Email"
+                            value={email}
+                            onChange={handleEmailChange}
+                        />
+                        {error.email && <p className="errors" >Debes ingresar un email valido.</p>}
+                    </div>
 
-                <button type="submit">Iniciar</button>
+                    <div className="input-container">
+                        <label>Contraseña</label>
+                        <input
+                            ref={passwordRef}
+                            type="password"
+                            placeholder="Ingresar Contraseña"
+                            value={password}
+                            //onchange se ejecuta cada vez que el usuario cambiar el input 
+                            onChange={handlePasswordChange}
+                        />
+                        {error.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres.</p>}
+                    </div>
+                    <button type="submit">Iniciar</button>
 
-                {/*si no tenes cuenta te redirige a la pagina del register*/}
-                <p className="register-text" onClick={() => navigate("/register")}>
-                    ¿No tenes cuenta? Registrate
-                </p>
-            </form>
+                    {/*si no tenes cuenta te redirige a la pagina del register*/}
+                    <p className="register-text" onClick={() => navigate("/register")}>
+                        ¿No tenes cuenta? Registrate
+                    </p>
+                </form>
+            </div>
         </section>
     )
 }
