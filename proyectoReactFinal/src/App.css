@@ -225,27 +225,49 @@
   justify-content: center;
   align-items: center;
 }
+.login-container{
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  box-shadow:  8px 8px 0 0 var(--variableTres);
+  border-radius: 12px;
+  width: 60%;
+  height: 80%;
+  max-width: 900px;
+}
+
+.login-img{
+  width: 35%;
+  min-width: 180px;
+  object-fit: cover;
+  border-radius: 12px 0 0 12px;
+}
 .login form {
   background-color: var(--variableUno);
   padding: 40px;
-  border-radius: 12px;
-  width: 350px;
-  box-shadow:  8px 8px 0 0 var(--variableTres);
+  border-radius: 0px 12px 12px 0px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .login h1 {
-  font-size: 20px;
+  font-size: 25px;
   color: var(--variableCuatro);
   font-family: Arial, Helvetica, sans-serif;
-  display: flex;
-  justify-content: center;
-  left: 40px;
+  text-align: center;
+  max-width: 900px;
 }
-.login h2 {
-  font-size: 15px;
+.input-container {
+  margin-bottom: 20px;
+}
+.input-container label{
+  display: block;
+  margin-bottom: 8px;
+  font-size: 18px;
   color: var(--variableCuatro);
   font-family: Arial, Helvetica, sans-serif;
-  left: 40px;
 }
 .login input {
   background-color: var(--variableTres);
@@ -265,12 +287,12 @@ input:focus{
 }
 
 .login button {
-  font-size: 15px;
+  font-size: 18px;
   color: var(--variableUno);
   font-family: Arial, Helvetica, sans-serif;
   background-color: var(--variableCuatro);
   width: 97%;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   border-radius: 8px;
   border: 1px solid var(--variableCuatro);
 }
@@ -279,7 +301,7 @@ input:focus{
 }
 
 .errors{
-  color: var(--variableCinco);
+  color: #d30505;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
   margin-top: 5px;
@@ -296,37 +318,6 @@ input:focus{
   text-decoration: underline;
   color: var(--variableCinco);
   cursor: pointer;
-}
-
-/*para computadoras y tablets*/
-@media (min-width: 768px) {
-  .login {
-    padding: 40px;
-
-  }
-  .login form {
-    padding: 30px;
-  }
-  .login h1 {
-    font-size: 18px;
-  }
-  .login h2 {
-    font-size: 14px;
-  }
-  .login input {
-    font-size: 13px;
-    padding: 10px;
-  }
-  .login button {
-    font-size: 14px;
-    padding: 10px;
-  }
-
-  .register-text{
-    font-size: 14px;
-    text-align: center;
-  }
- 
 }
 
 /* Not Found styles*/
