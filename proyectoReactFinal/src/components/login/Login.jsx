@@ -46,7 +46,7 @@ const Login = ({onLogin})=>{
 
     return(
         <section className="login">
-            <form onSubmit = {handleSubmit}>
+            <form noValidate onSubmit = {handleSubmit}>
                 <h1>Inicia Sesión</h1>
 
                 <h2>Email Address</h2>
