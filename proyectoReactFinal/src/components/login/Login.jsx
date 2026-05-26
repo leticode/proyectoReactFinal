@@ -36,7 +36,7 @@ const Login = ({onLogin})=>{
 			return;
 		}
 
-		if (!password.length || password.length < 7) {
+		if (!password.length || password.length < 6) {
 			setError({ email: false, password: true });
 			passwordRef.current.focus();
 			return;
@@ -46,8 +46,8 @@ const Login = ({onLogin})=>{
 
     return(
         <section className="login">
-            <div class="login-container">
-                <img src="./public/img/loginImg/pureskin.logo.png" alt="login" class="login-img"></img>
+            <div className="login-container">
+                <img src="./public/img/loginImg/pureskin.logo.png" alt="login" className="login-img"></img>
 
                 <form noValidate onSubmit = {handleSubmit}>
                     <h1>Inicia Sesión</h1>
