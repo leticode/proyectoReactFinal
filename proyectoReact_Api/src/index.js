@@ -10,6 +10,7 @@ import cors from "cors";
 import { services } from "./services/information.services.js";
 import { sequelize } from "./db.js";
 import { Service } from "./models/Service.js";
+import authRoutes from "./routes/auth.routes.js";
 
 //creamos la aplicacion express donde app es nuestro servidor backend
 const app = express();
@@ -17,6 +18,8 @@ const app = express();
 // habilitar CORS
 app.use(cors());
 
+// leer JSON del body, asi le paso en formato json el email y la contrasena al register en auth.services.js
+app.use(express.json());
 // ENDPOINTS ---------------
 
 // ruta root (entras a la url sin nada mas, es la ruta raiz)
@@ -56,6 +59,8 @@ async function startServer() {
     await sequelize.sync(); // sincronizar las tablas (agregar las que faltan, modificar las que cambiaron, etc.) 
     await seedServices(); // si la tabla de servicios esta vacia, llenarla con los datos que tenemos hardcodeados en information.services.js 
 
+    //puse esto para usar la ruta de auth
+    app.use(authRoutes);
     app.listen(PORT, () => {
       console.log(`server listening on port ${PORT}`);
     });

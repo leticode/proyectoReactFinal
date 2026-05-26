@@ -9,6 +9,7 @@ const Register = ()=>{
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState({email: false, password: false, confirmPassword: false});
+    const [serverMessage, setServerMessage] = useState("");
 
     const emailRef = useRef(null)
     const passwordRef = useRef(null)
@@ -52,17 +53,43 @@ const Register = ()=>{
             return;
         }
 
-        //cree objeto para ver si se registraba bien
-        const usuario = {email, password};
+        try {
+            //hacemos una peticion HTTP al backend
+			const response = await fetch('http://localhost:3000/register', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					email,
+					password,
+                    confirmPassword
+				}),
+			});
 
-        console.log("Usuario registrado:", usuario);
-        navigate("/login");
+            //aca en data guardamos lo del backend que viene en formato JSON y lo trasforma en objeto
+            const data = await response.json();
+
+            //si devolvio error cortamos la funcion
+            if (!response.ok) {
+                setServerMessage(data.message);
+                return;
+            }
+            setServerMessage("Usuario registrado correctamente");
+            //si se registro bien lo mandamos al login
+            navigate("/login");
+
+        } catch (error) {
+            console.error(error);
+            setServerMessage("Error al conectar con le servidor");
+        }
+
     }
 
     return(
         <section className="login">
-            <div class="login-container">
-                <img src="./public/img/loginImg/pureskin.logo.png" alt="login" class="login-img"></img>
+            <div className="login-container">
+                <img src="./public/img/loginImg/pureskin.logo.png" alt="login" className="login-img"></img>
 
                 <form noValidate onSubmit = {handleSubmit}>
                     <h1>Registrate</h1>
@@ -103,6 +130,9 @@ const Register = ()=>{
                         {error.confirmPassword && <p className="errors" >La contraseña debe ser igual</p>}
                         
                     </div>
+                
+                    {serverMessage && (<p className="server-message">{serverMessage}</p>)}
+                    
                     <button type="submit">Registrarse</button>
 
                     <p className="register-text" onClick={() => navigate("/login")}>
