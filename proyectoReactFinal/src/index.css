@@ -14,10 +14,10 @@
 }
 
 .brandFont {
-    font-family: var(--brandFont);
-    font-weight: 700;
-    font-style: normal;
-  }
+  font-family: var(--brandFont);
+  font-weight: 700;
+  font-style: normal;
+}
   
 .textFont {
   font-family: var(--textFont);
@@ -26,32 +26,77 @@
   font-style: normal;
 }
 
-/*Home styles*/
 *{
   margin: 0;
   padding: 0;
 }
 
+/*Footer styles*/
 .footer{
   width: auto;
-  padding:50px 70px 30px;
+  padding: 50px 70px 30px;
   background-color: var(--variableCinco);
 }
 
 .footer-container{
-  max-width:1200px;
-  margin:auto;
+  max-width: 1200px;
+  margin: auto;
 }
 
-.title-footer{
+.footer-top {
+  display: flex;
+  justify-content: space-around;
+  gap: 80px;
+  border-bottom: 1px solid var(--variableDos);
+  padding-bottom: 40px;
+}
+
+.column-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 280px;
+}
+
+.title-footer-PS{
+  font-family: var(--brandFont);
   color: var(--variableUno);
 }
 
-.text-footer{
+.title-footer{
+  font-family: var(--textFont);
+  font-weight: 400;
+  color: var(--variableUno);
+}
+
+.subtitle-footer {
+  font-family: var(--textFont);
+  color: var(--variableDos);
+  margin-top: 5px;
+}
+
+.text-footer, .link-footer{
+  font-family: var(--textFont);
   color: var(--variableDos);
 }
 
 .link-footer{
-  color: var(--variableDos);
   text-decoration: none;
+  transition: 0.3s ease;
+}
+.link-footer :hover{
+  color: var(--variableUno);
+  transform: scale(1.05);
+}
+
+.instagram-icon {
+  width: 35px;
+  margin-top: 10px;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 25px;
+  font-size: 0.9rem;
 }
