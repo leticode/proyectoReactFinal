@@ -1,7 +1,18 @@
-import { useState } from "react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+
+    const navigate = useNavigate();
+
+    const handleToServices = () => {
+        navigate("/servicios"); 
+    }
+
+    const handleToAboutUs = () => {
+        navigate(""); //agregar la ruta de aboutUs
+    }
+
     return (
         <>
             <main className="home-main">
@@ -16,8 +27,8 @@ const Home = () => {
                         </p>
                     </div>
                     <div className="home-buttons">
-                        <button className="btn-services">Nuestros servicios</button>
-                        <button className="btn-us">Sobre nosotros</button>
+                        <button className="btn-services"  onClick={handleToServices}>Nuestros servicios</button>
+                        <button className="btn-us" onClick={handleToAboutUs}>Sobre nosotros</button>
                     </div>
                     
                 </section>
