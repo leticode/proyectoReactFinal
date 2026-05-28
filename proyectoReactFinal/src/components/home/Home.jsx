@@ -1,21 +1,38 @@
-import { useState } from "react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const Home = () =>{
-    return(
+const Home = () => {
+
+    const navigate = useNavigate();
+
+    const handleToServices = () => {
+        navigate("/servicios"); 
+    }
+
+    const handleToAboutUs = () => {
+        navigate(""); //agregar la ruta de aboutUs
+    }
+
+    return (
         <>
-            <body className="home-body">
+            <main className="home-main">
                 <section className="home-section">
                     <div className="home-presentation">
                         <h2 className="home-title">Belleza, equilibrio y bienestar en un solo lugar</h2>
-                        <p className="home-text">Trabajamos con estándares profesionales, equipamiento moderno y un enfoque personalizado para garantizar seguridad, eficacia y resultados que potencian tu belleza natural.</p>
+                        <p className="home-text">
+                            Trabajamos con estándares profesionales,
+                            equipamiento moderno y un enfoque personalizado
+                            para garantizar seguridad, eficacia y resultados
+                            que potencian tu belleza natural.
+                        </p>
                     </div>
                     <div className="home-buttons">
-                        <button className="button-services">Servicios</button>
-                        <button className="button-us">Nosotros</button>
+                        <button className="btn-services"  onClick={handleToServices}>Nuestros servicios</button>
+                        <button className="btn-us" onClick={handleToAboutUs}>Sobre nosotros</button>
                     </div>
+                    
                 </section>
-            </body>
+            </main>
         </>
     )
 };

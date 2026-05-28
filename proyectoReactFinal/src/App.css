@@ -372,3 +372,70 @@ input:focus{
   background-color: var(--variableCuatro);
   transform: scale(1.05);
 }
+
+/*Home styles*/
+.home-main{
+  width: 100%;
+  min-height: 100vh;
+  background-image: url("/img/homeImg/woman-home.webp");
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: 400px ;
+  background-color: var(--variableCuatro);
+}
+
+.home-section{
+  display: flex;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+  padding: 0 80px;
+}
+
+.home-buttons{
+  display: flex;
+  gap: 20px;
+}
+
+.btn-services, .btn-us{
+  width: 35vh;
+  padding: 15px 30px;
+  border-radius: 40px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-services{
+  border: none;
+  background-color: var(--variableUno);
+  color: var(--variableCuatro);
+}
+.btn-services:hover{
+  transform: scale(1.05);
+  background-color: var(--variableTres);
+  color: var(--variableUno);
+  border: 1px solid var(--variableUno);
+}
+
+.btn-us{
+  background-color: var(--variableTres);
+  border: 1px solid var(--variableUno);
+  color: var(--variableUno);
+}
+.btn-us:hover{
+  transform: scale(1.05);
+  background-color: var(--variableUno);
+  color: var(--variableCuatro);
+}
+
+/*.home-img{
+  width: 45%;
+  display: flex;
+  justify-content: center;
+}
+
+.home-img img{
+  width: 100%;
+  max-width: 500px;
+  object-fit: cover;
+}*/
