@@ -379,9 +379,18 @@ input:focus{
   min-height: 100vh;
   background-image: url("/img/homeImg/woman-home.webp");
   background-repeat: no-repeat;
-  background-position: right;
-  background-size: 400px ;
-  background-color: var(--variableCuatro);
+  background-position: right bottom;
+  background-size: contain;
+  background-size: 65vh ;
+  background-color:  var(--variableTres);
+  user-select: none;
+}
+
+.home-content{
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 120vh;
 }
 
 .home-section{
@@ -391,22 +400,40 @@ input:focus{
   padding: 0 80px;
 }
 
+.home-title{
+  font-family: var(--textFont);
+  font-size: 74px;
+  color: var(--variableUno);
+  text-shadow: 2px 2px 5px var(--variableCuatro);
+  margin-bottom: 20px;
+}
+
+.home-text{
+  font-family: var(--textFont);
+  font-size: 24px;
+  color: var(--variableCuatro);
+}
+
 .home-buttons{
   display: flex;
   gap: 20px;
 }
 
 .btn-services, .btn-us{
-  width: 35vh;
+  width: 30vh;
   padding: 15px 30px;
   border-radius: 40px;
-  font-size: 14px;
+  font-size: 24px;
+  font-family: var(--textFont);
   cursor: pointer;
   transition: 0.3s;
+  box-shadow:
+    0 4px 10px var(--variableCuatro),
+    0 2px 4px var(--variableCuatro);
 }
 
 .btn-services{
-  border: none;
+  border: 1px solid transparent;
   background-color: var(--variableUno);
   color: var(--variableCuatro);
 }
@@ -414,28 +441,17 @@ input:focus{
   transform: scale(1.05);
   background-color: var(--variableTres);
   color: var(--variableUno);
-  border: 1px solid var(--variableUno);
+  border-color: var(--variableCinco);
 }
 
 .btn-us{
   background-color: var(--variableTres);
-  border: 1px solid var(--variableUno);
+  border: 1px solid var(--variableCinco);
   color: var(--variableUno);
 }
 .btn-us:hover{
   transform: scale(1.05);
+  border: 1px solid transparent;
   background-color: var(--variableUno);
   color: var(--variableCuatro);
 }
-
-/*.home-img{
-  width: 45%;
-  display: flex;
-  justify-content: center;
-}
-
-.home-img img{
-  width: 100%;
-  max-width: 500px;
-  object-fit: cover;
-}*/

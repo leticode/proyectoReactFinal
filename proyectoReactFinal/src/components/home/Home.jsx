@@ -6,7 +6,7 @@ const Home = () => {
     const navigate = useNavigate();
 
     const handleToServices = () => {
-        navigate("/servicios"); 
+        navigate("/servicios");
     }
 
     const handleToAboutUs = () => {
@@ -17,20 +17,22 @@ const Home = () => {
         <>
             <main className="home-main">
                 <section className="home-section">
-                    <div className="home-presentation">
-                        <h2 className="home-title">Belleza, equilibrio y bienestar en un solo lugar</h2>
-                        <p className="home-text">
-                            Trabajamos con estándares profesionales,
-                            equipamiento moderno y un enfoque personalizado
-                            para garantizar seguridad, eficacia y resultados
-                            que potencian tu belleza natural.
-                        </p>
+                    <div className="home-content">
+                        <div className="home-presentation">
+                            <h2 className="home-title">Belleza, equilibrio y bienestar en un solo lugar</h2>
+                            <p className="home-text">
+                                Trabajamos con estándares profesionales,
+                                equipamiento moderno y un enfoque personalizado
+                                para garantizar seguridad, eficacia y resultados
+                                que potencian tu belleza natural.
+                            </p>
+                        </div>
+                        <div className="home-buttons">
+                            <button className="btn-services" onClick={handleToServices}>Nuestros servicios</button>
+                            <button className="btn-us" onClick={handleToAboutUs}>Sobre nosotros</button>
+                        </div>
                     </div>
-                    <div className="home-buttons">
-                        <button className="btn-services"  onClick={handleToServices}>Nuestros servicios</button>
-                        <button className="btn-us" onClick={handleToAboutUs}>Sobre nosotros</button>
-                    </div>
-                    
+
                 </section>
             </main>
         </>
