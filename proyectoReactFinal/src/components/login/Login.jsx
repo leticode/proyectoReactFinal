@@ -2,12 +2,13 @@ import { useState, useRef } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({onLogin})=>{
+const Login = () =>{
     const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState({email: false, password: false});
+    const [serverMessage, setServerMessage] = useState("");
 
     //el useRef sirve para obtener referencia directa a un elemento HTML real
     const emailRef = useRef(null);
@@ -36,12 +37,41 @@ const Login = ({onLogin})=>{
 			return;
 		}
 
-		if (!password.length || password.length < 6) {
+		if (!password.length || password.length < 7) {
 			setError({ email: false, password: true });
 			passwordRef.current.focus();
 			return;
 		}
-        navigate("/home");
+
+        try {
+            //hacemos una peticion HTTP al backend
+			const response = await fetch('http://localhost:3000/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					email,
+					password,
+				}),
+			});
+
+            //aca en data guardamos lo del backend que viene en formato JSON y lo trasforma en objeto
+            const data = await response.json();
+
+            //si devolvio error cortamos la funcion
+            if (!response.ok) {
+                setServerMessage(data.message || "error al iniciar sesion");
+                return;
+            }
+
+            setServerMessage("login exitoso");
+            navigate("/home");
+
+        } catch (error) {
+            console.error(error);
+            setServerMessage("Error al conectar con el servidor");
+        }
     }
 
     return(
@@ -77,6 +107,9 @@ const Login = ({onLogin})=>{
                         {error.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres.</p>}
                     </div>
                     <button type="submit">Iniciar</button>
+
+                    {/*para mostrar el error al usuario*/}
+                    {serverMessage && (<p className="server-message">{serverMessage}</p>)}
 
                     {/*si no tenes cuenta te redirige a la pagina del register*/}
                     <p className="register-text" onClick={() => navigate("/register")}>
