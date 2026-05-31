@@ -1,5 +1,6 @@
 import { DataTypes} from "sequelize";
 import { sequelize } from "../db.js";
+import { userRoles } from "../enums/enum.js";
 
 const User = sequelize.define("user", {
     id: {
@@ -16,7 +17,15 @@ const User = sequelize.define("user", {
     password: {
         type: DataTypes.TEXT,
         allowNull: false
-    }
+    },
+
+    roles: {
+        //.ENUM permite solo tener valores predefinidos
+        type: DataTypes.ENUM(Object.values(userRoles)),
+        allowNull: false,
+        //que por default ponga el rol de user
+        defaultValue: userRoles.USER,
+}
 }, {
     //se pone esto para que no se cree una columna con
     //la feha y hora en la que se creo el registro 

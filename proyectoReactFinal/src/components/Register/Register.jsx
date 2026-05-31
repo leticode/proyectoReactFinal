@@ -72,7 +72,7 @@ const Register = ()=>{
 
             //si devolvio error cortamos la funcion
             if (!response.ok) {
-                setServerMessage(data.message);
+                setServerMessage(data.message || "error al registrarse");
                 return;
             }
             setServerMessage("Usuario registrado correctamente");
@@ -81,7 +81,7 @@ const Register = ()=>{
 
         } catch (error) {
             console.error(error);
-            setServerMessage("Error al conectar con le servidor");
+            setServerMessage("Error al conectar con el servidor");
         }
 
     }
