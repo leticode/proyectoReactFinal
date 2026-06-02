@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+//prueba untaria
+import verifyEmail from "../../utils/verifyEmail.js";
 
 const Login = () =>{
     const navigate = useNavigate();
@@ -29,7 +31,7 @@ const Login = () =>{
     const handleSubmit = async (event) => {
 		event.preventDefault();
 
-		if (!email.length || !email.includes("@")) {
+		if (!verifyEmail(email)) {
 			setError({ email: true, password: false });
             //focus() mueve automáticamente el cursor al input
             //si el usuario no puso el email por ej
@@ -91,7 +93,7 @@ const Login = () =>{
                             value={email}
                             onChange={handleEmailChange}
                         />
-                        {error.email && <p className="errors" >Debes ingresar un email valido.</p>}
+                        {error.email && <p className="errors" >El email ingresado debe ser válido.</p>}
                     </div>
 
                     <div className="input-container">
