@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import verifyEmail from "../../utils/verifyEmail.js";
 
 const Register = ()=>{
     const navigate = useNavigate();
@@ -34,7 +35,7 @@ const Register = ()=>{
     const handleSubmit = async (event) => {
 		event.preventDefault();
 
-		if (!email.length || !email.includes("@")) {
+		if (!verifyEmail(email)) {
 			setError({email: true, password: false, confirmPassword: false});
 			emailRef.current.focus();
 			return;
@@ -103,7 +104,7 @@ const Register = ()=>{
                             value={email}
                             onChange={handleEmailChange}
                         />
-                        {error.email && <p className="errors" >Debes ingresar un email valido.</p>}
+                        {error.email && <p className="errors" >El email ingresado debe ser válido.</p>}
                     </div>    
 
                     <div className="input-container">
@@ -130,10 +131,10 @@ const Register = ()=>{
                         {error.confirmPassword && <p className="errors" >La contraseña debe ser igual</p>}
                         
                     </div>
-                
-                    {serverMessage && (<p className="server-message">{serverMessage}</p>)}
                     
                     <button type="submit">Registrarse</button>
+
+                    {serverMessage && (<p className="server-message">{serverMessage}</p>)}
 
                     <p className="register-text" onClick={() => navigate("/login")}>
                         ¿Ya tenes cuenta? Inicia sesion
