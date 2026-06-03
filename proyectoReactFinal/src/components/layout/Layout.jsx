@@ -1,10 +1,12 @@
 import { NavLink } from "react-router-dom";
+import Header from "../header/Header";
 import '../../index.css';
 
 const Layout = ({ children }) => {
   return (
-    /*antes del main colocar todo el header de la pag*/
     <>
+      {/* HEADER */}
+      <Header />
 
       <main>
         {children}
