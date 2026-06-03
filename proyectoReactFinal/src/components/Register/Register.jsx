@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import verifyEmail from "../../utils/verifyEmail.js";
+import verifyPassword from "../../utils/verifyPassword.js";
 
 const Register = ()=>{
     const navigate = useNavigate();
@@ -34,13 +36,13 @@ const Register = ()=>{
     const handleSubmit = async (event) => {
 		event.preventDefault();
 
-		if (!email.length || !email.includes("@")) {
+		if (!verifyEmail(email)) {
 			setError({email: true, password: false, confirmPassword: false});
 			emailRef.current.focus();
 			return;
 		}
 
-		if (!password.length || password.length < 7) {
+		if (!verifyPassword(password)) {
 			setError({email: false, password: true, confirmPassword: false});
 			passwordRef.current.focus();
 			return;
@@ -72,7 +74,7 @@ const Register = ()=>{
 
             //si devolvio error cortamos la funcion
             if (!response.ok) {
-                setServerMessage(data.message);
+                setServerMessage(data.message || "error al registrarse");
                 return;
             }
             setServerMessage("Usuario registrado correctamente");
@@ -81,7 +83,7 @@ const Register = ()=>{
 
         } catch (error) {
             console.error(error);
-            setServerMessage("Error al conectar con le servidor");
+            setServerMessage("Error al conectar con el servidor");
         }
 
     }
@@ -103,7 +105,7 @@ const Register = ()=>{
                             value={email}
                             onChange={handleEmailChange}
                         />
-                        {error.email && <p className="errors" >Debes ingresar un email valido.</p>}
+                        {error.email && <p className="errors" >El email ingresado debe ser válido.</p>}
                     </div>    
 
                     <div className="input-container">
@@ -115,7 +117,7 @@ const Register = ()=>{
                             value={password}
                             onChange={handlePasswordChange}
                         />
-                        {error.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres.</p>}
+                        {error.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres y un caracter especial.</p>}
                     </div>
 
                     <div className="input-container">
@@ -130,10 +132,10 @@ const Register = ()=>{
                         {error.confirmPassword && <p className="errors" >La contraseña debe ser igual</p>}
                         
                     </div>
-                
-                    {serverMessage && (<p className="server-message">{serverMessage}</p>)}
                     
                     <button type="submit">Registrarse</button>
+
+                    {serverMessage && (<p className="server-message">{serverMessage}</p>)}
 
                     <p className="register-text" onClick={() => navigate("/login")}>
                         ¿Ya tenes cuenta? Inicia sesion

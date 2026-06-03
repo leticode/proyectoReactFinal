@@ -31,6 +31,10 @@
   padding: 0;
 }
 
+main{
+  min-height: 95vh;
+}
+
 /*Footer styles*/
 .footer{
   width: auto;
