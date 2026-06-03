@@ -28,6 +28,10 @@ export const Service = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    duration:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     img: {
       type: DataTypes.STRING,
       allowNull: false,
