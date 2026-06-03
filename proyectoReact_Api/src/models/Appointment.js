@@ -31,6 +31,10 @@ export const Appointment = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false
     },
+    professionalId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     serviceId: {
       type: DataTypes.INTEGER,
       allowNull: false,
