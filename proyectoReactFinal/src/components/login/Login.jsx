@@ -2,7 +2,8 @@ import { useState, useRef } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 //prueba untaria
-import verifyEmail from "../../utils/verifyEmail.js";
+import  verifyEmail  from "../../utils/verifyEmail.js";
+import verifyPassword from "../../utils/verifyPassword.js";
 
 const Login = () =>{
     const navigate = useNavigate();
@@ -39,7 +40,7 @@ const Login = () =>{
 			return;
 		}
 
-		if (!password.length || password.length < 7) {
+		if (!verifyPassword(password)) {
 			setError({ email: false, password: true });
 			passwordRef.current.focus();
 			return;
@@ -106,7 +107,7 @@ const Login = () =>{
                             //onchange se ejecuta cada vez que el usuario cambiar el input 
                             onChange={handlePasswordChange}
                         />
-                        {error.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres.</p>}
+                        {error.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres y un caracter especial.</p>}
                     </div>
                     <button type="submit">Iniciar</button>
 

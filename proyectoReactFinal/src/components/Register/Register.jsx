@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import verifyEmail from "../../utils/verifyEmail.js";
+import verifyPassword from "../../utils/verifyPassword.js";
 
 const Register = ()=>{
     const navigate = useNavigate();
@@ -41,7 +42,7 @@ const Register = ()=>{
 			return;
 		}
 
-		if (!password.length || password.length < 7) {
+		if (!verifyPassword(password)) {
 			setError({email: false, password: true, confirmPassword: false});
 			passwordRef.current.focus();
 			return;
@@ -116,7 +117,7 @@ const Register = ()=>{
                             value={password}
                             onChange={handlePasswordChange}
                         />
-                        {error.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres.</p>}
+                        {error.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres y un caracter especial.</p>}
                     </div>
 
                     <div className="input-container">
