@@ -56,7 +56,7 @@ async function seedServices() {
 async function startServer() {
   try {
     await sequelize.authenticate(); // conectarse a la base de datos, con los datos que estan definidos en db.js
-    await sequelize.sync(); // sincronizar las tablas (agregar las que faltan, modificar las que cambiaron, etc.) 
+    await sequelize.sync( {alter: true}); // sincronizar las tablas (agregar las que faltan, modificar las que cambiaron, etc.) 
     await seedServices(); // si la tabla de servicios esta vacia, llenarla con los datos que tenemos hardcodeados en information.services.js 
 
     //puse esto para usar la ruta de auth
