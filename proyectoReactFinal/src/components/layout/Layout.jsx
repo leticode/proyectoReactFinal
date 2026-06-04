@@ -1,49 +1,120 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import '../../index.css';
 
 const Layout = ({ children }) => {
+
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const linkClass = ({ isActive }) =>
+    isActive ? "link active" : "link";
+
   return (
-    /*antes del main colocar todo el header de la pag*/
     <>
+      {/* HEADER */}
+      <header className="header">
 
-      <main>
-        {children}
-      </main>
+        {/* LOGO */}
+        <div className="logo">
+          PURE SKIN
+        </div>
 
+        {/* NAV DESKTOP */}
+        <nav className="nav navbar">
+          <NavLink to="/home" className={linkClass}>
+            Inicio
+          </NavLink>
+
+          <NavLink to="/servicios" className={linkClass}>
+            Servicios
+          </NavLink>
+
+          <NavLink to="/login" className={linkClass}>
+            Login
+          </NavLink>
+
+          <NavLink to="/contacto" className={linkClass}>
+            Contacto
+          </NavLink>
+        </nav>
+
+        {/* ICONO USER */}
+        <div className="user-icon">
+          👤
+        </div>
+
+        {/* HAMBURGUESA */}
+        <button
+          className="menu-btn"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <span className={`menu-line ${menuOpen ? "open" : ""}`}></span>
+          <span className={`menu-line ${menuOpen ? "open" : ""}`}></span>
+          <span className={`menu-line ${menuOpen ? "open" : ""}`}></span>
+        </button>
+
+      </header>
+
+      {/* MENU MOBILE */}
+      {menuOpen && (
+        <div className="mobile-menu">
+
+          <NavLink to="/home" onClick={() => setMenuOpen(false)} className={linkClass}>
+            Inicio
+          </NavLink>
+
+          <NavLink to="/servicios" onClick={() => setMenuOpen(false)} className={linkClass}>
+            Servicios
+          </NavLink>
+
+          <NavLink to="/login" onClick={() => setMenuOpen(false)} className={linkClass}>
+            Login
+          </NavLink>
+
+          <NavLink to="/contacto" onClick={() => setMenuOpen(false)} className={linkClass}>
+            Contacto
+          </NavLink>
+
+        </div>
+      )}
+
+      {/* CONTENIDO */}
+      <main>{children}</main>
+
+      {/* FOOTER */}
       <footer className="footer">
         <div className="footer-container">
           <div className="footer-top">
+
             <div className="column-footer">
               <h3 className="title-footer-PS">PURE SKIN</h3>
-              <p className="text-footer">Comprometidos con resaltar tu armonía natural a través de ciencia y tecnología.</p>
-              <a href="https://www.instagram.com/utnrosarioseu/" target="_blank">
-                <img className="instagram-icon" src="/img/footerImg/instagram-icon.webp" alt="logo-instagram" />
-              </a>
+              <p className="text-footer">
+                Comprometidos con resaltar tu armonía natural.
+              </p>
             </div>
 
             <div className="column-footer">
               <h3 className="title-footer">EXPLORAR</h3>
-              <NavLink to="/Home" className="link-footer">Inicio</NavLink>
-              <NavLink to="/Servicios" className="link-footer">Servicios</NavLink>
+              <NavLink to="/home" className="link-footer">Inicio</NavLink>
+              <NavLink to="/servicios" className="link-footer">Servicios</NavLink>
             </div>
 
             <div className="column-footer">
               <h3 className="title-footer">HORARIOS</h3>
-              <p className="subtitle-footer">LUNES A VIERNES</p>
               <p className="text-footer">09:00 a 20:00</p>
-              <p className="subtitle-footer">SÁBADOS</p>
-              <p className="text-footer">09:00 a 14:00</p>
+              <p className="text-footer">Sábados 09:00 a 14:00</p>
             </div>
+
           </div>
+
           <div className="footer-bottom">
-            <div className="section-terminos">
-              <p className="text-footer">© 2026 PURE SKIN Rosario.</p>
-            </div>
+            <p className="text-footer">© 2026 PURE SKIN Rosario</p>
           </div>
         </div>
       </footer>
-    </>
-  )
-}
 
-export default Layout
+    </>
+  );
+};
+
+export default Layout;
