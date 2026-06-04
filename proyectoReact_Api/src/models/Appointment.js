@@ -43,4 +43,4 @@ export const Appointment = sequelize.define(
   {
     tableName: "appointment",
   }
-);//FK preguntar a marcelo
+);

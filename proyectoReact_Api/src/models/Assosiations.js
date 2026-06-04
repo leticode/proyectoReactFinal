@@ -1,4 +1,5 @@
 import User from "./User.js";
+import { Professionals } from "./Professionals.js";
 import { Appointment } from "./Appointment.js";
 import { Service } from "./Service.js";
 
@@ -9,7 +10,7 @@ Appointment.belongsTo(User, {
 });
 
 // Profesional
-Appointment.belongsTo(User, {
+Appointment.belongsTo(Professionals, {
   foreignKey: "professionalId",
   as: "professional",
 });
