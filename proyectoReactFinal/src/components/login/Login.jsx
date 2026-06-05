@@ -64,11 +64,12 @@ const Login = () =>{
 
             //si devolvio error cortamos la funcion
             if (!response.ok) {
-                setServerMessage(data.message || "error al iniciar sesion");
+                setServerMessage(data.message || "error al registrarse");
                 return;
             }
 
-            setServerMessage("login exitoso");
+            localStorage.setItem('token', data.token);
+
             navigate("/home");
 
         } catch (error) {

@@ -16,12 +16,12 @@ function App() {
  /*  NAV LOGICA 
   const [menuOpen, setMenuOpen] = useState(false); //Inicializo el menu en falso primero (por default cerrado)
   const linkClass = ({ isActive }) => isActive ? "link active" : "link"; //OPERADOR TERNARIO(? SIMBOLIZA TRUE Y : SIMBOLIZA FALSE ASI FUNCIONA EN REACT) si se cumple pone esta clase si no se cumple la otra*/
-  const [LoggedIn, setLoggedIn] = useState(false); //inicializamos el login en falso 
+  /*const [LoggedIn, setLoggedIn] = useState(false); //inicializamos el login en falso 
 
   //cambiamos el estado a verdadero para indicar que el usuario esta loggeado
   const handleLoggedIn = () => {
     setLoggedIn(true);
-  } 
+  } */
 
   //en realidad deberiamos usar BrowserRouter pero x el momento lo dejamos asi(HashRouter) pq no tiene complejidad el proyecto (sirve para poder navegar entre paginas sin recargar)
   return (<>
@@ -72,7 +72,7 @@ function App() {
           <Route path='/' element={<Navigate to='home' />} /> {/*redirige*/}
           <Route path="/home" element={<Home />} />
           <Route path="/servicios" element={<Services />} />
-          <Route path="/login" element={<Login onLogin={handleLoggedIn}/>}/>
+          <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
           <Route path="/*" element={<NotFound/>}/>
         </Routes>
