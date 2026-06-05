@@ -77,7 +77,6 @@ const Register = ()=>{
                 setServerMessage(data.message || "error al registrarse");
                 return;
             }
-            setServerMessage("Usuario registrado correctamente");
             //si se registro bien lo mandamos al login
             navigate("/login");
 

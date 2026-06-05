@@ -2,8 +2,13 @@ import User from "../models/User.js";
 //importamos la libreria bcrypt para hashear la contrasena
 //antes de guardarla
 import bcrypt from "bcrypt" ;
+//lbrera para generar token
+import jwt from "jsonwebtoken";
 
 export const registerUser = async (req, res) => {
+try {
+
+        // TODO tu código actual
 
     //obtenemos los datos del body
     const {email, password, confirmPassword} = req.body;
@@ -38,6 +43,7 @@ export const registerUser = async (req, res) => {
     //creamos el hash con la contrasena escrta por el usuario y el salt generado aleatoriamente
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    console.log("Password recibida en register:", password);
     const newUser = await User.create({
         email,
         //cuando creamos el usuaro la contrasena se guarda hasheada en la bdd
@@ -52,6 +58,15 @@ export const registerUser = async (req, res) => {
             email: newUser.email
         }
     });
+
+        } catch (error) {
+        console.error("ERROR REGISTER:");
+        console.error(error);
+
+        return res.status(500).json({
+            message: error.message
+        });
+    }
 
 }
 
@@ -75,21 +90,29 @@ export const loginUser = async (req, res) => {
     if (!comparison)
         return res.status(401).send({ message: "Email y/o contraseña incorrecta" });
 
+    //creamos la clave secreta para el token
+    const JWTsecretKey = '2tup2pureSkin-2026'
+
+    //generamos el token
+    const token = jwt.sign(
+        {
+            //payload osea la informacion queva guardada dentro del token
+            id: user.id,
+            email: user.email,
+            roles: user.roles
+        },
+        JWTsecretKey,
+        //desp de una hora deja de ser valido
+        {expiresIn: '1h'}
+    )
     return res.status(200).send({
         message: "Login exitoso",
+        token,
         user: {
             id: user.id,
             email: user.email,
-            role: user.role
+            roles: user.roles
         }
     });
 
-    //Clave secreta para firmar el token (debería estar en variables de entorno)
-    //const secretKey = 'programacion3-2025';
-
-    // Genera un token JWT que expira en 1 hora
-    //const token = jwt.sign({ email }, secretKey, { expiresIn: '1h' });
-
-    // Devuelve el token al cliente
-    //return res.json(token);
 }
