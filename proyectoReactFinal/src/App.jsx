@@ -9,6 +9,7 @@ import Login from "./components/login/Login";
 import Register from "./components/Register/Register"; 
 import NotFound from './components/notFound/Notfound';
 import Admin from './components/admin/Admin';
+import UserManagement from './components/userManagement/UserManagement';
 import './App.css';
 import './index.css';
 
@@ -76,6 +77,8 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
           <Route path="/admin" element={<Admin/>}/>
+
+          <Route path="/users" element={<UserManagement/>}/>
           <Route path="/*" element={<NotFound/>}/>
         </Routes>
       </Layout>

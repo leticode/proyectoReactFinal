@@ -43,9 +43,7 @@ export const verifyLogin = ((req, res, next) =>{
     const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>]).{7,}$/;
 
     if (!password || !passwordRegex.test(password)) {
-        errors.push(
-            "La contraseña debe tener al menos 7 caracteres y un carácter especial"
-        )
+        errors.push("La contraseña debe tener al menos 7 caracteres y un carácter especial")
     }
 
     if (errors.length > 0) {
@@ -56,4 +54,17 @@ export const verifyLogin = ((req, res, next) =>{
 
     next();
 
+});
+
+export const verifyRole = ((role) => {
+    const allowRole = ['customer', 'professional', 'admin']
+    const errors = [];
+
+    if(!role)
+        errors.push("El rol es obligatorio")
+
+    if(!allowRole.includes(role))
+        errors.push("Rol inválido")
+
+    return errors;
 });
