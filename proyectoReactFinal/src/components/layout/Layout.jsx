@@ -21,6 +21,7 @@ const Layout = ({ children }) => {
 
         {/* NAV DESKTOP */}
         <nav className="nav navbar">
+          
           <NavLink to="/home" className={linkClass}>
             Inicio
           </NavLink>
@@ -29,19 +30,14 @@ const Layout = ({ children }) => {
             Servicios
           </NavLink>
 
-          <NavLink to="/login" className={linkClass}>
-            Login
-          </NavLink>
-
           <NavLink to="/contacto" className={linkClass}>
             Contacto
           </NavLink>
-        </nav>
+          <NavLink to="/login" className={linkClass}>
+            <img src="/img/navbarImg/user-icon.webp" alt="Img navbar" className = "imgLogin"/>
+          </NavLink>
 
-        {/* ICONO USER */}
-        <div className="user-icon">
-          👤
-        </div>
+        </nav>
 
         {/* HAMBURGUESA */}
         <button
@@ -67,12 +63,12 @@ const Layout = ({ children }) => {
             Servicios
           </NavLink>
 
-          <NavLink to="/login" onClick={() => setMenuOpen(false)} className={linkClass}>
-            Login
-          </NavLink>
-
           <NavLink to="/contacto" onClick={() => setMenuOpen(false)} className={linkClass}>
             Contacto
+          </NavLink>
+
+          <NavLink to="/login" onClick={() => setMenuOpen(false)} className={linkClass}>
+            Login
           </NavLink>
 
         </div>
