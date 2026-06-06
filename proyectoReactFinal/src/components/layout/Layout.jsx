@@ -21,7 +21,7 @@ const Layout = ({ children }) => {
 
         {/* NAV DESKTOP */}
         <nav className="nav navbar">
-          
+          <NavLink to="/admin" className={linkClass}>Admin</NavLink>
           <NavLink to="/home" className={linkClass}>
             Inicio
           </NavLink>
@@ -54,6 +54,8 @@ const Layout = ({ children }) => {
       {/* MENU MOBILE */}
       {menuOpen && (
         <div className="mobile-menu">
+
+          <NavLink to="/admin" className={linkClass}>Admin</NavLink>
 
           <NavLink to="/home" onClick={() => setMenuOpen(false)} className={linkClass}>
             Inicio
