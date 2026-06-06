@@ -1,3 +1,4 @@
+//esta libreria es para crear o verificar token en el back
 import jwt from "jsonwebtoken";
 
 const verifyToken = ((req, res, next) => {
