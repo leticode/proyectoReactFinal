@@ -20,6 +20,7 @@
   font-size: 28px;
   font-style: italic;
   color: var(--variableCinco);
+  text-decoration: none;
 }
 
 /* NAV */
@@ -29,6 +30,7 @@
   letter-spacing: 2px;
   transition: all 0.3s;
   color: var(--variableTres); 
+  text-decoration: none;
 }
 
 .link:hover {
