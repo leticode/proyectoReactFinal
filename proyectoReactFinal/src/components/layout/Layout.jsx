@@ -15,9 +15,9 @@ const Layout = ({ children }) => {
       <header className="header">
 
         {/* LOGO */}
-        <div className="logo">
+        <NavLink to="/home" className="logo">
           PURE SKIN
-        </div>
+        </NavLink>
 
         {/* NAV DESKTOP */}
         <nav className="nav navbar">
