@@ -14,10 +14,14 @@ export const Professionals = sequelize.define(
     name: {
       type: DataTypes.STRING
     },
-    serviceId: {
+    specialty: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    /*serviceId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
+    },*/
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -25,5 +29,6 @@ export const Professionals = sequelize.define(
   },
   {
     tableName: "professional",
-  }
+  },
+  {timestamps: false}
 );

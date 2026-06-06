@@ -42,5 +42,6 @@ export const Appointment = sequelize.define(
   },
   {
     tableName: "appointment",
-  }
+  },
+  {timestamps: false}
 );

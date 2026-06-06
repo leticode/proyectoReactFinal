@@ -2,6 +2,7 @@ import User from "./User.js";
 import { Professionals } from "./Professionals.js";
 import { Appointment } from "./Appointment.js";
 import { Service } from "./Service.js";
+import { ProfessionalService } from "./ProfessionalService.js";
 
 // Cliente
 Appointment.belongsTo(User, {
@@ -43,7 +44,6 @@ Service.hasMany(Appointment, {
   foreignKey: "serviceId",
 });
 
-
 //Profesional a servicio
 Professionals.belongsTo(Service, {
   foreignKey: "serviceId",
@@ -51,5 +51,17 @@ Professionals.belongsTo(Service, {
 });
 
 Service.hasMany(Professionals, {
+  foreignKey: "serviceId",
+});
+
+//Realación un profesional-varios servicios
+
+Professionals.belongsToMany(Service, {
+  through: ProfessionalService,
+  foreignKey: "professionalId",
+});
+
+Service.belongsToMany(Professionals, {
+  through: ProfessionalService,
   foreignKey: "serviceId",
 });
