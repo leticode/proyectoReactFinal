@@ -1,6 +1,6 @@
 //creamos un objeto con las cntastes de los roles de usuario
-export const userRoles = {
-    SUPERADMIN: 'super-admin',
+export const userRole = {
     ADMIN: 'admin',
-    USER: 'user',
+    PROFESSIONAL: 'professional',
+    CUSTOMER: 'customer',
 };
