@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { NavLink } from "react-router-dom";
 import { HashRouter } from "react-router-dom";
 import { Routes, Route, Navigate } from "react-router-dom";
@@ -9,21 +9,21 @@ import Login from "./components/login/Login";
 import Register from "./components/Register/Register"; 
 import NotFound from './components/notFound/Notfound';
 import Admin from './components/admin/Admin';
+
 import UserManagement from './components/userManagement/UserManagement';
+import { AuthenticationContext } from './components/services/auth/authContextProvider';
+import tokenValid from './components/services/auth/auth.token';
+
 import './App.css';
 import './index.css';
 
 
 function App() {
+  const { user, token } = useContext(AuthenticationContext);
  /*  NAV LOGICA 
   const [menuOpen, setMenuOpen] = useState(false); //Inicializo el menu en falso primero (por default cerrado)
   const linkClass = ({ isActive }) => isActive ? "link active" : "link"; //OPERADOR TERNARIO(? SIMBOLIZA TRUE Y : SIMBOLIZA FALSE ASI FUNCIONA EN REACT) si se cumple pone esta clase si no se cumple la otra*/
-  /*const [LoggedIn, setLoggedIn] = useState(false); //inicializamos el login en falso 
 
-  //cambiamos el estado a verdadero para indicar que el usuario esta loggeado
-  const handleLoggedIn = () => {
-    setLoggedIn(true);
-  } */
 
   //en realidad deberiamos usar BrowserRouter pero x el momento lo dejamos asi(HashRouter) pq no tiene complejidad el proyecto (sirve para poder navegar entre paginas sin recargar)
   return (<>
@@ -78,7 +78,10 @@ function App() {
           <Route path="/register" element={<Register/>}/>
           <Route path="/admin" element={<Admin/>}/>
 
-          <Route path="/users" element={<UserManagement/>}/>
+          {/*si el token es valido y el user role es admin puede ir a usermanagemnet si no redirige a home*/}
+          {tokenValid(token) && user?.role === "admin" && 
+            (<Route path="/users" element={<UserManagement />}/>)
+          }
           <Route path="/*" element={<NotFound/>}/>
         </Routes>
       </Layout>

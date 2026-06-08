@@ -19,10 +19,10 @@ const verifyToken = ((req, res, next) => {
         //aca verificaos el token si la firma es correcta etc
         const decoded = jwt.verify(token, '2tup2pureSkin-2026');
 
-        //para obtener usuario
+        //se guarda el usuario
         req.user = decoded;
 
-        next();
+        next(); //pasamos al sig middleware
 
     } catch (error) {
         return res.status(401).json({
