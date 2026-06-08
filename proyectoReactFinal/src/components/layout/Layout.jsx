@@ -1,10 +1,18 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useState, useContext } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { AuthenticationContext } from "../services/auth/authContextProvider";
 import '../../index.css';
 
 const Layout = ({ children }) => {
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const { handleUserLogout } = useContext(AuthenticationContext);
+  const navigate = useNavigate();
+
+  const logout = () => {
+    handleUserLogout()
+    navigate("/login")
+  };
 
   const linkClass = ({ isActive }) =>
     isActive ? "link active" : "link";
@@ -37,6 +45,9 @@ const Layout = ({ children }) => {
             <img src="/img/navbarImg/user-icon.webp" alt="Img navbar" className = "imgLogin"/>
           </NavLink>
 
+          <button onClick={logout}>
+            Cerrar sesión
+          </button>
         </nav>
 
         {/* HAMBURGUESA */}

@@ -1,4 +1,5 @@
 import { User } from "../models/User.js";
+import { verifyRegister, verifyRole } from "../middleware/auth.validations.js";
 
 const getAllUsers = ((req, res) => {
     const allUsers = await User.findAll();

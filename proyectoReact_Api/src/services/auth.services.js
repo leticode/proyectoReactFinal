@@ -85,8 +85,8 @@ export const loginUser = async (req, res) => {
             role: user.role
         },
         JWTsecretKey,
-        //desp de una hora deja de ser valido
-        {expiresIn: '1h'}
+        //desp de dos hora deja de ser valido
+        {expiresIn: '2h'}
     )
     return res.status(200).send({
         message: "Login exitoso",
