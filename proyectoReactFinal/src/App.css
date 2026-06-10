@@ -594,8 +594,6 @@ input:focus{
   background-color: var(--variableUno);
   color: var(--variableCuatro);
 }
-<<<<<<< HEAD
-=======
 
 /*PAGINA DE GESTION DE USER*/
 .management {
@@ -672,4 +670,6 @@ input:focus{
   margin-top: 8px;
   outline: none;
 }
+
+
 
