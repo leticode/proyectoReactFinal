@@ -65,7 +65,8 @@ const Register = ()=>{
 				body: JSON.stringify({
 					email,
 					password,
-                    confirmPassword
+                    confirmPassword,
+                    role: 'customer'
 				}),
 			});
 

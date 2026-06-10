@@ -10,7 +10,10 @@ import cors from "cors";
 import { services } from "./services/information.services.js";
 import { sequelize } from "./db.js";
 import { Service } from "./models/Service.js";
+import  User from "./models/User.js";
+import bcrypt from "bcrypt";
 import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./routes/users.routes.js"
 
 //creamos la aplicacion express donde app es nuestro servidor backend
 const app = express();
@@ -53,14 +56,43 @@ async function seedServices() {
   }
 }
 
+/* FUNCION PARA CREAR EL ADMIN DONDE ME HASHEA LA CONTRASENA DEL ADMIN Y SI YA EXISTE ESE ADMIN
+//NO ME LO CREA LA COMENTO PORQ ESTA FUNCION SOLO SE TIENE Q EJECUTAR UNA VEZ
+//UNA VEZ QUE EL ADMIN SE CREO YA NO ME SIRVE
+
+  async function createSuperAdmin() {
+    const user = await User.findOne({
+        where: {
+            email: "luciromee@gmail.com"
+        }
+    });
+
+    if (!user) {
+        const hashedPassword = await bcrypt.hash("mondongo@@", 10);
+
+        await User.create({
+            email: "luciromee@gmail.com",
+            password: hashedPassword,
+            role: "admin"
+        })
+
+        console.log("Admin creado");
+    }
+}*/
+
 async function startServer() {
   try {
     await sequelize.authenticate(); // conectarse a la base de datos, con los datos que estan definidos en db.js
     await sequelize.sync(); // sincronizar las tablas (agregar las que faltan, modificar las que cambiaron, etc.) 
     await seedServices(); // si la tabla de servicios esta vacia, llenarla con los datos que tenemos hardcodeados en information.services.js 
 
+    //ACA SE EJECUTABA LA FUNCION PARA CREAR ADMIN
+    //await createSuperAdmin()
+
     //puse esto para usar la ruta de auth
-    app.use(authRoutes);
+    app.use("/api/auth", authRoutes);
+    app.use("/api/users", userRoutes);
+
     app.listen(PORT, () => {
       console.log(`server listening on port ${PORT}`);
     });

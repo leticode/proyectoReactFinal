@@ -6,17 +6,8 @@ import bcrypt from "bcrypt" ;
 import jwt from "jsonwebtoken";
 
 export const registerUser = async (req, res) => {
-try {
-
-        // TODO tu código actual
-
     //obtenemos los datos del body
-    const {email, password, confirmPassword} = req.body;
-
-    //confirmamos que las contrasenas sean iguales
-    if (password !== confirmPassword){
-        return res.status(400).send({message: "Las contrasenas no coinciden"})
-    }
+    const {email, password, confirmPassword, role} = req.body;
 
     //buscamos si el usuario existe
     const user = await User.findOne({
@@ -43,7 +34,6 @@ try {
     //creamos el hash con la contrasena escrta por el usuario y el salt generado aleatoriamente
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    console.log("Password recibida en register:", password);
     const newUser = await User.create({
         email,
         //cuando creamos el usuaro la contrasena se guarda hasheada en la bdd
@@ -55,21 +45,13 @@ try {
         message: "Usuario creado correctamente",
         user: {
             id: newUser.id,
-            email: newUser.email
+            email: newUser.email,
+            role: newUser.role
         }
     });
 
-        } catch (error) {
-        console.error("ERROR REGISTER:");
-        console.error(error);
-
-        return res.status(500).json({
-            message: error.message
-        });
-    }
 
 }
-
 
 export const loginUser = async (req, res) => {
     const {email, password} = req.body;
@@ -86,7 +68,7 @@ export const loginUser = async (req, res) => {
     // Compara la contraseña ingresada con el hash almacenado
     const comparison = await bcrypt.compare(password, user.password);
 
-        // Si no coinciden, devuelve error 401
+    // Si no coinciden, devuelve error 401
     if (!comparison)
         return res.status(401).send({ message: "Email y/o contraseña incorrecta" });
 
@@ -99,11 +81,11 @@ export const loginUser = async (req, res) => {
             //payload osea la informacion queva guardada dentro del token
             id: user.id,
             email: user.email,
-            roles: user.roles
+            role: user.role
         },
         JWTsecretKey,
-        //desp de una hora deja de ser valido
-        {expiresIn: '1h'}
+        //desp de dos hora deja de ser valido
+        {expiresIn: '2h'}
     )
     return res.status(200).send({
         message: "Login exitoso",
@@ -111,7 +93,7 @@ export const loginUser = async (req, res) => {
         user: {
             id: user.id,
             email: user.email,
-            roles: user.roles
+            role: user.role
         }
     });
 

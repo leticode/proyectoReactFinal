@@ -1,9 +1,10 @@
+//esta libreria es para crear o verificar token en el back
 import jwt from "jsonwebtoken";
 
 const verifyToken = ((req, res, next) => {
     //obtenemos el header
-    const authHeader = req.header.authorization;
-
+    const authHeader = req.headers.authorization;
+    
     //verificamos que ese token encontrado en el header exista
     if(!authHeader){
         return res.status(401).json({
@@ -18,10 +19,10 @@ const verifyToken = ((req, res, next) => {
         //aca verificaos el token si la firma es correcta etc
         const decoded = jwt.verify(token, '2tup2pureSkin-2026');
 
-        //para obtener usuario
+        //se guarda el usuario
         req.user = decoded;
 
-        next();
+        next(); //pasamos al sig middleware
 
     } catch (error) {
         return res.status(401).json({

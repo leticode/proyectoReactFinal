@@ -1,11 +1,13 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 //prueba untaria
 import  verifyEmail  from "../../utils/verifyEmail.js";
 import verifyPassword from "../../utils/verifyPassword.js";
+import { AuthenticationContext } from "../services/auth/authContextProvider.jsx";
 
 const Login = () =>{
+    const { handleUserLogin } = useContext(AuthenticationContext)
     const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
@@ -60,15 +62,17 @@ const Login = () =>{
 			});
 
             //aca en data guardamos lo del backend que viene en formato JSON y lo trasforma en objeto
-            const data = await response.json();
-
+            const data = await response.json(); 
             //si devolvio error cortamos la funcion
             if (!response.ok) {
                 setServerMessage(data.message || "error al registrarse");
                 return;
             }
 
-            localStorage.setItem('token', data.token);
+            handleUserLogin(data) //{token, user}
+
+            setEmail('');
+            setPassword('');
 
             navigate("/home");
 
