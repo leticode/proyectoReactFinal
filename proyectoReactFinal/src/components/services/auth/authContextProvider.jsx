@@ -21,9 +21,12 @@ const AuthContextProvider = ({children}) => {
     const handleUserLogin = (userData) => {
         //guardamos el token en uno y el objeto del usuario en el otro
         localStorage.setItem('pureSkin-token', userData.token);
-        localStorage.setItem('pureSkin-user', JSON.stringify(userData));
+        localStorage.setItem('pureSkin-user', JSON.stringify(userData.user));
+        //aca guardamos solo el objeto del token
         setToken(userData.token);
-        setUser(userData);
+        //y aca solo el objeto del usuario asi cuando hacemos la verificacion 
+        // nos devuelve el objeto donde va a estar el rol
+        setUser(userData.user);
     }
 
     const handleUserLogout = (userData) => {
