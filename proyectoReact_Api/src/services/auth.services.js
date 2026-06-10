@@ -53,7 +53,6 @@ export const registerUser = async (req, res) => {
 
 }
 
-
 export const loginUser = async (req, res) => {
     const {email, password} = req.body;
 
@@ -69,7 +68,7 @@ export const loginUser = async (req, res) => {
     // Compara la contraseña ingresada con el hash almacenado
     const comparison = await bcrypt.compare(password, user.password);
 
-        // Si no coinciden, devuelve error 401
+    // Si no coinciden, devuelve error 401
     if (!comparison)
         return res.status(401).send({ message: "Email y/o contraseña incorrecta" });
 

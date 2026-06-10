@@ -1,17 +1,24 @@
-import { User } from "../models/User.js";
+import  User  from "../models/User.js";
 import { verifyRegister, verifyRole } from "../middleware/auth.validations.js";
 
-const getAllUsers = ((req, res) => {
+export const getAllUsers = async (req, res) => {
     const allUsers = await User.findAll();
     res.json(allUsers);
-});
+};
 
-const getUserById = ((req, res) => {
+export const getUserById = async (req, res) => {
     const { id } = req.params;
+    const UserById = await User.findByPk(id);
+    
+    if(!UserById)
+    return res.status(404).json({message: 'Id inexistente'});
 
-});
-//crear gets para buscar usuario
-const createUser = ((req, res) => {
+    res.json(UserById);
+
+};
+
+
+export const createUser = ((req, res) => {
 
 }); 
 //crear post para crearlos

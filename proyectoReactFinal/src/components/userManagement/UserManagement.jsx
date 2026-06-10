@@ -1,10 +1,13 @@
 import { useEffect, useState, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-//IMPORTARIAMOS EL CONTEXTO TAMB uy
+import { AuthenticationContext } from "../services/auth/authContextProvider";
 import ValidateUserManagement from "../../utils/validateUserManagement";
 import tokenValid from "../services/auth/auth.token";
 
 const UserManagement = () => {
+    const { token, handleUserLogout } = useContext(AuthenticationContext);
+
+    const [users, setUsers] = useState([]);
     const [formUser, setformUser] = useState({
         email: "",
         password: "",
@@ -29,8 +32,42 @@ const UserManagement = () => {
             ...formUser,
             [name]: value
         });
-    };
+    }
     
+    //permte ejecutar el codgo cuando se renderza el componente
+    useEffect (() => {
+        //el token es valdo? si no lo es lo desloguea borra desde el localstorage y navega al login
+        if (!tokenValid(token)) {
+            handleLogoutUser();
+            navigate("/login");
+        }
+
+        //si es valido hace el la peticion para traer los usaruaios
+        fetch("http://localhost:3000/api/users", {
+            //mandamos como header el token
+            headers: { Authorization: `Bearer ${token}` },
+        })
+
+        //el front recibe la respuesta del backend PERO solo recibe la response status
+        //osea solo recibe o 201 o 401 no el objeto de usuario 
+        .then((res) => {
+            //si el error empieza con 400 algo tira error 
+            if (!res.ok) throw new Error("Error al cargar usuarios");
+
+            //si todo sale bien convierte la response a objeto
+            return res.json();
+        })
+
+        //ahora si este then tiene el objeto usuario
+        .then((data) => {
+            //y actualiza el estado de users con el objeto recibido
+            setUsers(data);
+        })
+
+        .catch(() => setServerMessage("No se pudieron cargar los usuarios"));
+  
+    }, []);
+
     const handleCreateUser = async (event) => {
         //evitamos que recarguen la pagina
         event.preventDefault();
@@ -52,17 +89,16 @@ const UserManagement = () => {
             return;
         }
 
-        fetch("http://localhost:5000/api/users", {
+        fetch("http://localhost:3000/api/users", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                //deberia tener authorization me todavia no tengo lo  del token
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(formUser),
         })
-        //respuesta del servdor
+
         .then((res) => {
-                //si la respuesta no fue exitosa osea error400, 401 etc
 				if (!res.ok) {
                     //corta la ejecucon throw
 					throw new Error('No se pudieron cargar los usuarios');
@@ -147,7 +183,8 @@ const UserManagement = () => {
                                 
                             </div>
                             <button type = "submit"> Agregar </button>
-                            <p>{setServerMessage}</p>
+                            
+                            {serverMessage && (<p className="server-message">{serverMessage}</p>)}
                         </form>
                 </div>
             </section>

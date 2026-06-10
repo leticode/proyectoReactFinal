@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 
 const verifyToken = ((req, res, next) => {
     //obtenemos el header
-    const authHeader = req.header.authorization;
-
+    const authHeader = req.headers.authorization;
+    
     //verificamos que ese token encontrado en el header exista
     if(!authHeader){
         return res.status(401).json({
