@@ -9,6 +9,7 @@ import Login from "./components/login/Login";
 import Register from "./components/Register/Register"; 
 import NotFound from './components/notFound/Notfound';
 import Admin from './components/admin/Admin';
+import ServiceDetails from './components/serviceDetails/ServiceDetails';
 
 import UserManagement from './components/userManagement/UserManagement';
 import { AuthenticationContext } from './components/services/auth/authContextProvider';
@@ -30,6 +31,7 @@ function App() {
           <Route path='/' element={<Navigate to='home' />} /> {/*redirige*/}
           <Route path="/home" element={<Home />} />
           <Route path="/servicios" element={<Services />} />
+          <Route path="/services/:id" element={<ServiceDetails />} />
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
           <Route path="/admin" element={<Admin/>}/>
