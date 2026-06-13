@@ -36,7 +36,7 @@ export const Service = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    professional: {
+    professional: { //duplica la info hay q borrarla
       type: DataTypes.STRING,
       allowNull: false,
     },

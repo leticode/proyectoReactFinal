@@ -16,6 +16,5 @@ export const ProfessionalService = sequelize.define(
   {
     tableName: "professional_services",
     timestamps: false,
-  },
-  {timestamps: false}
+  }
 );

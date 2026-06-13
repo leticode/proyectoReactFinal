@@ -1,8 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db.js";
 
-
-
 export const Professionals = sequelize.define(
   "Professionals",
   {
@@ -12,23 +10,21 @@ export const Professionals = sequelize.define(
       autoIncrement: true,
     },
     name: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     specialty: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    /*serviceId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },*/
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      unique: true, //pq debe tener una sola ficha profesional
     },
   },
   {
     tableName: "professional",
-  },
-  {timestamps: false}
+    timestamps: false
+  }
 );

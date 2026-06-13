@@ -4,7 +4,7 @@ import { Appointment } from "./Appointment.js";
 import { Service } from "./Service.js";
 import { ProfessionalService } from "./ProfessionalService.js";
 
-// Cliente
+//cliente <-> turno
 Appointment.belongsTo(User, {
   foreignKey: "userId",
   as: "user",
@@ -14,7 +14,7 @@ User.hasMany(Appointment, {
   foreignKey: "userId",
 });
 
-// Profesional
+//professional <-> turno
 Appointment.belongsTo(Professionals, {
   foreignKey: "professionalId",
   as: "professional",
@@ -24,17 +24,7 @@ Professionals.hasMany(Appointment, {
   foreignKey: "professionalId",
 });
 
-// Profesional a user
-Professionals.belongsTo(User, {
-  foreignKey: "userId",
-  as: "user",
-});
-
-User.hasOne(Professionals, {
-  foreignKey: "userId",
-});
-
-// Servicio
+//servicio <-> turno
 Appointment.belongsTo(Service, {
   foreignKey: "serviceId",
   as: "service",
@@ -44,18 +34,17 @@ Service.hasMany(Appointment, {
   foreignKey: "serviceId",
 });
 
-//Profesional a servicio
-Professionals.belongsTo(Service, {
-  foreignKey: "serviceId",
-  as: "service",
+//usuario <-> professional
+Professionals.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
 });
 
-Service.hasMany(Professionals, {
-  foreignKey: "serviceId",
+User.hasOne(Professionals, {
+  foreignKey: "userId",
 });
 
-//Realación un profesional-varios servicios
-
+//professional <-> servicio
 Professionals.belongsToMany(Service, {
   through: ProfessionalService,
   foreignKey: "professionalId",
