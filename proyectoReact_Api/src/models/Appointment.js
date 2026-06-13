@@ -12,20 +12,21 @@ export const Appointment = sequelize.define(
       autoIncrement: true,
     },
     date: {
-      type: DataTypes.DATEONLY
+      type: DataTypes.DATEONLY,
+      allowNull: false,
     },
     hour: {
-      type: DataTypes.STRING,
+      type: DataTypes.TIME,
       allowNull: false,
     },
     status: {
       type: DataTypes.ENUM(
-        "pending",
-        "confirmed",
-        "cancelled",
-        "completed"
+        "pendiente",
+        "terminado",
+        "cancelado",
+        "en curso"
       ),
-      defaultValue: "pending",
+      defaultValue: "pendiente",
     },
     userId: {
       type: DataTypes.INTEGER,
@@ -41,7 +42,7 @@ export const Appointment = sequelize.define(
     },
   },
   {
-    tableName: "appointment",
-  },
-  {timestamps: false}
+    tableName: "professional",
+    timestamps: false
+  }
 );
