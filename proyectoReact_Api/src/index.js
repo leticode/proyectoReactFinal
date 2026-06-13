@@ -41,6 +41,28 @@ app.get("/api/services", async (req, res) => {
   }
 });
 
+// endpoint para obtener un solo servicio por id
+app.get("/api/services/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const serviceId = Number(id);
+
+    if (Number.isNaN(serviceId)) {
+      return res.status(400).json({ message: "El id del servicio debe ser un número" });
+    }
+
+    const service = await Service.findByPk(serviceId);
+
+    if (!service) {
+      return res.status(404).json({ message: "Servicio no encontrado" });
+    }
+
+    res.json(service);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener el servicio", error: error.message });
+  }
+});
+
 // FIN ENDPOINTS ---------------
 
 async function seedServices() {
