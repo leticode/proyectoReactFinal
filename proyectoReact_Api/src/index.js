@@ -63,6 +63,20 @@ app.get("/api/services/:id", async (req, res) => {
   }
 });
 
+// endpoint para crear un servicio
+app.post("/api/services", async (req, res) => {
+  try {
+    const service = await Service.create(req.body);
+
+    res.status(201).json(service);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error al crear servicio",
+      error: error.message,
+    });
+  }
+});
+
 // FIN ENDPOINTS ---------------
 
 async function seedServices() {
