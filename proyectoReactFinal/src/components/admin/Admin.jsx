@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { SERVICE_CATEGORIES_ARRAY } from "../../constants/serviceCategories";
 
 const Admin = () => {
     const [serverMessage, setServerMessage] = useState("");
     const [services, setServices] = useState([]);
     const [modal, setModal] = useState(false);
     const [newService, setNewService] = useState({
-        tags: [],
         name: "",
         img: "",
         price: 0,
         description: "",
         professional: "",
         duration: 0,
-
+        category: "",
     });
 
     useEffect(() => {
@@ -92,20 +92,21 @@ const Admin = () => {
                             </div>
 
                             <form className="modal-form" onSubmit={handleSubmit}>
-
                                 <label>
-                                    Tags
+                                    Categoría
                                     <select
-                                        name="tags"
-                                        value={newService.tags}
-                                        onChange={handleChange}>
-                                        <option value="Cuidados faciales">Cuidados faciales</option>
-                                        <option value="Pestañas y cejas">Pestañas y cejas</option>
-                                        <option value="Masajes">Masajes</option>
-                                        <option value="Tratamientos corporales">Tratamientos corporales</option>
-
+                                        name="category"
+                                        value={newService.category}
+                                        onChange={handleChange}
+                                    >
+                                        {SERVICE_CATEGORIES_ARRAY.map((category) => (
+                                            <option key={category.value} value={category.value}>
+                                                {category.name}
+                                            </option>
+                                        ))}
                                     </select>
                                 </label>
+
                                 <label>
                                     Nombre
                                     <input
@@ -140,7 +141,7 @@ const Admin = () => {
                                 </label>
 
                                 <label>
-                                    Descripcion
+                                    Descripción
                                     <input
                                         type="text"
                                         name="description"
@@ -149,6 +150,7 @@ const Admin = () => {
                                         placeholder="Descripcion del servicio"
                                     />
                                 </label>
+
                                 <label>
                                     Profesional
                                     <input
@@ -159,8 +161,9 @@ const Admin = () => {
                                         placeholder="Profesional encargado del servicio"
                                     />
                                 </label>
+
                                 <label>
-                                    Duracion
+                                    Duración
                                     <input
                                         type="number"
                                         name="duration"
