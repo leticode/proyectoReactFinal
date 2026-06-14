@@ -20,28 +20,24 @@ export default function Services() {
         <div className="filter">
           <button onClick={() => setFiltro("Todos")}>Todos</button>
 
-          <button onClick={() => setFiltro("Cuidados faciales")}>
+          <button onClick={() => setFiltro("CF")}>
             Cuidados faciales
           </button>
 
-          <button onClick={() => setFiltro("Pestañas y cejas")}>
+          <button onClick={() => setFiltro("PC")}>
             Pestañas y cejas
           </button>
 
-          <button onClick={() => setFiltro("Tratamientos corporales")}>
+          <button onClick={() => setFiltro("TC")}>
             Tratamientos corporales
           </button>
 
-          <button onClick={() => setFiltro("Masajes")}>
+          <button onClick={() => setFiltro("MA")}>
             Masajes
           </button>
 
-          <button onClick={() => setFiltro("Depilación definitiva")}>
+          <button onClick={() => setFiltro("DD")}>
             Depilación definitiva
-          </button>
-
-          <button onClick={() => setFiltro("Combos")}>
-            Combos
           </button>
         </div>
 
@@ -50,7 +46,7 @@ export default function Services() {
             .filter(
               (service) =>
                 filtro === "Todos" ||
-                service.tags.includes(filtro)
+                service.category == filtro
             )
             .map((service) => (
               <Link

@@ -5,14 +5,13 @@ const Admin = () => {
     const [services, setServices] = useState([]);
     const [modal, setModal] = useState(false);
     const [newService, setNewService] = useState({
-        tags: [],
         name: "",
         img: "",
         price: 0,
         description: "",
         professional: "",
         duration: 0,
-
+        category: ""
     });
 
     useEffect(() => {
@@ -94,15 +93,15 @@ const Admin = () => {
                             <form className="modal-form" onSubmit={handleSubmit}>
 
                                 <label>
-                                    Tags
+                                    Categoria
                                     <select
-                                        name="tags"
-                                        value={newService.tags}
+                                        name="category"
+                                        value={newService.category}
                                         onChange={handleChange}>
-                                        <option value="Cuidados faciales">Cuidados faciales</option>
-                                        <option value="Pestañas y cejas">Pestañas y cejas</option>
-                                        <option value="Masajes">Masajes</option>
-                                        <option value="Tratamientos corporales">Tratamientos corporales</option>
+                                        <option value="CF">Cuidados faciales</option>
+                                        <option value="PC">Pestañas y cejas</option>
+                                        <option value="MA">Masajes</option>
+                                        <option value="TC">Tratamientos corporales</option>
 
                                     </select>
                                 </label>

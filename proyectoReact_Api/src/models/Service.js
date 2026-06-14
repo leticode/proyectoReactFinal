@@ -16,6 +16,11 @@ export const Service = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+    category: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'CF',
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -39,11 +44,6 @@ export const Service = sequelize.define(
     professional: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    tags: {
-      type: DataTypes.JSON,
-      allowNull: false,
-      defaultValue: [],
     },
   },
   {
