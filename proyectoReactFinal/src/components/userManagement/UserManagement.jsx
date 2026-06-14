@@ -5,8 +5,7 @@ import ValidateUserManagement from "../../utils/validateUserManagement";
 import tokenValid from "../services/auth/auth.token.js";
 
 const UserManagement = () => {
-    const { token, handleUserLogout } = useContext(AuthenticationContext);
-
+    const { token, handleUserLogout, user } = useContext(AuthenticationContext);
     const [users, setUsers] = useState([]);
     const [formUser, setformUser] = useState({
         email: "",
@@ -124,11 +123,12 @@ const UserManagement = () => {
     }
 
     return (
-        <section className="management">
+        <>
+        <h1>Gestion de Usuarios</h1>
+        <div className="management">
             <div className="management-container">
-
-                <form onSubmit={handleCreateUser}>
-                    <h1>Gestion de Usuarios</h1>
+                {user?.role === "admin" && (
+                <form onSubmit={handleCreateUser} noValidate>
 
                     <div className="input-container">
                         <label>Email</label>
@@ -186,8 +186,49 @@ const UserManagement = () => {
 
                     {serverMessage && (<p className="server-message">{serverMessage}</p>)}
                 </form>
+                )}
             </div>
-        </section>
+            
+            <div className="management-container">
+                <table>
+                    <thead> {/*encabezado*/}
+                        <tr> {/*row*/} 
+                            <th>Email</th>
+                            {user?.role === "admin" && (
+                                <>
+                                    <th>Rol</th>
+                                    <th></th>
+                                    <th></th>
+                                </>
+                            )}
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {/*mapeamos users por cada usuario con su id ceramos una fila*/}
+                        {users.map((u) => (
+                            <tr key={u.id}>
+                                <td>{u.email}</td>
+                                {user?.role === "admin" && (
+                                    <>
+                                        <td>{u.role}</td> {/*mostramos rol */}
+                                        <td> {/*botones para editar o borrar*/}
+                                            <button className="edit-button">Editar</button>
+                                        </td>
+                                        <td>
+                                            <button className="delete-button"> Eliminar</button>
+                                        </td>
+                                    </>
+                                )}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+
+                {serverMessage && (<p className="server-message">{serverMessage}</p>)}
+            </div>
+        </div>
+        </>
     );
 }
 
