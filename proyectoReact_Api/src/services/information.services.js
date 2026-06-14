@@ -1,3 +1,4 @@
+/*
 export const services = [
 {
   id: 1,
@@ -190,3 +191,4 @@ export const services = [
   tags: ["Tratamientos corporales"]
 }
 ];
+*/

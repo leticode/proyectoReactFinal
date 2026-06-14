@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import {
+  SERVICE_CATEGORY_DICTIONARY,
+  SERVICE_CATEGORIES_ARRAY,
+} from "../../constants/serviceCategories";
 
 export default function Services() {
   const [filtro, setFiltro] = useState("Todos");
@@ -14,43 +18,29 @@ export default function Services() {
 
   return (
     <section className="servicios">
-      <h2>{filtro === "Todos" ? "Servicios" : filtro}</h2>
+      <h2>{filtro=="Todos"?"Todos":SERVICE_CATEGORY_DICTIONARY[filtro].name}</h2>
 
       <div className="contenedor-servicios">
         <div className="filter">
+
           <button onClick={() => setFiltro("Todos")}>Todos</button>
 
-          <button onClick={() => setFiltro("Cuidados faciales")}>
-            Cuidados faciales
-          </button>
-
-          <button onClick={() => setFiltro("Pestañas y cejas")}>
-            Pestañas y cejas
-          </button>
-
-          <button onClick={() => setFiltro("Tratamientos corporales")}>
-            Tratamientos corporales
-          </button>
-
-          <button onClick={() => setFiltro("Masajes")}>
-            Masajes
-          </button>
-
-          <button onClick={() => setFiltro("Depilación definitiva")}>
-            Depilación definitiva
-          </button>
-
-          <button onClick={() => setFiltro("Combos")}>
-            Combos
-          </button>
+          {/* Crear los botones de todas las categorias */}
+          {SERVICE_CATEGORIES_ARRAY.map((category) => (
+            <button
+              key={category.value}
+              onClick={() => setFiltro(category.value)}
+            >
+              {category.name}
+            </button>
+          ))}
         </div>
 
         <div className="grid-servicios">
           {services
             .filter(
               (service) =>
-                filtro === "Todos" ||
-                service.tags.includes(filtro)
+                filtro === "Todos" || service.category == filtro
             )
             .map((service) => (
               <Link
@@ -59,13 +49,8 @@ export default function Services() {
                 className="card"
               >
                 <div className="img-container">
-                  <img
-                    src={service.img}
-                    alt={service.name}
-                  />
-                  <p className="titulo">
-                    {service.name}
-                  </p>
+                  <img src={service.img} alt={service.name} />
+                  <p className="titulo">{service.name}</p>
                 </div>
               </Link>
             ))}
