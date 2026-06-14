@@ -126,7 +126,7 @@ async function startServer() {
     //await createSuperAdmin()
 
     //puse esto para usar la ruta de auth
-    app.use("/api/auth", authRoutes);
+    app.use(authRoutes);
     app.use("/api/users", userRoutes);
 
     app.listen(PORT, () => {

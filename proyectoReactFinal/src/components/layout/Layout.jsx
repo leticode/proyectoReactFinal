@@ -6,11 +6,18 @@ import '../../index.css';
 const Layout = ({ children }) => {
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const { handleUserLogout } = useContext(AuthenticationContext);
+  const { handleUserLogout, user } = useContext(AuthenticationContext);
+  const [open, setOpen]= useState(false);
+
   const navigate = useNavigate();
 
   const logout = () => {
     handleUserLogout()
+    setOpen(false)
+    navigate("/home")
+  };
+  const login = () => {
+    setOpen(false)
     navigate("/login")
   };
 
@@ -41,13 +48,25 @@ const Layout = ({ children }) => {
           <NavLink to="/contacto" className={linkClass}>
             Contacto
           </NavLink>
-          <NavLink to="/login" className={linkClass}>
-            <img src="/img/navbarImg/user-icon.webp" alt="Img navbar" className = "imgLogin"/>
-          </NavLink>
 
-          <button onClick={logout}>
-            Cerrar sesión
-          </button>
+          <div className="user-menu">
+              <img src="/img/navbarImg/user-icon.webp" alt="Img navbar" className = "imgLogin" onClick={() => setOpen(!open)}/>
+                
+                {open && (
+                <div className="dropdown">
+                  {user ? (
+                    <button onClick={logout}>
+                          Cerrar sesion
+                      </button>
+                  ) : (
+                    <button onClick={login}>
+                          Iniciar Sesion
+                      </button>
+                  )}
+                </div>
+                )}
+          </div>
+
         </nav>
 
         {/* HAMBURGUESA */}
@@ -80,9 +99,25 @@ const Layout = ({ children }) => {
             Contacto
           </NavLink>
 
-          <NavLink to="/login" onClick={() => setMenuOpen(false)} className={linkClass}>
-            Login
-          </NavLink>
+          {user ? (
+            <button
+              className="mobile-menu-btn"
+              onClick={() => {
+                logout();
+                setMenuOpen(false);
+              }}
+            >
+              Cerrar sesion
+            </button>
+          ) : (
+            <NavLink
+              to="/login"
+              onClick={() => setMenuOpen(false)}
+              className={linkClass}
+            >
+              Iniciar sesion
+            </NavLink>
+          )}
 
         </div>
       )}
