@@ -100,7 +100,7 @@ const Layout = ({ children }) => {
           {(user?.role === "admin" || user?.role === "professional") && (
             <>
               <NavLink to="/admin" className={linkClass}>Admin</NavLink>
-              <NavLink to="/management" className={linkClass}>Gestion Usuarios</NavLink>
+              <NavLink to="/management" className={linkClass}>Gestion de Usuarios</NavLink>
             </>
           )}
 
