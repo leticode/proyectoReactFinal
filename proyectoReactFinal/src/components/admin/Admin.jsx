@@ -5,7 +5,7 @@ const Admin = () => {
     const [serverMessage, setServerMessage] = useState("");
     const [services, setServices] = useState([]);
     const [modal, setModal] = useState(false);
-    const [newService, setNewService] = useState({
+    const emptyService = {
         name: "",
         img: "",
         price: 0,
@@ -13,7 +13,8 @@ const Admin = () => {
         professional: "",
         duration: 0,
         category: "",
-    });
+    };
+    const [newService, setNewService] = useState(emptyService);
 
     useEffect(() => {
         const loadServices = async () => {
@@ -65,6 +66,7 @@ const Admin = () => {
 
     setServices((prev) => [...prev, data]);
     setModal(false);
+    setNewService(emptyService);
 };
 
     return (
