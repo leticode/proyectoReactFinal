@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import NotFound from "../notFound/Notfound";
+import ServiceCalendar from "../serviceCalendar/ServiceCalendar";
 
 export default function ServiceDetails() {
   const { id } = useParams();
@@ -49,7 +50,7 @@ export default function ServiceDetails() {
           </p>
 
           <button className="btn-reservar">
-            Reservar turno
+            <ServiceCalendar />
           </button>
         </div>
       </div>

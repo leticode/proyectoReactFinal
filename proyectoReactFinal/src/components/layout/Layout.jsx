@@ -36,13 +36,25 @@ const Layout = ({ children }) => {
 
         {/* NAV DESKTOP */}
         <nav className="nav navbar">
-          <NavLink to="/admin" className={linkClass}>Admin</NavLink>
+          {(user?.role === "admin" || user?.role === "professional") && (
+            <>
+              <NavLink to="/admin" className={linkClass}>Admin</NavLink>
+              <NavLink to="/admin" className={linkClass}>Gestion Usuarios</NavLink>
+            </>
+          )}
+
+          <NavLink to="/professionals" className={linkClass}>Profesionals</NavLink>
+
           <NavLink to="/home" className={linkClass}>
             Inicio
           </NavLink>
 
           <NavLink to="/servicios" className={linkClass}>
             Servicios
+          </NavLink>
+
+          <NavLink to="/nosotros" className={linkClass}>
+            Nosotros
           </NavLink>
 
           <NavLink to="/contacto" className={linkClass}>
@@ -85,7 +97,12 @@ const Layout = ({ children }) => {
       {menuOpen && (
         <div className="mobile-menu">
 
-          <NavLink to="/admin" className={linkClass}>Admin</NavLink>
+          {(user?.role === "admin" || user?.role === "professional") && (
+            <>
+              <NavLink to="/admin" className={linkClass}>Admin</NavLink>
+              <NavLink to="/admin" className={linkClass}>Gestion Usuarios</NavLink>
+            </>
+          )}
 
           <NavLink to="/home" onClick={() => setMenuOpen(false)} className={linkClass}>
             Inicio
@@ -93,6 +110,10 @@ const Layout = ({ children }) => {
 
           <NavLink to="/servicios" onClick={() => setMenuOpen(false)} className={linkClass}>
             Servicios
+          </NavLink>
+
+          <NavLink to="/nosotros" onClick={() => setMenuOpen(false)} className={linkClass}>
+            Nosotros
           </NavLink>
 
           <NavLink to="/contacto" onClick={() => setMenuOpen(false)} className={linkClass}>
@@ -141,12 +162,16 @@ const Layout = ({ children }) => {
               <h3 className="title-footer">EXPLORAR</h3>
               <NavLink to="/home" className="link-footer">Inicio</NavLink>
               <NavLink to="/servicios" className="link-footer">Servicios</NavLink>
+              <NavLink to="/nosotros" className="link-footer">Nosotros</NavLink>
+              <NavLink to="/contacto" className="link-footer">Contacto</NavLink>
             </div>
 
             <div className="column-footer">
               <h3 className="title-footer">HORARIOS</h3>
+              <p className="subtitle-footer">Lunes a Viernes</p>
               <p className="text-footer">09:00 a 20:00</p>
-              <p className="text-footer">Sábados 09:00 a 14:00</p>
+              <p className="subtitle-footer">Sábados</p>
+              <p className="text-footer">09:00 a 14:00</p>
             </div>
 
           </div>
