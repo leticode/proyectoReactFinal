@@ -24,12 +24,13 @@ function ServiceCalendar() {
                             X
                         </button>
 
-                        <h2>Seleccionar Turno</h2>
+                        <h2 className="calendar-title">Seleccionar Turno</h2>
 
                         <div className="calendar-container">
                             <Calendar
                                 onChange={setFecha}
                                 value={fecha}
+                                tileDisabled={({ date }) => date.getDay() === 0}
                             />
                         </div>
 

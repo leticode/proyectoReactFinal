@@ -1035,3 +1035,129 @@ tbody{
 .form-contact button:hover{
     background:#8a4f3d;
 }
+
+/*calendar styles*/
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.modal-calendar {
+  background: var(--variableUno);
+  width: 700px;
+  max-width: 90vw;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 5px 10px rgba(57, 43, 37, 0.436);
+  position: relative;
+}
+.cerrar {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+  color: var(--variableCinco);
+}
+.calendar-title{
+  color: var(--variableCinco);
+  text-align: center;
+  margin-bottom: 20px;
+}
+.calendar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+/*aca modifico estilos que trae por default la libreria*/
+.react-calendar {
+  border: none !important;
+  background-color: var(--variableUno);
+  width: 100% !important;
+  max-width: 500px;
+  border-radius: 16px;
+  padding: 15px;
+  font-family: var(--textFont);
+}
+
+.react-calendar__navigation {
+  margin-bottom: 15px;
+}
+
+.react-calendar__navigation button {
+  border-radius: 10px;
+  min-height: 40px;
+  font-weight: bold;
+}
+
+.react-calendar__tile {
+  border-radius: 12px;
+  height: 50px;
+  transition: 0.2s;
+}
+.react-calendar__tile:hover {
+  background: var(--variableDos);
+}
+.react-calendar__tile--active {
+  background: var(--variableTres) !important;
+  color: var(--variableUno) !important;
+}
+.react-calendar__tile--now {
+  background: var(--variableDos) !important;
+}
+
+.react-calendar__month-view__weekdays {
+  color: var(--variableCinco);
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: black !important; /*el important es para que tome este y no el default*/
+}
+.react-calendar__tile:disabled {
+  background: #e6e6e6;
+  cursor: not-allowed;
+}
+
+.hours {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 25px 0;
+}
+
+.hours button {
+  border: 1px solid var(--variableCuatro);
+  background: var(--variableUno);
+  padding: 10px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.hours button:hover {
+  background: var(--variableCuatro);
+  color: var(--variableDos);
+}
+
+.btn-confirmar {
+  width: 100%;
+  border: none;
+  background: var(--variableTres);
+  color: var(--variableUno);
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .3s;
+}
+.btn-confirmar:hover{
+  background: var(--variableCinco);
+  color: var(--variableDos);
+}
