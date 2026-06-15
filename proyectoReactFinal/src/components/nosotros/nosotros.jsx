@@ -1,15 +1,8 @@
-function nosotros() {
-  return (
+function Nosotros() {
     return (
     <section className="nosotros">
 
       <h1>Sobre Nosotros</h1>
-
-      <img
-        src="/img/nosotros/equipo-medico.jpg"
-        alt="Equipo Médico"
-        className="imagen-nosotros"
-      />
 
       <p className="nosotros-descripcion">
         Somos un centro especializado en estética y bienestar,
@@ -55,4 +48,4 @@ function nosotros() {
     </section>
   );
 }
-export default nosotros;
+export default Nosotros;

@@ -10,9 +10,8 @@ import Register from "./components/Register/Register";
 import NotFound from './components/notFound/Notfound';
 import Admin from './components/admin/Admin';
 import ServiceDetails from './components/serviceDetails/ServiceDetails';
-import Contacto from "./components/contacto/contacto";
-import Nosotros from "./components/nosotros/nosotros";
-
+import Nosotros from './components/nosotros/Nosotros';
+import Contacto from './components/contacto/Contacto';
 import UserManagement from './components/userManagement/UserManagement';
 import { AuthenticationContext } from './components/services/auth/authContextProvider';
 import tokenValid from './components/services/auth/auth.token';
