@@ -74,6 +74,12 @@ const Admin = () => {
 };
 
 const handleDelete = async (id) => {
+  const confirmDelete = window.confirm(
+    "¿Estás seguro de que quieres borrar este servicio?"
+  );
+
+  if (!confirmDelete) return;
+
   try {
     const response = await fetch(`http://localhost:3000/api/services/${id}`, {
       method: "DELETE",
