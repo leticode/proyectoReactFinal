@@ -877,20 +877,20 @@ tbody{
 
 /*NOSOTROS*/
 
-.nosotros {
+.aboutUs {
     max-width: 1200px;
     margin: 70px auto;
     padding: 20px;
     text-align: center;
 }
 
-.nosotros h1 {
+.aboutUs h1 {
     color: #5b1f12;
     font-size: 48px;
     margin-bottom: 30px;
 }
 
-.imagen-nosotros {
+.imagen-aboutUs {
     width: 100%;
     max-width: 750px;
     border-radius: 20px;
@@ -898,7 +898,7 @@ tbody{
     box-shadow: 0 8px 20px rgba(0,0,0,.15);
 }
 
-.nosotros-descripcion {
+.aboutUs-descripcion {
     max-width: 850px;
     margin: auto;
     font-size: 20px;
@@ -907,14 +907,14 @@ tbody{
     margin-bottom: 60px;
 }
 
-.cards-nosotros {
+.cards-aboutUs {
     display: flex;
     justify-content: center;
     gap: 30px;
     flex-wrap: wrap;
 }
 
-.card-nosotros {
+.card-aboutUs {
     width: 320px;
     background: white;
     border-radius: 18px;
@@ -923,35 +923,35 @@ tbody{
     transition: .3s;
 }
 
-.card-nosotros:hover {
+.card-aboutUs:hover {
     transform: translateY(-8px);
 }
 
-.card-nosotros h2 {
+.card-aboutUs h2 {
     color: #5b1f12;
     margin-bottom: 18px;
 }
 
-.card-nosotros p {
+.card-aboutUs p {
     color: #6b5a52;
     line-height: 1.7;
 }
 
 /* CONTACTO */
-.contacto{
+.contact{
     max-width:1200px;
     margin:70px auto;
     padding:20px;
 }
 
-.contacto h1{
+.contact h1{
     text-align:center;
     font-size:48px;
     color:#5b1f12;
     margin-bottom:20px;
 }
 
-.contacto-subtitulo{
+.contact-subtitulo{
     text-align:center;
     max-width:700px;
     margin:auto;
@@ -961,14 +961,14 @@ tbody{
     font-size:18px;
 }
 
-.contacto-container{
+.contact-container{
     display:flex;
     gap:50px;
     flex-wrap:wrap;
     justify-content:center;
 }
 
-.info-contacto{
+.info-contact{
     flex:1;
     min-width:300px;
     background:#fff;
@@ -977,17 +977,17 @@ tbody{
     box-shadow:0 8px 18px rgba(0,0,0,.12);
 }
 
-.info-contacto h2{
+.info-contact h2{
     color:#5b1f12;
     margin-bottom:25px;
 }
 
-.info-contacto p{
+.info-contact p{
     margin-bottom:18px;
     color:#6b5a52;
 }
 
-.form-contacto{
+.form-contact{
     flex:1;
     min-width:350px;
     background:#fff;
@@ -996,19 +996,19 @@ tbody{
     box-shadow:0 8px 18px rgba(0,0,0,.12);
 }
 
-.form-contacto h2{
+.form-contact h2{
     color:#5b1f12;
     margin-bottom:25px;
 }
 
-.form-contacto form{
+.form-contact form{
     display:flex;
     flex-direction:column;
     gap:20px;
 }
 
-.form-contacto input,
-.form-contacto textarea{
+.form-contact input,
+.form-contact textarea{
     padding:15px;
     border:1px solid #d7c3bc;
     border-radius:10px;
@@ -1016,12 +1016,12 @@ tbody{
     outline:none;
 }
 
-.form-contacto input:focus,
-.form-contacto textarea:focus{
+.form-contact input:focus,
+.form-contact textarea:focus{
     border-color:#8a4f3d;
 }
 
-.form-contacto button{
+.form-contact button{
     background:#b88473;
     color:white;
     border:none;
@@ -1032,6 +1032,6 @@ tbody{
     transition:.3s;
 }
 
-.form-contacto button:hover{
+.form-contact button:hover{
     background:#8a4f3d;
 }

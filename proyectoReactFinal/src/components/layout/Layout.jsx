@@ -36,7 +36,12 @@ const Layout = ({ children }) => {
 
         {/* NAV DESKTOP */}
         <nav className="nav navbar">
-          <NavLink to="/admin" className={linkClass}>Admin</NavLink>
+          {(user?.role === "admin" || user?.role === "professional") && (
+            <>
+              <NavLink to="/admin" className={linkClass}>Admin</NavLink>
+              <NavLink to="/management" className={linkClass}>Gestion Usuarios</NavLink>
+            </>
+          )}
 
           <NavLink to="/professionals" className={linkClass}>Profesionals</NavLink>
 
@@ -48,11 +53,11 @@ const Layout = ({ children }) => {
             Servicios
           </NavLink>
 
-          <NavLink to="/nosotros" className={linkClass}>
+          <NavLink to="/aboutUs" className={linkClass}>
             Nosotros
           </NavLink>
 
-          <NavLink to="/contacto" className={linkClass}>
+          <NavLink to="/contact" className={linkClass}>
             Contacto
           </NavLink>
 
@@ -92,7 +97,12 @@ const Layout = ({ children }) => {
       {menuOpen && (
         <div className="mobile-menu">
 
-          <NavLink to="/admin" className={linkClass}>Admin</NavLink>
+          {(user?.role === "admin" || user?.role === "professional") && (
+            <>
+              <NavLink to="/admin" className={linkClass}>Admin</NavLink>
+              <NavLink to="/management" className={linkClass}>Gestion de Usuarios</NavLink>
+            </>
+          )}
 
           <NavLink to="/home" onClick={() => setMenuOpen(false)} className={linkClass}>
             Inicio
@@ -102,11 +112,11 @@ const Layout = ({ children }) => {
             Servicios
           </NavLink>
 
-          <NavLink to="/nosotros" onClick={() => setMenuOpen(false)} className={linkClass}>
+          <NavLink to="/aboutUs" onClick={() => setMenuOpen(false)} className={linkClass}>
             Nosotros
           </NavLink>
 
-          <NavLink to="/contacto" onClick={() => setMenuOpen(false)} className={linkClass}>
+          <NavLink to="/contact" onClick={() => setMenuOpen(false)} className={linkClass}>
             Contacto
           </NavLink>
 
@@ -152,8 +162,8 @@ const Layout = ({ children }) => {
               <h3 className="title-footer">EXPLORAR</h3>
               <NavLink to="/home" className="link-footer">Inicio</NavLink>
               <NavLink to="/servicios" className="link-footer">Servicios</NavLink>
-              <NavLink to="/nosotros" className="link-footer">Nosotros</NavLink>
-              <NavLink to="/contacto" className="link-footer">Contacto</NavLink>
+              <NavLink to="/aboutUs" className="link-footer">Nosotros</NavLink>
+              <NavLink to="/contact" className="link-footer">Contacto</NavLink>
             </div>
 
             <div className="column-footer">

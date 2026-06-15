@@ -11,8 +11,8 @@ import NotFound from './components/notFound/Notfound';
 import Admin from './components/admin/Admin';
 import Professionals from './components/professionals/Professionals';
 import ServiceDetails from './components/serviceDetails/ServiceDetails';
-import Nosotros from './components/nosotros/Nosotros';
-import Contacto from './components/contacto/Contacto';
+import AboutUs from './components/aboutUs/AboutUs';
+import Contact from './components/contact/Contact';
 import UserManagement from './components/userManagement/UserManagement';
 import { AuthenticationContext } from './components/services/auth/authContextProvider';
 import tokenValid from './components/services/auth/auth.token';
@@ -34,16 +34,20 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/servicios" element={<Services />} />
           <Route path="/services/:id" element={<ServiceDetails />} />
-          <Route path="/nosotros" element={<Nosotros />} />
-          <Route path="/contacto" element={<Contacto />} />
+          <Route path="/aboutUs" element={<AboutUs />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
-          <Route path="/admin" element={<Admin/>}/>
           <Route path="/professionals" element={<Professionals/>}/>
 
+          {/*misma validacion que en usermanagement pero incluyendo al professional*/}
+          {tokenValid(token) && (user?.role === "admin" || user?.role === "professional") && (
+            <Route path="/admin" element={<Admin/>}/>
+          )}
+          
           {/*si el token es valido y el user role es admin puede ir a usermanagemnet si no redirige a home*/}
           {tokenValid(token) && user?.role === "admin" && 
-            (<Route path="/users" element={<UserManagement />}/>)
+            (<Route path="/management" element={<UserManagement />}/>)
           }
           <Route path="/*" element={<NotFound/>}/>
         </Routes>
