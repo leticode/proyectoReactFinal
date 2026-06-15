@@ -4,10 +4,19 @@ import User from "../models/User.js";
 import bcrypt from "bcrypt" ;
 //lbrera para generar token
 import jwt from "jsonwebtoken";
+import { validateRegister, validateLogin } from "../middleware/auth.validations.js";
 
 export const registerUser = async (req, res) => {
     //obtenemos los datos del body
     const {email, password, confirmPassword, role} = req.body;
+
+    const errors = validateRegister({email, password, confirmPassword });
+        if (Object.keys(errors).length > 0) {
+            return res.status(400).json(
+                { errors, 
+                    message: "Datos inválidos" 
+                });
+        }
 
     //buscamos si el usuario existe
     const user = await User.findOne({
@@ -38,6 +47,7 @@ export const registerUser = async (req, res) => {
         email,
         //cuando creamos el usuaro la contrasena se guarda hasheada en la bdd
         password: hashedPassword,
+        role
     });
 
     //devolvemos el d y el email y un mensaje de quese creo el usuario
@@ -56,6 +66,12 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
     const {email, password} = req.body;
 
+    const errors = validateLogin({email, password});
+    if (Object.keys(errors).length > 0) {
+        return res.status(400).json(
+            { errors }
+        );
+    }
     // Busca el usuario por email
     const user = await User.findOne({
         where: { email }

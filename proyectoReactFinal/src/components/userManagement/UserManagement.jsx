@@ -6,6 +6,8 @@ import tokenValid from "../services/auth/auth.token.js";
 
 const UserManagement = () => {
     const { token, handleUserLogout, user } = useContext(AuthenticationContext);
+    const navigate = useNavigate();
+
     const [users, setUsers] = useState([]);
     const [formUser, setformUser] = useState({
         email: "",
@@ -18,11 +20,13 @@ const UserManagement = () => {
         password: "",
         confirmPassword: ""
     })
-    const [serverMessage, setServerMessage] = useState("");
 
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
     const confirmPasswordRef = useRef(null);
+
+    const [formServerMessage, setFormServerMessage] = useState("");
+    const [tableServerMessage, setTableServerMessage] = useState("");
 
     //handle general que va guardardando todos los inputs a medida que el usuario escribe
     const handleChange = (event) => {
@@ -37,12 +41,12 @@ const UserManagement = () => {
     useEffect(() => {
         //el token es valdo? si no lo es lo desloguea borra desde el localstorage y navega al login
         if (!tokenValid(token)) {
-            handleLogoutUser();
+            handleUserLogout();
             navigate("/login");
         }
 
         //si es valido hace el la peticion para traer los usaruaios
-        fetch("http://localhost:3000/api/users", {
+        fetch("http://localhost:3000/api/user", {
             //mandamos como header el token
             headers: { Authorization: `Bearer ${token}` },
         })
@@ -63,7 +67,7 @@ const UserManagement = () => {
                 setUsers(data);
             })
 
-            .catch(() => setServerMessage("No se pudieron cargar los usuarios"));
+            .catch(() => setTableServerMessage("No se pudieron cargar los usuarios"));
 
     }, []);
 
@@ -88,7 +92,7 @@ const UserManagement = () => {
             return;
         }
 
-        fetch("http://localhost:3000/api/users", {
+        fetch("http://localhost:3000/api/user", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -100,12 +104,18 @@ const UserManagement = () => {
             .then((res) => {
                 if (!res.ok) {
                     //corta la ejecucon throw
-                    throw new Error('No se pudieron cargar los usuarios');
+                    throw new Error('Error al crear usuario');
                 }
 
                 return res.json();
             })
-            .then(() => {
+            .then((data) => {
+                //agregamos el usuaro nuevo a la tabla si necesidad de recargar
+                setUsers((prevUsers) => [
+                    ...prevUsers,
+                    data.user
+                ]);
+
                 //aca limpiamos los inputs desp de crear el usuario
                 setformUser({
                     email: "",
@@ -114,14 +124,22 @@ const UserManagement = () => {
                     role: "customer",
                 });
 
-                setServerMessage("Usuario creado correctamente");
+                setFormServerMessage("Usuario creado correctamente");
             })
             .catch((error) => {
                 console.log(error);
-                setServerMessage('No se pudo crear al usuario');
+                setFormServerMessage('No se pudo crear al usuario');
             });
     }
 
+    const handleUpdateUser = async (event) => {
+
+    };
+
+    const handleDeleteUser = async (event) => {
+
+    };
+    
     return (
         <>
         <h1>Gestion de Usuarios</h1>
@@ -184,7 +202,7 @@ const UserManagement = () => {
                     </div>
                     <button type="submit"> Agregar </button>
 
-                    {serverMessage && (<p className="server-message">{serverMessage}</p>)}
+                    {formServerMessage && (<p className="server-message">{formServerMessage}</p>)}
                 </form>
                 )}
             </div>
@@ -225,7 +243,7 @@ const UserManagement = () => {
                     </tbody>
                 </table>
 
-                {serverMessage && (<p className="server-message">{serverMessage}</p>)}
+                {tableServerMessage && (<p className="server-message">{tableServerMessage}</p>)}
             </div>
         </div>
         </>

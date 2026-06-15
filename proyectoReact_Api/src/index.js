@@ -127,7 +127,7 @@ async function startServer() {
 
     //puse esto para usar la ruta de auth
     app.use(authRoutes);
-    app.use("/api/users", userRoutes);
+    app.use("/api/user", userRoutes);
 
     app.listen(PORT, () => {
       console.log(`server listening on port ${PORT}`);
