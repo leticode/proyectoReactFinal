@@ -37,6 +37,9 @@ const Layout = ({ children }) => {
         {/* NAV DESKTOP */}
         <nav className="nav navbar">
           <NavLink to="/admin" className={linkClass}>Admin</NavLink>
+
+          <NavLink to="/professionals" className={linkClass}>Profesionals</NavLink>
+
           <NavLink to="/home" className={linkClass}>
             Inicio
           </NavLink>

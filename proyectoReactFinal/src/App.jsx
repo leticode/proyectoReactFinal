@@ -9,6 +9,7 @@ import Login from "./components/login/Login";
 import Register from "./components/Register/Register"; 
 import NotFound from './components/notFound/Notfound';
 import Admin from './components/admin/Admin';
+import Professionals from './components/professionals/Professionals';
 import ServiceDetails from './components/serviceDetails/ServiceDetails';
 import Nosotros from './components/nosotros/Nosotros';
 import Contacto from './components/contacto/Contacto';
@@ -38,6 +39,7 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
           <Route path="/admin" element={<Admin/>}/>
+          <Route path="/professionals" element={<Professionals/>}/>
 
           {/*si el token es valido y el user role es admin puede ir a usermanagemnet si no redirige a home*/}
           {tokenValid(token) && user?.role === "admin" && 
