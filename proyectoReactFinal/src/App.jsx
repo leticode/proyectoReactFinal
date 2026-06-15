@@ -10,7 +10,8 @@ import Register from "./components/Register/Register";
 import NotFound from './components/notFound/Notfound';
 import Admin from './components/admin/Admin';
 import ServiceDetails from './components/serviceDetails/ServiceDetails';
-
+import Nosotros from './components/nosotros/Nosotros';
+import Contacto from './components/contacto/Contacto';
 import UserManagement from './components/userManagement/UserManagement';
 import { AuthenticationContext } from './components/services/auth/authContextProvider';
 import tokenValid from './components/services/auth/auth.token';
@@ -32,6 +33,8 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/servicios" element={<Services />} />
           <Route path="/services/:id" element={<ServiceDetails />} />
+          <Route path="/nosotros" element={<Nosotros />} />
+          <Route path="/contacto" element={<Contacto />} />
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
           <Route path="/admin" element={<Admin/>}/>
