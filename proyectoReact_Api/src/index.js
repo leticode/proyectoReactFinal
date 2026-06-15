@@ -76,6 +76,34 @@ app.post("/api/services", async (req, res) => {
     });
   }
 });
+
+// endpoint para modificar un servicio por id
+app.put("/api/services/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const serviceId = Number(id);
+
+    if (Number.isNaN(serviceId)) {
+      return res.status(400).json({ message: "El id del servicio debe ser un número" });
+    }
+
+    const service = await Service.findByPk(serviceId);
+
+    if (!service) {
+      return res.status(404).json({ message: "Servicio no encontrado" });
+    }
+
+    await service.update(req.body);
+
+    res.json(service);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error al modificar servicio",
+      error: error.message,
+    });
+  }
+});
+
 // endpoint para borrar un servicio por id
 app.delete("/api/services/:id", async (req, res) => {
   try {
