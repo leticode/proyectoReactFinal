@@ -1,4 +1,4 @@
-function Contacto() {
+function Contact() {
   return (
     <section className="contacto">
 
@@ -35,4 +35,4 @@ function Contacto() {
   );
 }
 
-export default Contacto;
+export default Contact;
