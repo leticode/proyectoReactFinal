@@ -47,62 +47,62 @@ const Admin = () => {
         }));
     };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    const response = await fetch(
-        "http://localhost:3000/api/services",
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newService),
+        const response = await fetch(
+            "http://localhost:3000/api/services",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newService),
+            }
+        );
+
+        const data = await response.json();
+
+        setModal(false);
+        setNewService(emptyService);
+
+        // Hay dos posibilidades para actualizar el array:
+        // 1. lo actrualizamos manualmente
+        // 2. lo volvemos a cargar desde el server (loadServices)
+        // setServices((prev) => [...prev, data]);
+        loadServices();
+    };
+
+    const handleDelete = async (id) => {
+        const confirmDelete = window.confirm(
+            "¿Estás seguro de que quieres borrar este servicio?"
+        );
+
+        if (!confirmDelete) return;
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/services/${id}`, {
+                method: "DELETE",
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setServerMessage(data.message || "Error al borrar servicio");
+                return;
+            }
+
+            // Hay dos posibilidades para actualizar el array:
+            // 1. lo actrualizamos manualmente (Elimino el servicio borrado del array que estamos mostrando para que desaparezca del front)
+            // 2. lo volvemos a cargar desde el server (loadServices)
+
+            // setServices((prev) => prev.filter((service) => service.id !== id));
+            loadServices();
+        } catch (error) {
+            console.error(error);
+            setServerMessage("Error al conectar con el servidor");
         }
-    );
-
-    const data = await response.json();
-
-    setModal(false);
-    setNewService(emptyService);
-
-    // Hay dos posibilidades para actualizar el array:
-    // 1. lo actrualizamos manualmente
-    // 2. lo volvemos a cargar desde el server (loadServices)
-    // setServices((prev) => [...prev, data]);
-    loadServices();
-};
-
-const handleDelete = async (id) => {
-  const confirmDelete = window.confirm(
-    "¿Estás seguro de que quieres borrar este servicio?"
-  );
-
-  if (!confirmDelete) return;
-
-  try {
-    const response = await fetch(`http://localhost:3000/api/services/${id}`, {
-      method: "DELETE",
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      setServerMessage(data.message || "Error al borrar servicio");
-      return;
-    }
-
-    // Hay dos posibilidades para actualizar el array:
-    // 1. lo actrualizamos manualmente (Elimino el servicio borrado del array que estamos mostrando para que desaparezca del front)
-    // 2. lo volvemos a cargar desde el server (loadServices)
- 
-    // setServices((prev) => prev.filter((service) => service.id !== id));
-    loadServices();
-  } catch (error) {
-    console.error(error);
-    setServerMessage("Error al conectar con el servidor");
-  }
-};
+    };
 
     return (
         <div className="notFound-container">
@@ -228,26 +228,26 @@ const handleDelete = async (id) => {
                 )}
 
                 <div className="services-grid">
-    {services.map((service) => (
-        <div className="card" key={service.id}>
-            <div className="img-container">
-                <img src={service.img} alt={service.name} />
+                    {services.map((service) => (
+                        <div className="card" key={service.id}>
+                            <div className="img-container">
+                                <img src={service.img} alt={service.name} />
 
-            <p className="titulo">{service.name}</p>
-            </div>
+                                <p className="titulo">{service.name}</p>
+                            </div>
 
-            <div className="card-actions">
-                <button className="modal-title">
-                    Actualizar
-                </button>
+                            <div className="card-actions">
+                                <button className="modal-title">
+                                    Actualizar
+                                </button>
 
-                <button className="modal-title" onClick={()=>handleDelete(service.id)}>
-                    Eliminar
-                </button>
-            </div>
-        </div>
-    ))}
-</div>
+                                <button className="modal-title" onClick={() => handleDelete(service.id)}>
+                                    Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
