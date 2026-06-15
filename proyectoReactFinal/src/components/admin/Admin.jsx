@@ -16,26 +16,25 @@ const Admin = () => {
     };
     const [newService, setNewService] = useState(emptyService);
 
-    useEffect(() => {
-        const loadServices = async () => {
-            try {
-                const response = await fetch("http://localhost:3000/api/services", {
-                    method: "GET",
-                });
-                const data = await response.json();
+    const loadServices = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/api/services", {
+                method: "GET",
+            });
+            const data = await response.json();
 
-                if (!response.ok) {
-                    setServerMessage(data.message || "error al traer servicios");
-                    return;
-                }
-
-                setServices(data);
-            } catch (error) {
-                console.error(error);
-                setServerMessage("Error al conectar con el servidor");
+            if (!response.ok) {
+                setServerMessage(data.message || "error al traer servicios");
+                return;
             }
-        };
 
+            setServices(data);
+        } catch (error) {
+            console.error(error);
+            setServerMessage("Error al conectar con el servidor");
+        }
+    };
+    useEffect(() => {
         loadServices();
     }, []);
 
@@ -64,9 +63,14 @@ const Admin = () => {
 
     const data = await response.json();
 
-    setServices((prev) => [...prev, data]);
     setModal(false);
     setNewService(emptyService);
+
+    // Hay dos posibilidades para actualizar el array:
+    // 1. lo actrualizamos manualmente
+    // 2. lo volvemos a cargar desde el server (loadServices)
+    // setServices((prev) => [...prev, data]);
+    loadServices();
 };
 
 const handleDelete = async (id) => {
@@ -82,8 +86,12 @@ const handleDelete = async (id) => {
       return;
     }
 
-    // Elimino el servicio borrado del array que estamos mostrando para que desaparezca del front
-    setServices((prev) => prev.filter((service) => service.id !== id));
+    // Hay dos posibilidades para actualizar el array:
+    // 1. lo actrualizamos manualmente (Elimino el servicio borrado del array que estamos mostrando para que desaparezca del front)
+    // 2. lo volvemos a cargar desde el server (loadServices)
+ 
+    // setServices((prev) => prev.filter((service) => service.id !== id));
+    loadServices();
   } catch (error) {
     console.error(error);
     setServerMessage("Error al conectar con el servidor");
