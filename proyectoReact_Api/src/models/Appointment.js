@@ -42,7 +42,7 @@ export const Appointment = sequelize.define(
     },
   },
   {
-    tableName: "professional",
+    tableName: "appointment",
     timestamps: false
   }
 );
