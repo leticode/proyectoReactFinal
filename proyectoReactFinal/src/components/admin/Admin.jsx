@@ -69,6 +69,27 @@ const Admin = () => {
     setNewService(emptyService);
 };
 
+const handleDelete = async (id) => {
+  try {
+    const response = await fetch(`http://localhost:3000/api/services/${id}`, {
+      method: "DELETE",
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setServerMessage(data.message || "Error al borrar servicio");
+      return;
+    }
+
+    // Elimino el servicio borrado del array que estamos mostrando para que desaparezca del front
+    setServices((prev) => prev.filter((service) => service.id !== id));
+  } catch (error) {
+    console.error(error);
+    setServerMessage("Error al conectar con el servidor");
+  }
+};
+
     return (
         <div className="notFound-container">
             <div className="notFound-box">
@@ -206,7 +227,7 @@ const Admin = () => {
                     Actualizar
                 </button>
 
-                <button className="modal-title">
+                <button className="modal-title" onClick={()=>handleDelete(service.id)}>
                     Eliminar
                 </button>
             </div>
