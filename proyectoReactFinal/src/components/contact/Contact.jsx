@@ -1,17 +1,17 @@
 function Contact() {
   return (
-    <section className="contacto">
+    <section className="contact">
 
       <h1>Contacto</h1>
 
-      <p className="contacto-subtitulo">
+      <p className="contact-subtitulo">
         Estamos para ayudarte. Si tenés consultas sobre nuestros tratamientos o
         querés solicitar un turno, comunicate con nosotros.
       </p>
 
-      <div className="contacto-container">
+      <div className="contact-container">
 
-        <div className="info-contacto">
+        <div className="info-contact">
 
           <h2>Información</h2>
 

@@ -1,10 +1,10 @@
 function AboutUs() {
     return (
-    <section className="nosotros">
+    <section className="aboutUs">
 
       <h1>Sobre Nosotros</h1>
 
-      <p className="nosotros-descripcion">
+      <p className="aboutUs-descripcion">
         Somos un centro especializado en estética y bienestar,
         comprometido con brindar atención profesional,
         personalizada y de calidad. Nuestro equipo trabaja
@@ -12,9 +12,9 @@ function AboutUs() {
         resultados que potencien la belleza natural de cada persona.
       </p>
 
-      <div className="cards-nosotros">
+      <div className="cards-aboutUs">
 
-        <div className="card-nosotros">
+        <div className="card-aboutUs">
           <h2>Misión</h2>
 
           <p>
@@ -24,7 +24,7 @@ function AboutUs() {
           </p>
         </div>
 
-        <div className="card-nosotros">
+        <div className="card-aboutUs">
           <h2>Visión</h2>
 
           <p>
@@ -34,7 +34,7 @@ function AboutUs() {
           </p>
         </div>
 
-        <div className="card-nosotros">
+        <div className="card-aboutUs">
           <h2>Valores</h2>
 
           <p>
