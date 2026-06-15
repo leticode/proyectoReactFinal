@@ -10,7 +10,7 @@ const Home = () => {
     }
 
     const handleToAboutUs = () => {
-        navigate(""); //agregar la ruta de aboutUs
+        navigate("/nosotros"); 
     }
 
     return (
