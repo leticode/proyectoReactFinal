@@ -1,4 +1,4 @@
-function Nosotros() {
+function AboutUs() {
     return (
     <section className="nosotros">
 
@@ -48,4 +48,4 @@ function Nosotros() {
     </section>
   );
 }
-export default Nosotros;
+export default AboutUs;
