@@ -47,7 +47,7 @@ function App() {
           
           {/*si el token es valido y el user role es admin puede ir a usermanagemnet si no redirige a home*/}
           {tokenValid(token) && user?.role === "admin" && 
-            (<Route path="/users" element={<UserManagement />}/>)
+            (<Route path="/management" element={<UserManagement />}/>)
           }
           <Route path="/*" element={<NotFound/>}/>
         </Routes>
