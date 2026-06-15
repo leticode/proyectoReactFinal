@@ -38,9 +38,13 @@ function App() {
           <Route path="/contacto" element={<Contacto />} />
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
-          <Route path="/admin" element={<Admin/>}/>
           <Route path="/professionals" element={<Professionals/>}/>
 
+          {/*misma validacion que en usermanagement pero incluyendo al professional*/}
+          {tokenValid(token) && (user?.role === "admin" || user?.role === "professional") && (
+            <Route path="/admin" element={<Admin/>}/>
+          )}
+          
           {/*si el token es valido y el user role es admin puede ir a usermanagemnet si no redirige a home*/}
           {tokenValid(token) && user?.role === "admin" && 
             (<Route path="/users" element={<UserManagement />}/>)

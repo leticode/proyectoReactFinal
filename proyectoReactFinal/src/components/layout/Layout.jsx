@@ -36,7 +36,12 @@ const Layout = ({ children }) => {
 
         {/* NAV DESKTOP */}
         <nav className="nav navbar">
-          <NavLink to="/admin" className={linkClass}>Admin</NavLink>
+          {(user?.role === "admin" || user?.role === "professional") && (
+            <>
+              <NavLink to="/admin" className={linkClass}>Admin</NavLink>
+              <NavLink to="/admin" className={linkClass}>Gestion Usuarios</NavLink>
+            </>
+          )}
 
           <NavLink to="/professionals" className={linkClass}>Profesionals</NavLink>
 
@@ -92,7 +97,12 @@ const Layout = ({ children }) => {
       {menuOpen && (
         <div className="mobile-menu">
 
-          <NavLink to="/admin" className={linkClass}>Admin</NavLink>
+          {(user?.role === "admin" || user?.role === "professional") && (
+            <>
+              <NavLink to="/admin" className={linkClass}>Admin</NavLink>
+              <NavLink to="/admin" className={linkClass}>Gestion Usuarios</NavLink>
+            </>
+          )}
 
           <NavLink to="/home" onClick={() => setMenuOpen(false)} className={linkClass}>
             Inicio
