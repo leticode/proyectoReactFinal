@@ -10,7 +10,7 @@ const Home = () => {
     }
 
     const handleToAboutUs = () => {
-        navigate("/nosotros"); 
+        navigate("/aboutUs"); 
     }
 
     return (
