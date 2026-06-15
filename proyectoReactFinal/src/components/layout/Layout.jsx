@@ -37,6 +37,9 @@ const Layout = ({ children }) => {
         {/* NAV DESKTOP */}
         <nav className="nav navbar">
           <NavLink to="/admin" className={linkClass}>Admin</NavLink>
+
+          <NavLink to="/professionals" className={linkClass}>Profesionals</NavLink>
+
           <NavLink to="/home" className={linkClass}>
             Inicio
           </NavLink>
@@ -155,8 +158,10 @@ const Layout = ({ children }) => {
 
             <div className="column-footer">
               <h3 className="title-footer">HORARIOS</h3>
+              <p className="subtitle-footer">Lunes a Viernes</p>
               <p className="text-footer">09:00 a 20:00</p>
-              <p className="text-footer">Sábados 09:00 a 14:00</p>
+              <p className="subtitle-footer">Sábados</p>
+              <p className="text-footer">09:00 a 14:00</p>
             </div>
 
           </div>
