@@ -5,6 +5,8 @@ const Admin = () => {
     const [serverMessage, setServerMessage] = useState("");
     const [services, setServices] = useState([]);
     const [modal, setModal] = useState(false);
+    const [modifyID, setModifyID] = useState(0);
+
     const emptyService = {
         name: "",
         img: "",
@@ -50,27 +52,35 @@ const Admin = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await fetch(
-            "http://localhost:3000/api/services",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newService),
-            }
-        );
-
-        const data = await response.json();
-
+        if (modifyID == 0) {
+            const response = await fetch(
+                "http://localhost:3000/api/services",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(newService),
+                }
+            );
+            const data = await response.json();
+        } else {
+            const response = await fetch(
+                `http://localhost:3000/api/services/${modifyID}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(newService),
+                }
+            );
+            const data = await response.json();
+        }
         setModal(false);
         setNewService(emptyService);
-
-        // Hay dos posibilidades para actualizar el array:
-        // 1. lo actrualizamos manualmente
-        // 2. lo volvemos a cargar desde el server (loadServices)
-        // setServices((prev) => [...prev, data]);
         loadServices();
+
     };
 
     const handleDelete = async (id) => {
@@ -104,13 +114,34 @@ const Admin = () => {
         }
     };
 
+    const addService = () => {
+        setModifyID(0);
+        setModal(true);
+    }
+
+    const modifyService = (id) => {
+        const service = services.filter((s) => s.id == id)[0];
+
+        // let service=null;
+        // for (let i=0;i<services.length;i++) {
+        //     if (services[i].id == id) {
+        //         service=services[i];
+        //         break;
+        //     }
+        // }
+
+        setNewService(service);
+        setModifyID(id);
+        setModal(true);
+    }
+
     return (
         <div className="notFound-container">
             <div className="notFound-box">
                 <h2 className="notFound-title">Admin</h2>
                 {serverMessage && <p className="server-message">{serverMessage}</p>}
 
-                <button className="notFound-btn" onClick={() => setModal(true)}>
+                <button className="notFound-btn" onClick={() => addService()}>
                     Agregar servicio
                 </button>
 
@@ -118,7 +149,7 @@ const Admin = () => {
                     <div className="modal-overlay" onClick={() => setModal(false)}>
                         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                             <div className="modal-header">
-                                <h3 className="modal-title">Agregar servicio</h3>
+                                <h3 className="modal-title">{modifyID == 0 ? "Agregar servicio" : "Modificar servicio"}</h3>
                                 <button
                                     type="button"
                                     className="modal-close"
@@ -237,7 +268,7 @@ const Admin = () => {
                             </div>
 
                             <div className="card-actions">
-                                <button className="modal-title">
+                                <button className="modal-title" onClick={() => modifyService(service.id)}>
                                     Actualizar
                                 </button>
 
