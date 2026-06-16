@@ -1,4 +1,4 @@
-const ValidateUserManagement = ((formUser) => {
+export const ValidateUserManagement = ((formUser) => {
     const errors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -19,4 +19,14 @@ const ValidateUserManagement = ((formUser) => {
     return errors;
 });
 
-export default ValidateUserManagement;
+export const ValidateUserUpdate = (user) => {
+    const errors = {};
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!user.email || !emailRegex.test(user.email)) {
+        errors.email = "El email no es válido";
+    }
+
+    return errors;
+};
