@@ -16,6 +16,9 @@ import Contact from './components/contact/Contact';
 import UserManagement from './components/userManagement/UserManagement';
 import { AuthenticationContext } from './components/services/auth/authContextProvider';
 import tokenValid from './components/services/auth/auth.token';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ProtectedRoutes from './components/protectedRoutes/ProtectedRoutes';
 
 import './App.css';
 import './index.css';
@@ -23,11 +26,19 @@ import './index.css';
 
 function App() {
   //traemos el objeto user y el token del contexto para usarlo en los permsos
-  const { user, token } = useContext(AuthenticationContext);
+  const { token } = useContext(AuthenticationContext);
 
   //en realidad deberiamos usar BrowserRouter pero x el momento lo dejamos asi(HashRouter) pq no tiene complejidad el proyecto (sirve para poder navegar entre paginas sin recargar)
   return (<>
     <HashRouter> 
+      <ToastContainer
+        position="top-right"
+        autoClose={4500}
+        newestOnTop
+        closeOnClick
+        pauseOnFocusLoss={false}
+        limit={3}
+      />
       <Layout>
         <Routes>
           <Route path='/' element={<Navigate to='home' />} /> {/*redirige*/}
@@ -36,19 +47,23 @@ function App() {
           <Route path="/services/:id" element={<ServiceDetails />} />
           <Route path="/aboutUs" element={<AboutUs />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login/>}/>
+          {/*para cuando el token es valido el usuario no vaya a login porq no es necesario*/}
+          <Route 
+            path="/login" 
+            element={tokenValid(token) ? <Navigate to="/home" replace /> : <Login />} 
+          />
           <Route path="/register" element={<Register/>}/>
           <Route path="/professionals" element={<Professionals/>}/>
 
           {/*misma validacion que en usermanagement pero incluyendo al professional*/}
-          {tokenValid(token) && (user?.role === "admin" || user?.role === "professional") && (
-            <Route path="/admin" element={<Admin/>}/>
-          )}
-          
-          {/*si el token es valido y el user role es admin puede ir a usermanagemnet si no redirige a home*/}
-          {tokenValid(token) && user?.role === "admin" && 
-            (<Route path="/management" element={<UserManagement />}/>)
-          }
+          <Route element={<ProtectedRoutes allowedRoles={['admin', 'professional']}/>}>
+              <Route path="/admin" element={<Admin />}/>
+          </Route>
+    
+          <Route element={<ProtectedRoutes allowedRoles={['admin']}/>}>
+            <Route path="/management" element={<UserManagement />}/>
+          </Route>
+
           <Route path="/*" element={<NotFound/>}/>
         </Routes>
       </Layout>

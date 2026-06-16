@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import  verifyEmail  from "../../utils/verifyEmail.js";
 import verifyPassword from "../../utils/verifyPassword.js";
 import { AuthenticationContext } from "../services/auth/authContextProvider.jsx";
+import { toast } from "react-toastify";
 
 const Login = () =>{
     const { handleUserLogin } = useContext(AuthenticationContext)
@@ -13,7 +14,6 @@ const Login = () =>{
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState({email: false, password: false});
-    const [serverMessage, setServerMessage] = useState("");
 
     //el useRef sirve para obtener referencia directa a un elemento HTML real
     const emailRef = useRef(null);
@@ -65,7 +65,7 @@ const Login = () =>{
             const data = await response.json(); 
             //si devolvio error cortamos la funcion
             if (!response.ok) {
-                setServerMessage(data.message || "error al registrarse");
+                toast.error(data.message || "error al registrarse");
                 return;
             }
 
@@ -74,11 +74,12 @@ const Login = () =>{
             setEmail('');
             setPassword('');
 
+            toast.success("Sesion iniciada correctamente")
             navigate("/home");
 
         } catch (error) {
             console.error(error);
-            setServerMessage("Error al conectar con el servidor");
+            toast.error("Error al conectar con el servidor");
         }
     }
 
@@ -115,9 +116,6 @@ const Login = () =>{
                         {error.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres y un caracter especial.</p>}
                     </div>
                     <button type="submit">Iniciar</button>
-
-                    {/*para mostrar el error al usuario*/}
-                    {serverMessage && (<p className="server-message">{serverMessage}</p>)}
 
                     {/*si no tenes cuenta te redirige a la pagina del register*/}
                     <p className="register-text" onClick={() => navigate("/register")}>

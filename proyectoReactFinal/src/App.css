@@ -1224,3 +1224,19 @@ tbody{
   background: var(--variableCinco);
   color: var(--variableDos);
 }
+.Toastify__toast--success {
+  background-color: var(--variableUno)!important;
+  color: var(--variableCuatro)!important;
+  border: 1px solid;
+  border-color: var(--variableCuatro)!important;
+  font-family: var(--textFont)!important;
+  font-size: 18px !important;
+}
+.Toastify__toast--error {
+  background-color: var(--variableUno)!important;
+  color: var(--variableCuatro)!important;
+  border: 1px solid;
+  border-color: var(--variableCuatro)!important;
+  font-family: var(--textFont)!important;
+  font-size: 18px !important;
+}
