@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthenticationContext } from "../services/auth/authContextProvider";
 import {ValidateUserManagement, ValidateUserUpdate} from "../../utils/validateUserManagement";
 import tokenValid from "../services/auth/auth.token.js";
+import { toast } from "react-toastify";
 
 const UserManagement = () => {
     const { token, handleUserLogout, user } = useContext(AuthenticationContext);
@@ -25,9 +26,6 @@ const UserManagement = () => {
     const passwordRef = useRef(null);
     const confirmPasswordRef = useRef(null);
 
-    //mensaje para el form y la tabla por separados
-    const [formServerMessage, setFormServerMessage] = useState("");
-    const [tableServerMessage, setTableServerMessage] = useState("");
     //para mostrar el modal y guardar el id donde no se va a eliminar
     const [showModal, setShowModal] = useState(false);
     const [userDelete, setUserDelete] = useState(null);
@@ -55,6 +53,10 @@ const UserManagement = () => {
     const handleCloseUpdateModal = () => {
         setShowUpdateModal(false);
         setUpdateUser(null);
+        setUpdateErrors({
+            email: "",
+            role: ""
+        });
     }
 
     //handle general que va guardardando todos los inputs a medida que el usuario escribe
@@ -96,7 +98,7 @@ const UserManagement = () => {
                 setUsers(data);
             })
 
-            .catch(() => setTableServerMessage("No se pudieron cargar los usuarios"));
+            .catch(() => toast.error("No se pudieron cargar los usuarios"));
 
     }, []);
 
@@ -153,11 +155,11 @@ const UserManagement = () => {
                     role: "customer",
                 });
 
-                setFormServerMessage("Usuario creado correctamente");
+                toast.success("Usuario creado correctamente");
             })
             .catch((error) => {
                 console.log(error);
-                setFormServerMessage('No se pudo crear al usuario');
+                toast.error("No se pudo crear al usuario");
             });
     }
 
@@ -211,10 +213,10 @@ const UserManagement = () => {
             setShowUpdateModal(false);
             //limpiamos usuario en edicion
             setUpdateUser(null);
-            setTableServerMessage("Usuario actualizado correctamente");
+            toast.success("Usuario actualizado correctamente");
         })
         .catch((error) => {
-            setTableServerMessage(error.message);
+            toast.error(error.message);
         })
     };
 
@@ -241,10 +243,10 @@ const UserManagement = () => {
                 prevUsers.filter((user) => user.id !== id)
             )
             setShowModal(false);
-            setTableServerMessage("Usuario eliminado correctamente");
+            toast.success("Usuario eliminado correctamente");
         })
         .catch((error) => {
-            setTableServerMessage(error.message);
+            toast.error(error.message);
         })
     };
 
@@ -254,64 +256,62 @@ const UserManagement = () => {
             <div className="management">
                 <div className="management-container">
                     {user?.role === "admin" && (
-                    <form onSubmit={handleCreateUser} noValidate>
+                        <form onSubmit={handleCreateUser} noValidate>
 
-                        <div className="input-container">
-                            <label>Email</label>
-                            <input className="management-input"
-                                name="email"
-                                ref={emailRef}
-                                type="email"
-                                placeholder="Ingresar Email"
-                                value={formUser.email}
-                                onChange={handleChange}
-                            />
-                            {errors.email && <p className="errors" >El email ingresado debe ser válido.</p>}
-                        </div>
+                            <div className="input-container">
+                                <label>Email</label>
+                                <input className="management-input"
+                                    name="email"
+                                    ref={emailRef}
+                                    type="email"
+                                    placeholder="Ingresar Email"
+                                    value={formUser.email}
+                                    onChange={handleChange}
+                                />
+                                {errors.email && <p className="errors" >El email ingresado debe ser válido.</p>}
+                            </div>
 
-                        <div className="input-container">
-                            <label>Contraseña</label>
-                            <input className="management-input"
-                                name="password"
-                                ref={passwordRef}
-                                type="password"
-                                placeholder="Ingresar Contraseña"
-                                value={formUser.password}
-                                onChange={handleChange}
-                            />
-                            {errors.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres y un caracter especial.</p>}
-                        </div>
+                            <div className="input-container">
+                                <label>Contraseña</label>
+                                <input className="management-input"
+                                    name="password"
+                                    ref={passwordRef}
+                                    type="password"
+                                    placeholder="Ingresar Contraseña"
+                                    value={formUser.password}
+                                    onChange={handleChange}
+                                />
+                                {errors.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres y un caracter especial.</p>}
+                            </div>
 
-                        <div className="input-container">
-                            <label>Confirmar Contraseña</label>
-                            <input className="management-input"
-                                name="confirmPassword"
-                                ref={confirmPasswordRef}
-                                type="password"
-                                placeholder="Ingresar Contraseña"
-                                value={formUser.confirmPassword}
-                                onChange={handleChange}
-                            />
-                            {errors.confirmPassword && <p className="errors" >La contraseña debe ser igual</p>}
+                            <div className="input-container">
+                                <label>Confirmar Contraseña</label>
+                                <input className="management-input"
+                                    name="confirmPassword"
+                                    ref={confirmPasswordRef}
+                                    type="password"
+                                    placeholder="Ingresar Contraseña"
+                                    value={formUser.confirmPassword}
+                                    onChange={handleChange}
+                                />
+                                {errors.confirmPassword && <p className="errors" >La contraseña debe ser igual</p>}
 
-                        </div>
-                        <div className="input-container">
-                            <label>Rol de usuario</label>
-                            <select
-                                name="role"
-                                value={formUser.role}
-                                onChange={handleChange}
-                            >
-                                <option value="customer">Customer</option>
-                                <option value="professional">Professional</option>
-                                <option value="admin">Admin</option>
-                            </select>
+                            </div>
+                            <div className="input-container">
+                                <label>Rol de usuario</label>
+                                <select
+                                    name="role"
+                                    value={formUser.role}
+                                    onChange={handleChange}
+                                >
+                                    <option value="customer">Customer</option>
+                                    <option value="professional">Professional</option>
+                                    <option value="admin">Admin</option>
+                                </select>
 
-                        </div>
-                        <button type="submit"> Agregar </button>
-
-                        {formServerMessage && (<p className="server-message">{formServerMessage}</p>)}
-                    </form>
+                            </div>
+                            <button type="submit"> Agregar </button>
+                        </form>
                     )}
                 </div>
                 
@@ -354,7 +354,6 @@ const UserManagement = () => {
                             ))}
                         </tbody>
                     </table>
-                    {tableServerMessage && (<p className="server-message">{tableServerMessage}</p>)}
 
                     {showModal && (
                         <div className="modal-container">

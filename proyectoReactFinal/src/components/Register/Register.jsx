@@ -3,6 +3,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import verifyEmail from "../../utils/verifyEmail.js";
 import verifyPassword from "../../utils/verifyPassword.js";
+import { toast } from "react-toastify";
 
 const Register = ()=>{
     const navigate = useNavigate();
@@ -11,7 +12,6 @@ const Register = ()=>{
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState({email: false, password: false, confirmPassword: false});
-    const [serverMessage, setServerMessage] = useState("");
 
     const emailRef = useRef(null)
     const passwordRef = useRef(null)
@@ -75,15 +75,17 @@ const Register = ()=>{
 
             //si devolvio error cortamos la funcion
             if (!response.ok) {
-                setServerMessage(data.message || "error al registrarse");
+                toast.error(data.message || "error al registrarse");
                 return;
             }
+
+            toast.success("Usuario registrado con exito")
             //si se registro bien lo mandamos al login
             navigate("/login");
 
         } catch (error) {
             console.error(error);
-            setServerMessage("Error al conectar con el servidor");
+            toast.error("Error al conectar con el servidor");
         }
 
     }
@@ -134,8 +136,6 @@ const Register = ()=>{
                     </div>
                     
                     <button type="submit">Registrarse</button>
-
-                    {serverMessage && (<p className="server-message">{serverMessage}</p>)}
 
                     <p className="register-text" onClick={() => navigate("/login")}>
                         ¿Ya tenes cuenta? Inicia sesion
