@@ -838,6 +838,7 @@ h1 {
   padding: 12px;
   border: 2px solid var(--variableCuatro);
   color: var(--variableCuatro);
+  background-color: var(--variableUno);
   border-radius: 8px;
   font-size: 14px;
   outline: none;
@@ -875,8 +876,70 @@ tbody{
   font-family: var(--textFont);
 }
 
-/*NOSOTROS*/
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
+.modal {
+  background: var(--variableUno);
+  padding: 25px;
+  border-radius: 12px;
+  width: 350px;
+  text-align: center;
+  font-family: var(--textFont);
+  font-size: 18px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.cancel-btn {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.delete-btn {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.update-input {
+  background-color: var(--variableUno);
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid var(--variableCuatro);
+  font-size: 14px;
+}
+.edit-fields {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.edit-fields input {
+  flex: 2;
+}
+
+.edit-fields select {
+  flex: 1;
+}
+
+/*NOSOTROS*/
 .aboutUs {
     max-width: 1200px;
     margin: 70px auto;
