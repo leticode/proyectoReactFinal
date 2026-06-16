@@ -21,3 +21,13 @@ Appointment.belongsTo(Service, {
 Service.hasMany(Appointment, {
   foreignKey: "serviceId",
 });
+
+//usuario <-> professional
+Professionals.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+});
+
+User.hasOne(Professionals, {
+  foreignKey: "userId",
+});

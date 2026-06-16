@@ -135,7 +135,7 @@ app.delete("/api/services/:id", async (req, res) => {
 
 //Endpoints para consultar los turnos disponibles por servicio
 
-app.use("/appointments", appointmentRoutes);
+//app.use("/appointments", appointmentRoutes);
 
 
 // FIN ENDPOINTS ---------------
