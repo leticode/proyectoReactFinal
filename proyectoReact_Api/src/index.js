@@ -14,6 +14,8 @@ import  User from "./models/User.js";
 import bcrypt from "bcrypt";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/users.routes.js"
+import appointmentRoutes from "./routes/appointment.routes.js"
+
 
 //creamos la aplicacion express donde app es nuestro servidor backend
 const app = express();
@@ -130,6 +132,11 @@ app.delete("/api/services/:id", async (req, res) => {
     });
   }
 });
+
+//Endpoints para consultar los turnos disponibles por servicio
+
+app.use("/appointments", appointmentRoutes);
+
 
 // FIN ENDPOINTS ---------------
 
