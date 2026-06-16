@@ -1,5 +1,5 @@
 import  User  from "../models/User.js";
-import { validateRegister, verifyRole } from "../middleware/auth.validations.js";
+import { validateRegister, verifyRole, ValidateUserUpdate } from "../middleware/auth.validations.js";
 import bcrypt from "bcrypt";
 
 export const getAllUsers = async (req, res) => {
@@ -26,7 +26,7 @@ export const createUser = async (req, res) => {
     if (Object.keys(errors).length > 0) {
         return res.status(400).json({ 
             errors, 
-            message: "Datos inválidos" 
+            message: "Datos invalidos" 
         })
     }
 
@@ -35,7 +35,7 @@ export const createUser = async (req, res) => {
     if (roleErrors.length > 0) {
         return res.status(400).json({
             errors: { role: roleErrors },
-            message: "Datos inválidos"
+            message: "Datos invalidos"
         })
     }
 
@@ -68,13 +68,57 @@ export const createUser = async (req, res) => {
     });
 }; 
 
-export const updateUser = (req, res) => {
+export const updateUser = async (req, res) => {
     const {id} = req.params;
+    const {email, role} = req.body;
+
+    const errors = ValidateUserUpdate({ email, role });
+    if (Object.keys(errors).length > 0) {
+        return res.status(400).json({
+            errors,
+            message: "Datos inválidos"
+        });
+    }
+
+    const user = await User.findByPk(id);
+    if (!user) {
+        return res.status(404).json({
+            message: "el usuario no existe"
+        });
+    }
+
+    //s alguno de los dos es indefinido o esta vacio usa el valor anterior
+    user.email = email ?? user.email;
+    user.role = role ?? user.role;
+
+    await user.save();
+    res.json({ 
+        message: "Usuario actualizado", 
+        user 
+    });
 };
 
-export const deleteUser = (req, res) => {
-    const {id} = req.params;
+export const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await User.findByPk(id);
 
+        if (!user) {
+            return res.status(404).json({
+                message: "El usuario no existe"
+            });
+        }
+
+        await user.destroy();
+        res.json({
+            message: "Usuario eliminado"
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
 };
 //crear post para crearlos
 //put para mofificarlos

@@ -72,3 +72,21 @@ export const verifyRole = ((role) => {
 
     return errors;
 });
+
+export const ValidateUserUpdate = ({ email, role }) => {
+    const errors = {};
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email || !emailRegex.test(email)) {
+        errors.email = "El email no es válido";
+    }
+
+    const validRoles = ["customer", "professional", "admin"];
+
+    if (!role || !validRoles.includes(role)) {
+        errors.role = "El rol no es válido";
+    }
+
+    return errors;
+};
