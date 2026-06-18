@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const ProfessionalsModal = ({ onClose, onSelect }) => {
     const [professionals, setProfessionals] = useState([]);
@@ -12,20 +12,24 @@ const ProfessionalsModal = ({ onClose, onSelect }) => {
 
     return (
         <>
-            <div className="modal-overlay">
+            <div className="modal-professionals">
                 <div className="modal-content">
                     <h2>Selecciona un profesional</h2>
 
-                    {professionals.map((professional) => (
-                        <button
-                            key={professional.id}
-                            onClick={() => onSelect(professional)} //guarda un solo profesional
-                        >
-                            {professional.name}
-                        </button>
-                    ))}
-
-                    <button onClick={onClose}>
+                    <div className="professionals-list">
+                        {professionals.map((professional) => (
+                            <button
+                                key={professional.id}
+                                className="professional-card"
+                                onClick={() => onSelect(professional)}
+                            >
+                                <h4>
+                                    {professional.firstName} {professional.lastName}
+                                </h4>
+                            </button>
+                        ))}
+                    </div>
+                    <button onClick={onClose} className="close-professionals">
                         Cerrar
                     </button>
                 </div>
