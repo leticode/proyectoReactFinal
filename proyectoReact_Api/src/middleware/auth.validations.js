@@ -61,7 +61,7 @@ export const verifyLogin = (req, res, next) => {
 };
 
 export const verifyRole = ((role) => {
-    const allowRole = ['customer', 'professional', 'admin']
+    const allowRole = ['customer', 'professional', 'admin', 'superadmin']
     const errors = [];
 
     if(!role)
@@ -73,7 +73,22 @@ export const verifyRole = ((role) => {
     return errors;
 });
 
-export const ValidateUserUpdate = ({ email, role }) => {
+export const validateCreateUser = ({email, password, confirmPassword, role, firstName, lastName}) => {
+    const errors = validateRegister({email, password, confirmPassword});
+
+    if (role === "professional") {
+        if (!firstName?.trim()) {
+            errors.firstName = "El nombre es obligatorio";
+        }
+        if (!lastName?.trim()) {
+            errors.lastName = "El apellido es obligatorio";
+        }
+    }
+
+    return errors;
+};
+
+export const ValidateUserUpdate = ({ email, role, firstName, lastName }) => {
     const errors = {};
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -82,10 +97,21 @@ export const ValidateUserUpdate = ({ email, role }) => {
         errors.email = "El email no es válido";
     }
 
-    const validRoles = ["customer", "professional", "admin"];
+    const validRoles = ["customer", "professional", "admin", 'superadmin'];
 
     if (!role || !validRoles.includes(role)) {
         errors.role = "El rol no es válido";
+    }
+
+    //validacion por si es profesional y se le agrega el nombre y el apellido
+    if (role === "professional") {
+
+        if (!firstName?.trim()) {
+            errors.firstName = "El nombre es obligatorio";
+        }
+        if (!lastName?.trim()) {
+            errors.lastName = "El apellido es obligatorio";
+        }
     }
 
     return errors;

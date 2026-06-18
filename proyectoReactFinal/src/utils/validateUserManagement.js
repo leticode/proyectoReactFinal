@@ -16,6 +16,14 @@ export const ValidateUserManagement = ((formUser) => {
         errors.confirmPassword = "Las contraseñas no coinciden";
     }
 
+    if (!formUser.firstName.trim()) {
+        errors.firstName = "El nombre es obligatorio";
+    }
+
+    if (!formUser.lastName.trim()) {
+        errors.lastName = "El apellido es obligatorio";
+    }
+    
     return errors;
 });
 

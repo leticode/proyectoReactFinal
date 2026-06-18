@@ -9,7 +9,12 @@ export const Professionals = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    name: {
+    //agregue estos dos campos donde vamos a tener el nombre y apellido del profesional
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    lastName: {
       type: DataTypes.STRING,
       allowNull: false,
     },

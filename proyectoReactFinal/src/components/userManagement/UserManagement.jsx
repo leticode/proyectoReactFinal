@@ -14,12 +14,16 @@ const UserManagement = () => {
         email: "",
         password: "",
         confirmPassword: "",
-        role: "customer"
+        role: "customer",
+        firstName: "",
+        lastName: ""
     });
     const [errors, setErrors] = useState({
         email: "",
         password: "",
-        confirmPassword: ""
+        confirmPassword: "",
+        firstName: "",
+        lastName: ""
     })
 
     const emailRef = useRef(null);
@@ -95,6 +99,7 @@ const UserManagement = () => {
             //ahora si este then tiene el objeto usuario
             .then((data) => {
                 //y actualiza el estado de users con el objeto recibido
+                console.log("DATA:", data);
                 setUsers(data);
             })
 
@@ -118,6 +123,8 @@ const UserManagement = () => {
                 email: validationErrors.email || "",
                 password: validationErrors.password || "",
                 confirmPassword: validationErrors.confirmPassword || "",
+                firstName: validationErrors.firstName || "",
+                lastName: validationErrors.lastName || ""
             })
 
             return;
@@ -131,36 +138,37 @@ const UserManagement = () => {
             },
             body: JSON.stringify(formUser),
         })
+        .then((res) => {
+            if (!res.ok) {
+                //corta la ejecucon throw
+                throw new Error('Error al crear usuario');
+            }
 
-            .then((res) => {
-                if (!res.ok) {
-                    //corta la ejecucon throw
-                    throw new Error('Error al crear usuario');
-                }
+            return res.json();
+        })
+        .then((data) => {
+            //agregamos el usuaro nuevo a la tabla si necesidad de recargar
+            setUsers((prevUsers) => [
+                ...prevUsers,
+                data.user
+            ]);
 
-                return res.json();
-            })
-            .then((data) => {
-                //agregamos el usuaro nuevo a la tabla si necesidad de recargar
-                setUsers((prevUsers) => [
-                    ...prevUsers,
-                    data.user
-                ]);
-
-                //aca limpiamos los inputs desp de crear el usuario
-                setformUser({
-                    email: "",
-                    password: "",
-                    confirmPassword: "",
-                    role: "customer",
-                });
-
-                toast.success("Usuario creado correctamente");
-            })
-            .catch((error) => {
-                console.log(error);
-                toast.error("No se pudo crear al usuario");
+            //aca limpiamos los inputs desp de crear el usuario
+            setformUser({
+                email: "",
+                password: "",
+                confirmPassword: "",
+                role: "customer",
+                firstName: "",
+                lastName: ""
             });
+
+            toast.success("Usuario creado correctamente");
+        })
+        .catch((error) => {
+            console.log(error);
+            toast.error("No se pudo crear al usuario");
+        });
     }
 
     //recibimos el usuario que queremos actualizar
@@ -187,7 +195,7 @@ const UserManagement = () => {
             //transformamos el body en json para que lo reciba el back con req.body
             body: JSON.stringify({
                 email: updateUser.email,
-                role: updateUser.role
+                role: updateUser.role,
             })
         })
         .then((res) => {
@@ -255,7 +263,7 @@ const UserManagement = () => {
             <h1>Gestion de Usuarios</h1>
             <div className="management">
                 <div className="management-container">
-                    {user?.role === "admin" && (
+                    {user?.role === "superadmin" && (
                         <form onSubmit={handleCreateUser} noValidate>
 
                             <div className="input-container">
@@ -307,7 +315,39 @@ const UserManagement = () => {
                                     <option value="customer">Customer</option>
                                     <option value="professional">Professional</option>
                                     <option value="admin">Admin</option>
+
                                 </select>
+
+                                {formUser?.role === "professional" && (
+                                    <>
+                                        <div className="input-container">
+                                            <label>Nombre</label>
+                                            <input
+                                                className="management-input"
+                                                type="text"
+                                                name="firstName"
+                                                placeholder="Ingresar Nombre"
+                                                value={formUser.firstName}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+                                        {errors.firstName && (<p className="errors">{errors.firstName}</p>)}
+
+                                        <div className="input-container">
+                                            <label>Apellido</label>
+                                            <input
+                                                className="management-input"
+                                                type="text"
+                                                placeholder="Ingresar Apelliido"
+                                                name="lastName"
+                                                value={formUser.lastName}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+                                        {errors.lastName && (<p className="errors">{errors.lastName}</p>)}
+                                        
+                                    </>
+                                )}
 
                             </div>
                             <button type="submit"> Agregar </button>
@@ -320,9 +360,10 @@ const UserManagement = () => {
                         <thead> {/*encabezado*/}
                             <tr> {/*row*/} 
                                 <th>Email</th>
-                                {user?.role === "admin" && (
+                                {user?.role === "superadmin" && (
                                     <>
                                         <th>Rol</th>
+                                        <th>Nombre y Apellido</th>
                                         <th></th>
                                         <th></th>
                                     </>
@@ -335,9 +376,16 @@ const UserManagement = () => {
                             {users.map((u) => (
                                 <tr key={u.id}>
                                     <td>{u.email}</td>
-                                    {user?.role === "admin" && (
+                                    {user?.role === "superadmin" && (
                                         <>
                                             <td>{u.role}</td> {/*mostramos rol */}
+                                            <td>
+                                                {/*ternario donde si es profesioanl muestra nombre y apellido si no un guion */}
+                                                {u.role === "professional"
+                                                //esto lo trae desde el back con el nombre de professional
+                                                    ? `${u.professional?.firstName || ""} ${u.professional?.lastName || ""}`
+                                                    : "-"}
+                                            </td>
                                             <td> {/*botones para editar o borrar*/}
                                                 <button className="edit-button"
                                                         onClick={() => handleOpenUpdateModal(u)}
@@ -412,6 +460,48 @@ const UserManagement = () => {
                                         <option value="professional">Professional</option>
                                         <option value="admin">Admin</option>
                                     </select>
+
+                                    {updateUser.role === "professional" && (
+                                    <>
+                                        <div className="input-container">
+                                            <div className="name-container">
+                                                <label>Nombre</label>
+                                                <input
+                                                    className="update-input"
+                                                    type="text"
+                                                    placeholder="Ingresar Nombre"
+                                                    value={updateUser.firstName || ""}
+                                                    onChange={(e) =>
+                                                        setUpdateUser({
+                                                            ...updateUser,
+                                                            firstName: e.target.value
+                                                        })
+                                                    }
+                                                />
+                                            </div>
+                                        </div>
+                                        {errors.firstName && (<p className="errors">{errors.firstName}</p>)}
+
+                                        <div className="input-container">
+                                            <div className="name-container">
+                                                <label>Apellido</label>
+                                                <input
+                                                    className="update-input"
+                                                    type="text"
+                                                    placeholder="Ingresar Apelliido"
+                                                    value={updateUser.lastName || ""}
+                                                    onChange={(e) =>
+                                                        setUpdateUser({
+                                                            ...updateUser,
+                                                            lastName: e.target.value
+                                                        })
+                                                    }
+                                                />
+                                            </div>
+                                            {errors.lastName && (<p className="errors">{errors.lastName}</p>)}
+                                        </div>
+                                    </> 
+                                    )}
                                 </div>
                                 <div className="modal-buttons">
                                     <button
@@ -423,9 +513,8 @@ const UserManagement = () => {
                                     > Guardar
                                     </button>
                                 </div>
-                                {updateErrors.email && (
-                                    <p className="errors">{updateErrors.email}</p>
-                                )}
+                                {updateErrors.email && (<p className="errors">{updateErrors.email}</p>)}
+
                             </div>
                         </div>
                     )}
