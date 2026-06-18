@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import NotFound from "../notFound/Notfound";
 import ServiceCalendar from "../serviceCalendar/ServiceCalendar";
+import ProfessionalsModal from "../professionalsModal/ProfessionalsModal";
 
 export default function ServiceDetails() {
   const { id } = useParams();
 
   const [service, setService] = useState(null);
+
+  const [showProfessionalsModal, setShowProfessionalsModal] = useState(false);
+  const [selectedProfessional, setSelectedProfessional] = useState(null);
 
   useEffect(() => {
     fetch(`http://localhost:3000/api/services/${id}`)
@@ -49,9 +53,22 @@ export default function ServiceDetails() {
             PRECIO: ${service.price.toLocaleString("es-AR")}
           </p>
 
-          <button className="btn-reservar">
-            <ServiceCalendar />
+          <button
+            className="btn-reservar"
+            onClick={() => setShowProfessionalsModal(true)}
+          >
+            Reservar turno
           </button>
+
+          {showProfessionalsModal && (
+            <ProfessionalsModal
+              onClose={() => setShowProfessionalsModal(false)}
+              onSelect={(professional) => {
+                setSelectedProfessional(professional);
+                setShowProfessionalsModal(false);
+              }}
+            />
+          )}
         </div>
       </div>
     </section>
