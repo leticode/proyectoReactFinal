@@ -14,6 +14,7 @@ import  User from "./models/User.js";
 import bcrypt from "bcrypt";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/users.routes.js"
+import professionalsRoutes from "./routes/professionals.routes.js"
 import "./models/Assosiations.js"
 
 //creamos la aplicacion express donde app es nuestro servidor backend
@@ -131,6 +132,10 @@ app.delete("/api/services/:id", async (req, res) => {
     });
   }
 });
+
+//endopoint para profesionales
+
+app.use("/api/professionals", professionalsRoutes);
 
 // FIN ENDPOINTS ---------------
 
