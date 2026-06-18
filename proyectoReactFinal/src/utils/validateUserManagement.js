@@ -17,15 +17,15 @@ export const ValidateUserManagement = ((formUser) => {
     }
 
     if(formUser.role === "professional"){
-        if (!formUser.firstName.trim()) {
+        if (!formUser.firstName?.trim()) {
             errors.firstName = "El nombre es obligatorio";
         }
 
-        if (!formUser.lastName.trim()) {
+        if (!formUser.lastName?.trim()) {
             errors.lastName = "El apellido es obligatorio";
         }
     }
-    
+
     return errors;
 });
 
@@ -39,10 +39,10 @@ export const ValidateUserUpdate = (user) => {
     }
 
     if(user.role === "professional"){
-        if (!user.firstName.trim()) {
+        if (!user.firstName?.trim()) {
             errors.firstName = "El nombre es obligatorio";
         }
-        if (!user.lastName.trim()) {
+        if (!user.lastName?.trim()) {
             errors.lastName = "El apellido es obligatorio";
         }
     }
