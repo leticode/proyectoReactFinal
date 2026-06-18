@@ -45,22 +45,22 @@ const UserManagement = () => {
 
     const [updateUser, setUpdateUser] = useState(null);
     const [showUpdateModal, setShowUpdateModal] = useState(false);
-    const [updateErrors, setUpdateErrors] = useState({
-        email: "",
-        role: ""
-    });
+    const [updateErrors, setUpdateErrors] = useState({email: "", role: "", firstName: "", lastName: ""});
 
     const handleOpenUpdateModal = (user) => {
         setShowUpdateModal(true);
         setUpdateUser(user);
     }
     const handleCloseUpdateModal = () => {
-        setShowUpdateModal(false);
-        setUpdateUser(null);
         setUpdateErrors({
             email: "",
-            role: ""
+            role: "",
+            firstName: "",
+            lastName: ""
         });
+
+        setShowUpdateModal(false);
+        setUpdateUser(null);
     }
 
     //handle general que va guardardando todos los inputs a medida que el usuario escribe
@@ -175,7 +175,6 @@ const UserManagement = () => {
 
     //recibimos el usuario que queremos actualizar
     const handleUpdateUser = async (updateUser) => {
-
         const validationErrors = ValidateUserUpdate(updateUser);
 
         if (Object.keys(validationErrors).length > 0) {
@@ -240,7 +239,7 @@ const UserManagement = () => {
             return res.json();
         })
         .then(() => {
-            
+
             handleLoadUsers();
 
             setShowModal(false);
@@ -500,7 +499,7 @@ const UserManagement = () => {
                                     )}
                                 <div className="modal-buttons">
                                     <button
-                                        onClick={() => setShowUpdateModal(false)}
+                                        onClick={handleCloseUpdateModal}
                                     > Cancelar
                                     </button>
                                     <button
