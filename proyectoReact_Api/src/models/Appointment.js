@@ -38,6 +38,10 @@ export const Appointment = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    professionalId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }
   },
   {
     tableName: "appointment",
