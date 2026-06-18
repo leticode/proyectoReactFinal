@@ -56,11 +56,11 @@ function App() {
           <Route path="/professionals" element={<Professionals/>}/>
 
           {/*misma validacion que en usermanagement pero incluyendo al professional*/}
-          <Route element={<ProtectedRoutes allowedRoles={['admin', 'professional']}/>}>
+          <Route element={<ProtectedRoutes allowedRoles={['superadmin','admin', 'professional']}/>}>
               <Route path="/admin" element={<Admin />}/>
           </Route>
     
-          <Route element={<ProtectedRoutes allowedRoles={['admin']}/>}>
+          <Route element={<ProtectedRoutes allowedRoles={['superadmin']}/>}>
             <Route path="/management" element={<UserManagement />}/>
           </Route>
 
