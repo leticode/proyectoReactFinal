@@ -9,8 +9,9 @@ export default function ServiceDetails() {
 
   const [service, setService] = useState(null);
 
-  const [showProfessionalsModal, setShowProfessionalsModal] = useState(false);
   const [selectedProfessional, setSelectedProfessional] = useState(null);
+  const [showProfessionalsModal, setShowProfessionalsModal] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
 
   useEffect(() => {
     fetch(`http://localhost:3000/api/services/${id}`)
@@ -66,11 +67,22 @@ export default function ServiceDetails() {
               onSelect={(professional) => {
                 setSelectedProfessional(professional);
                 setShowProfessionalsModal(false);
+                setShowCalendar(true);
               }}
             />
-          )}
+          )}{
+            showCalendar && selectedProfessional && (
+              <ServiceCalendar
+                serviceId={service.id}
+                professionalId={selectedProfessional.id}
+                onClose={() => setShowCalendar(false)}
+              />
+            )
+          }
         </div>
       </div>
     </section>
   );
+  console.log("selectedProfessional:", selectedProfessional);
+  console.log("showCalendar:", showCalendar);
 }

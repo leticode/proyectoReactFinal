@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 
 const ProfessionalsModal = ({ onClose, onSelect }) => {
     const [professionals, setProfessionals] = useState([]);
+    const [showCalendar, setShowCalendar] = useState(false);
+
     //esto es para traer a los profesionales y asi poder mostrarlos
     useEffect(() => {
         fetch("http://localhost:3000/api/professionals")
@@ -22,6 +24,7 @@ const ProfessionalsModal = ({ onClose, onSelect }) => {
                                 key={professional.id}
                                 className="professional-card"
                                 onClick={() => onSelect(professional)}
+                                
                             >
                                 <h4>
                                     {professional.firstName} {professional.lastName}
