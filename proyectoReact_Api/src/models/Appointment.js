@@ -1,7 +1,5 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db.js";
-import User from "./User.js";
-import { Service } from "./Service.js";
 
 export const Appointment = sequelize.define(
   "Appointment",
@@ -15,24 +13,24 @@ export const Appointment = sequelize.define(
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    hour: {
+    startHour: {
+      type: DataTypes.TIME,
+      allowNull: false,
+    },
+    endHour: {
       type: DataTypes.TIME,
       allowNull: false,
     },
     status: {
       type: DataTypes.ENUM(
         "pendiente",
+        "en curso",
         "terminado",
-        "cancelado",
-        "en curso"
+        "cancelado"
       ),
       defaultValue: "pendiente",
     },
     userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    professionalId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },

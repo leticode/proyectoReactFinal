@@ -72,6 +72,32 @@ const UserManagement = () => {
         });
     }
 
+    //peticion al back para tener todos los usuarios
+    //decdi hacerlo funcion al fetch en vez de ponerlo en el useefccte porq necesito usar la funcion
+    //de cragar usuarios en el useefecct y ademas en el creteuser si yo solo lo ponia en useefectt
+    //cuando se creaba un usuario habia que recargar la pagina
+    const handleLoadUsers = () => {
+        fetch("http://localhost:3000/api/user", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error("Error al cargar usuarios");
+            }
+
+            return res.json();
+        })
+        //guardamos en estado users los usuaros obtenidos
+        .then((data) => {
+            setUsers(data);
+        })
+
+        .catch(() => toast.error("No se pudieron cargar los usuarios"));
+    };
+
     //permte ejecutar el codgo cuando se renderza el componente
     useEffect(() => {
         //el token es valdo? si no lo es lo desloguea borra desde el localstorage y navega al login
@@ -80,30 +106,8 @@ const UserManagement = () => {
             navigate("/login");
         }
 
-        //si es valido hace el la peticion para traer los usaruaios
-        fetch("http://localhost:3000/api/user", {
-            //mandamos como header el token
-            headers: { Authorization: `Bearer ${token}` },
-        })
-
-            //el front recibe la respuesta del backend PERO solo recibe la response status
-            //osea solo recibe o 201 o 401 no el objeto de usuario 
-            .then((res) => {
-                //si el error empieza con 400 algo tira error 
-                if (!res.ok) throw new Error("Error al cargar usuarios");
-
-                //si todo sale bien convierte la response a objeto
-                return res.json();
-            })
-
-            //ahora si este then tiene el objeto usuario
-            .then((data) => {
-                //y actualiza el estado de users con el objeto recibido
-                console.log("DATA:", data);
-                setUsers(data);
-            })
-
-            .catch(() => toast.error("No se pudieron cargar los usuarios"));
+        //ejecutamos la funcion para cargar los usuarios 
+        handleLoadUsers();
 
     }, []);
 
@@ -138,6 +142,7 @@ const UserManagement = () => {
             },
             body: JSON.stringify(formUser),
         })
+
         .then((res) => {
             if (!res.ok) {
                 //corta la ejecucon throw
@@ -146,13 +151,10 @@ const UserManagement = () => {
 
             return res.json();
         })
-        .then((data) => {
-            //agregamos el usuaro nuevo a la tabla si necesidad de recargar
-            setUsers((prevUsers) => [
-                ...prevUsers,
-                data.user
-            ]);
+        .then(() => {
 
+            //llamamos a la funcion de nuevo de traer los usuarios desp de crear el user
+            handleLoadUsers()
             //aca limpiamos los inputs desp de crear el usuario
             setformUser({
                 email: "",
@@ -180,6 +182,8 @@ const UserManagement = () => {
             setUpdateErrors({
                 email: validationErrors.email || "",
                 role: validationErrors.role || "",
+                firstName: validationErrors.firstName || "",
+                lastName: validationErrors.lastName || ""
             });
             return;
         }
@@ -196,6 +200,8 @@ const UserManagement = () => {
             body: JSON.stringify({
                 email: updateUser.email,
                 role: updateUser.role,
+                firstName: updateUser.firstName,
+                lastName: updateUser.lastName
             })
         })
         .then((res) => {
@@ -205,19 +211,9 @@ const UserManagement = () => {
             return res.json();
         })
         //con los datos devuketos por el back
-        .then((data) => {
-            //actualizamos la lista sin recargar
-            setUsers((prevUsers) =>
-                //mapeamos los usuarios
-                prevUsers.map((user) =>
-                    //si user id es igual al id actualizado
-                    user.id === updateUser.id
-                    //lo cambia con lo nuevo
-                        ? data.user
-                        //si no lo deja como esta
-                        : user
-                )
-            );
+        .then(() => {
+            handleLoadUsers()
+
             setShowUpdateModal(false);
             //limpiamos usuario en edicion
             setUpdateUser(null);
@@ -243,13 +239,10 @@ const UserManagement = () => {
             }
             return res.json();
         })
-        .then((data) => {
+        .then(() => {
+            
+            handleLoadUsers();
 
-            //filtro para actualizar el estado de user solo con los elementos que no fueron eliminados
-            //osea que no coinciden con el id elimanado
-            setUsers((prevUsers) =>
-                prevUsers.filter((user) => user.id !== id)
-            )
             setShowModal(false);
             toast.success("Usuario eliminado correctamente");
         })
@@ -446,7 +439,7 @@ const UserManagement = () => {
                                             })
                                         }
                                     />
-
+                                    
                                     <select
                                         value={updateUser.role}
                                         onChange={(e) =>
@@ -461,48 +454,50 @@ const UserManagement = () => {
                                         <option value="admin">Admin</option>
                                     </select>
 
-                                    {updateUser.role === "professional" && (
-                                    <>
-                                        <div className="input-container">
-                                            <div className="name-container">
-                                                <label>Nombre</label>
-                                                <input
-                                                    className="update-input"
-                                                    type="text"
-                                                    placeholder="Ingresar Nombre"
-                                                    value={updateUser.firstName || ""}
-                                                    onChange={(e) =>
-                                                        setUpdateUser({
-                                                            ...updateUser,
-                                                            firstName: e.target.value
-                                                        })
-                                                    }
-                                                />
-                                            </div>
-                                        </div>
-                                        {errors.firstName && (<p className="errors">{errors.firstName}</p>)}
-
-                                        <div className="input-container">
-                                            <div className="name-container">
-                                                <label>Apellido</label>
-                                                <input
-                                                    className="update-input"
-                                                    type="text"
-                                                    placeholder="Ingresar Apelliido"
-                                                    value={updateUser.lastName || ""}
-                                                    onChange={(e) =>
-                                                        setUpdateUser({
-                                                            ...updateUser,
-                                                            lastName: e.target.value
-                                                        })
-                                                    }
-                                                />
-                                            </div>
-                                            {errors.lastName && (<p className="errors">{errors.lastName}</p>)}
-                                        </div>
-                                    </> 
-                                    )}
                                 </div>
+                                    {updateUser.role === "professional" && (
+                                        <>
+                                            <div className="professional-fields">
+                                                <div className="input-container">
+                                                    <div className="name-container">
+                                                        <label>Nombre</label>
+                                                        <input
+                                                            className="update-input"
+                                                            type="text"
+                                                            placeholder="Ingresar Nombre"
+                                                            value={updateUser.firstName || ""}
+                                                            onChange={(e) =>
+                                                                setUpdateUser({
+                                                                    ...updateUser,
+                                                                    firstName: e.target.value
+                                                                })
+                                                            }
+                                                        />
+                                                    </div>
+                                                </div>
+                                                {updateErrors.firstName && (<p className="errors">{updateErrors.firstName}</p>)}
+
+                                                <div className="input-container">
+                                                    <div className="name-container">
+                                                        <label>Apellido</label>
+                                                        <input
+                                                            className="update-input"
+                                                            type="text"
+                                                            placeholder="Ingresar Apelliido"
+                                                            value={updateUser.lastName || ""}
+                                                            onChange={(e) =>
+                                                                setUpdateUser({
+                                                                    ...updateUser,
+                                                                    lastName: e.target.value
+                                                                })
+                                                            }
+                                                        />
+                                                    </div>
+                                                    {updateErrors.lastName && (<p className="errors">{updateErrors.lastName}</p>)}
+                                                </div>
+                                            </div>
+                                        </> 
+                                    )}
                                 <div className="modal-buttons">
                                     <button
                                         onClick={() => setShowUpdateModal(false)}

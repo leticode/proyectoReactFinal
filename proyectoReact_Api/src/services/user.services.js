@@ -78,8 +78,9 @@ export const createUser = async (req, res) => {
         await Professionals.create({
             firstName,
             lastName,
+            workayStart: 9,
+            workayEnd: 20,
             userId: newUser.id,
-            specialty: "Sin especialidad" // o el valor que quieras por defecto
         });
     }
 
@@ -97,7 +98,8 @@ export const updateUser = async (req, res) => {
     const {id} = req.params;
     const {email, role, firstName, lastName} = req.body;
 
-    const errors = ValidateUserUpdate({ email, role, firstName, lastName });
+    const errors = ValidateUserUpdate({ email, role, firstName, lastName});
+
     if (Object.keys(errors).length > 0) {
         return res.status(400).json({
             errors,
@@ -120,24 +122,29 @@ export const updateUser = async (req, res) => {
     await user.save();
 
     //aca si el rol seria profesion tendriamos q actualizar a tabla professional tamb
-    // Si es profesional, actualizar su ficha
+    // Si es profesional, actualizar su ficha y si no es profesional pero lo querems cambiar a profesional
+    //tedriamos que crear su ficha
     if (role === "professional") {
-        const professional = await Professionals.findOne({
-            where: {
-                userId: user.id
-            }
-        });
+        let professional = await Professionals.findOne({
+            where: { userId: user.id }
+        })
 
+        //si el profesional no existe lo crea
         if (!professional) {
-            return res.status(404).json({
-                message: "Id de profesional no encontrado"
+            professional = await Professionals.create({
+                firstName,
+                lastName,
+                workayStart: 9,
+                workayEnd: 20,
+                userId: user.id
             });
+        } else {
+            
+            professional.firstName = firstName;
+            professional.lastName = lastName;
+
+            await professional.save();
         }
-
-        professional.firstName = firstName;
-        professional.lastName = lastName;
-
-        await professional.save();
     }
 
     res.json({ 
@@ -155,13 +162,26 @@ export const deleteUser = async (req, res) => {
         if (!user) {
             return res.status(404).json({
                 message: "El usuario no existe"
-            });
+            })
+        }
+
+        if (user.role === "professional") {
+            const professional = await Professionals.findOne({
+                where: {
+                    userId: user.id
+                }
+            })
+        
+            if (professional) {
+                await professional.destroy();
+            }
         }
 
         await user.destroy();
+
         res.json({
             message: "Usuario eliminado"
-        });
+        })
 
     } catch (error) {
         res.status(500).json({
