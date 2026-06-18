@@ -171,6 +171,7 @@ const Layout = ({ children }) => {
             <div className="column-footer">
               <h3 className="title-footer">EXPLORAR</h3>
               <NavLink to="/home" className="link-footer">Inicio</NavLink>
+              <NavLink to="/myappointments" className="link-footer">Mis turnos</NavLink>
               <NavLink to="/servicios" className="link-footer">Servicios</NavLink>
               <NavLink to="/aboutUs" className="link-footer">Nosotros</NavLink>
               <NavLink to="/contact" className="link-footer">Contacto</NavLink>
