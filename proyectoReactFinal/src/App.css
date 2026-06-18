@@ -781,7 +781,8 @@ h1 {
 }
 
 .management-container:last-child {
-  width: 600px;
+  width: 60%;
+  max-width: 1400px;
   max-height: 500px;
   overflow-y: auto;
 }
@@ -841,6 +842,7 @@ h1 {
   background-color: var(--variableUno);
   border-radius: 8px;
   font-size: 14px;
+  margin-bottom: 15px;
   outline: none;
 }
 .management input::placeholder {
@@ -858,6 +860,8 @@ thead {
   font-family: var(--textFont);
 }
 th:first-child,
+th:nth-child(2),
+td:nth-child(2),
 td:first-child {
   border-right: 4px solid var(--variableTres);
 }
@@ -937,6 +941,12 @@ tbody{
 
 .edit-fields select {
   flex: 1;
+}
+
+.name-container{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 /*NOSOTROS*/

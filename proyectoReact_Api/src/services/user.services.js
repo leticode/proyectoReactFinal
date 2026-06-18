@@ -1,9 +1,24 @@
 import  User  from "../models/User.js";
-import { validateRegister, verifyRole, ValidateUserUpdate } from "../middleware/auth.validations.js";
+import { Professionals } from "../models/Professionals.js";
+import { verifyRole, ValidateUserUpdate, validateCreateUser } from "../middleware/auth.validations.js";
 import bcrypt from "bcrypt";
 
 export const getAllUsers = async (req, res) => {
-    const allUsers = await User.findAll();
+    const allUsers = await User.findAll({
+        //anadi esto para que cuando en la tabla se muestren los usuarios
+        //os que sean professionales traigan el nombre y apellido
+        include: [
+            {
+                //basicamente aca le mandamos al front el modelo profesional
+                //llamado profesional asi despues puedo hacer un operador ternario para mostrar el campo
+                // de nombre y apellido cuando se aprete la opcion de profesional
+                model: Professionals,
+                as: "professional",
+                attributes: ["firstName", "lastName"]
+            }
+        ]
+    });
+
     res.json(allUsers);
 };
 
@@ -19,10 +34,10 @@ export const getUserById = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-    //traemoslos datos del body con el rol por default
-    const {email, password, confirmPassword, role = "customer"} = req.body;   
+    //traemoslos datos del body con el rol por default y agregue el nombre y el apellido para el prof
+    const {email, password, confirmPassword, role = "customer", firstName, lastName} = req.body;   
 
-    const errors = validateRegister({email, password, confirmPassword});
+    const errors = validateCreateUser(req.body);
     if (Object.keys(errors).length > 0) {
         return res.status(400).json({ 
             errors, 
@@ -58,6 +73,16 @@ export const createUser = async (req, res) => {
         role
     });
      
+    //esto podriamos hacer para guardar el profesional en la tabla profesional
+    if (role === "professional") {
+        await Professionals.create({
+            firstName,
+            lastName,
+            userId: newUser.id,
+            specialty: "Sin especialidad" // o el valor que quieras por defecto
+        });
+    }
+
     return res.status(201).send({
         message: "Usuario creado correctamente",
         user: {
@@ -70,9 +95,9 @@ export const createUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     const {id} = req.params;
-    const {email, role} = req.body;
+    const {email, role, firstName, lastName} = req.body;
 
-    const errors = ValidateUserUpdate({ email, role });
+    const errors = ValidateUserUpdate({ email, role, firstName, lastName });
     if (Object.keys(errors).length > 0) {
         return res.status(400).json({
             errors,
@@ -91,11 +116,35 @@ export const updateUser = async (req, res) => {
     user.email = email ?? user.email;
     user.role = role ?? user.role;
 
+    //guardamos el usuario
     await user.save();
+
+    //aca si el rol seria profesion tendriamos q actualizar a tabla professional tamb
+    // Si es profesional, actualizar su ficha
+    if (role === "professional") {
+        const professional = await Professionals.findOne({
+            where: {
+                userId: user.id
+            }
+        });
+
+        if (!professional) {
+            return res.status(404).json({
+                message: "Id de profesional no encontrado"
+            });
+        }
+
+        professional.firstName = firstName;
+        professional.lastName = lastName;
+
+        await professional.save();
+    }
+
     res.json({ 
         message: "Usuario actualizado", 
         user 
     });
+
 };
 
 export const deleteUser = async (req, res) => {
@@ -120,7 +169,3 @@ export const deleteUser = async (req, res) => {
         });
     }
 };
-//crear post para crearlos
-//put para mofificarlos
-
-//delete para eliminarlo

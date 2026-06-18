@@ -42,6 +42,7 @@ Professionals.belongsTo(User, {
 
 User.hasOne(Professionals, {
   foreignKey: "userId",
+  as: "professional"
 });
 
 //professional <-> servicio
