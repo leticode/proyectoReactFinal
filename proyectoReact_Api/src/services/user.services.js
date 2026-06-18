@@ -1,4 +1,4 @@
-import  User  from "../models/User.js";
+import User from "../models/User.js";
 import { Professionals } from "../models/Professionals.js";
 import { verifyRole, ValidateUserUpdate, validateCreateUser } from "../middleware/auth.validations.js";
 import bcrypt from "bcrypt";
@@ -25,9 +25,9 @@ export const getAllUsers = async (req, res) => {
 export const getUserById = async (req, res) => {
     const { id } = req.params;
     const UserById = await User.findByPk(id);
-    
-    if(!UserById)
-    return res.status(404).json({message: 'Id inexistente'});
+
+    if (!UserById)
+        return res.status(404).json({ message: 'Id inexistente' });
 
     res.json(UserById);
 
@@ -35,13 +35,13 @@ export const getUserById = async (req, res) => {
 
 export const createUser = async (req, res) => {
     //traemoslos datos del body con el rol por default y agregue el nombre y el apellido para el prof
-    const {email, password, confirmPassword, role = "customer", firstName, lastName} = req.body;   
+    const { email, password, confirmPassword, role = "customer", firstName, lastName } = req.body;
 
     const errors = validateCreateUser(req.body);
     if (Object.keys(errors).length > 0) {
-        return res.status(400).json({ 
-            errors, 
-            message: "Datos invalidos" 
+        return res.status(400).json({
+            errors,
+            message: "Datos invalidos"
         })
     }
 
@@ -59,20 +59,20 @@ export const createUser = async (req, res) => {
             email
         }
     });
-    
-    if (userExists){
-        return res.status(400).send({message: "Usuario existente"})
+
+    if (userExists) {
+        return res.status(400).send({ message: "Usuario existente" })
     }
 
     //hasheamos la ocntrasena
     const hashedPassword = await bcrypt.hash(password, 10);
-    
+
     const newUser = await User.create({
-        email,    
+        email,
         password: hashedPassword,
         role
     });
-     
+
     //esto podriamos hacer para guardar el profesional en la tabla profesional
     if (role === "professional") {
         await Professionals.create({
@@ -92,13 +92,13 @@ export const createUser = async (req, res) => {
             role: newUser.role
         }
     });
-}; 
+};
 
 export const updateUser = async (req, res) => {
-    const {id} = req.params;
-    const {email, role, firstName, lastName} = req.body;
+    const { id } = req.params;
+    const { email, role, firstName, lastName } = req.body;
 
-    const errors = ValidateUserUpdate({ email, role, firstName, lastName});
+    const errors = ValidateUserUpdate({ email, role, firstName, lastName });
 
     if (Object.keys(errors).length > 0) {
         return res.status(400).json({
@@ -113,6 +113,8 @@ export const updateUser = async (req, res) => {
             message: "el usuario no existe"
         });
     }
+
+    const previousRole = user.role;
 
     //s alguno de los dos es indefinido o esta vacio usa el valor anterior
     user.email = email ?? user.email;
@@ -139,17 +141,25 @@ export const updateUser = async (req, res) => {
                 userId: user.id
             });
         } else {
-            
+
             professional.firstName = firstName;
             professional.lastName = lastName;
 
             await professional.save();
         }
+    } else if (previousRole === "professional") {
+        const professional = await Professionals.findOne({
+            where: { userId: user.id }
+        });
+
+        if (professional) {
+            await professional.destroy();
+        }
     }
 
-    res.json({ 
-        message: "Usuario actualizado", 
-        user 
+    res.json({
+        message: "Usuario actualizado",
+        user
     });
 
 };
@@ -171,7 +181,7 @@ export const deleteUser = async (req, res) => {
                     userId: user.id
                 }
             })
-        
+
             if (professional) {
                 await professional.destroy();
             }
