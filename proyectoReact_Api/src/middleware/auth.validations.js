@@ -105,7 +105,6 @@ export const ValidateUserUpdate = ({ email, role, firstName, lastName }) => {
 
     //validacion por si es profesional y se le agrega el nombre y el apellido
     if (role === "professional") {
-
         if (!firstName?.trim()) {
             errors.firstName = "El nombre es obligatorio";
         }
