@@ -78,8 +78,9 @@ export const createUser = async (req, res) => {
         await Professionals.create({
             firstName,
             lastName,
+            workayStart: 9,
+            workayEnd: 20,
             userId: newUser.id,
-            specialty: "Sin especialidad" // o el valor que quieras por defecto
         });
     }
 

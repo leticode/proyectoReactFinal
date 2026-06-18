@@ -9,7 +9,7 @@ import Login from "./components/login/Login";
 import Register from "./components/Register/Register"; 
 import NotFound from './components/notFound/Notfound';
 import Admin from './components/admin/Admin';
-import Professionals from './components/professionals/Professionals';
+import MyAppointments from './components/myAppointments/MyAppointments';
 import ServiceDetails from './components/serviceDetails/ServiceDetails';
 import AboutUs from './components/aboutUs/AboutUs';
 import Contact from './components/contact/Contact';
@@ -53,7 +53,7 @@ function App() {
             element={tokenValid(token) ? <Navigate to="/home" replace /> : <Login />} 
           />
           <Route path="/register" element={<Register/>}/>
-          <Route path="/professionals" element={<Professionals/>}/>
+          <Route path="//myappointments" element={<MyAppointments/>}/>
 
           {/*misma validacion que en usermanagement pero incluyendo al professional*/}
           <Route element={<ProtectedRoutes allowedRoles={['superadmin','admin', 'professional']}/>}>

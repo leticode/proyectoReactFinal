@@ -1,4 +1,4 @@
-import { Service } from "../models/Service.js";
+/*import { Service } from "../models/Service.js";
 import { Appointment } from "../models/Appointment.js";
 import { WORKING_HOURS } from "../utils/schedule.js";
 
@@ -97,4 +97,4 @@ export const createAppointment = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-};
+};*/

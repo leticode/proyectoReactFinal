@@ -48,7 +48,7 @@ const Layout = ({ children }) => {
             </>
           )}
           
-          <NavLink to="/professionals" className={linkClass}>Profesionals</NavLink>
+          <NavLink to="/myappointments" className={linkClass}>Mis Turnos</NavLink>
 
           <NavLink to="/home" className={linkClass}>
             Inicio

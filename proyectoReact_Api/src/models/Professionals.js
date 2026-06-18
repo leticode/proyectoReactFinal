@@ -18,6 +18,15 @@ export const Professionals = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    //esto de aca va a ser para eviatr tener hardcodeado el horario de atencion
+    workayStart:{
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    workayEnd:{
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
