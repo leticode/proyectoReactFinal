@@ -43,7 +43,7 @@ export const generateSlots = (
 
     return slots;
 };
-
+//funcion para crear turnos
 export const createAppointment = async (req, res) => {
     try {
         const {
@@ -57,6 +57,20 @@ export const createAppointment = async (req, res) => {
         const customer = await User.findByPk(userId);
 
         const loggedUser = req.user;
+        //professional solo pueda crear turnos para si mismo
+        if (loggedUser.role === "professional"){ //si el rol de usuario es professional
+            //hacemos que el id corresponda al loggedUser
+            const professional = await Professionals.findOne({
+                where: {
+                    userId: loggedUser.id
+                }
+            });//cuando intente crear un turnos apra un id q no es suya, saltara este mensaje
+            if (professional.id !== Number(professionalId)) {
+                return res.status(403).json({
+                    message: "Solo podés crear turnos para vos mismo"
+                });
+            }
+        }
 
         if (loggedUser.role === "superadmin") {
             return res.status(403).json({
@@ -328,7 +342,7 @@ export const deleteAppointment = async (req, res) => {
 
         if (loggedUser.role === "professional" && appointment.professionalId !== professional?.id) {
             return res.status(403).json({
-                message: "No podés modificar turnos de otro profesional"
+                message: "No podés eliminar turnos de otro profesional"
             })
         }
 

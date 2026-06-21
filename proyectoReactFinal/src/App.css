@@ -1393,3 +1393,8 @@ tbody{
   transform: translateY(-1px);
   background: var(--variableCuatro);
 }
+
+/*detalle de la table de turnos*/
+.th-fecha{
+  width: 15%;
+}

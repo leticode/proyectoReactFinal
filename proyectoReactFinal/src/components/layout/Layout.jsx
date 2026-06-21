@@ -49,7 +49,7 @@ const Layout = ({ children }) => {
           )}
           {(user?.role === "admin" || user?.role === "professional" || user?.role === "superadmin" || user?.role === "customer") && (
             <NavLink to="/myappointments" className={linkClass}>
-              {user?.role === "admin" || user?.role === "superadmin" ? "Turnos" : "Mis Turnos"}
+              {user?.role !== "customer" ? "Turnos" : "Mis Turnos"}
             </NavLink>
           )}
 
@@ -117,6 +117,12 @@ const Layout = ({ children }) => {
             </>
           )}
 
+          {(user?.role === "admin" || user?.role === "professional" || user?.role === "superadmin" || user?.role === "customer") && (
+            <NavLink to="/myappointments" className={linkClass}>
+              {user?.role !== "customer" ? "Turnos" : "Mis Turnos"}
+            </NavLink>
+          )}
+
           <NavLink to="/home" onClick={() => setMenuOpen(false)} className={linkClass}>
             Inicio
           </NavLink>
@@ -182,10 +188,10 @@ const Layout = ({ children }) => {
 
             <div className="column-footer">
               <h3 className="title-footer">HORARIOS</h3>
-              <p className="subtitle-footer">Lunes a Viernes</p>
+              <p className="subtitle-footer">Lunes a Sábados</p>
               <p className="text-footer">09:00 a 20:00</p>
-              <p className="subtitle-footer">Sábados</p>
-              <p className="text-footer">09:00 a 14:00</p>
+              <p className="subtitle-footer">Domingos</p>
+              <p className="text-footer">CERRADO</p>
             </div>
 
           </div>

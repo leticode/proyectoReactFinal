@@ -23,9 +23,9 @@ function Contact() {
 
           <p><strong> Horarios:</strong></p>
 
-          <p>Lunes a Viernes: 9:00 - 20:00</p>
+          <p>Lunes a Sábados: 9:00 - 20:00</p>
 
-          <p>Sábados: 9:00 - 14:00</p>
+          <p>Domingos: CERRADO</p>
 
         </div>
 

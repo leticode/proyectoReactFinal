@@ -103,6 +103,19 @@ const MyAppointments = () => {
         }
     }, [appointmentForm.professionalId, appointmentForm.date, appointmentForm.serviceId, services]);
 
+    const [showDeleteModal, setShowDeleteModal] = useState(false); //modal para confirmar eliminacion de turno
+    const [appointmentToDelete, setAppointmentToDelete] = useState(null);
+
+    const handleOpenDeleteModal = (appointmentId) => {
+        setAppointmentToDelete(appointmentId);
+        setShowDeleteModal(true);
+    };
+
+    const handleCloseDeleteModal = () => {
+        setAppointmentToDelete(null);
+        setShowDeleteModal(false);
+    };
+
     const handleChangeForm = (event) => {
         const { name, value } = event.target;
 
@@ -182,7 +195,7 @@ const MyAppointments = () => {
             },
             body: JSON.stringify({ status })
         })
-            .then(async(res) => {
+            .then(async (res) => {
                 const data = await res.json();
                 if (!res.ok) {
                     throw new Error(data.message);
@@ -204,7 +217,7 @@ const MyAppointments = () => {
                 Authorization: `Bearer ${token}`
             }
         })
-            .then(async(res) => {
+            .then(async (res) => {
                 const data = await res.json();
                 if (!res.ok) {
                     throw new Error(data.message);
@@ -222,7 +235,7 @@ const MyAppointments = () => {
     return (
         <>
             <h1>
-                {isAdmin || isSuperadmin || isProfessional ? "Turnos" : "Mis Turnos"}
+                {isCustomer ? "Mis Turnos" : "Turnos"}
             </h1>
 
             <div className="management">
@@ -236,7 +249,7 @@ const MyAppointments = () => {
                     <table>
                         <thead>
                             <tr>
-                                <th>Fecha</th>
+                                <th className="th-fecha">Fecha</th>
                                 <th>Hora</th>
                                 <th>Email</th>
                                 <th>Servicio</th>
@@ -288,7 +301,7 @@ const MyAppointments = () => {
                                         <td>
                                             <button
                                                 className="delete-button"
-                                                onClick={() => handleDeleteAppointment(appointment.id)}
+                                                onClick={() => handleOpenDeleteModal(appointment.id)}
                                             >
                                                 Eliminar
                                             </button>
@@ -296,7 +309,6 @@ const MyAppointments = () => {
                                     )}
                                 </tr>
                             ))}
-
                             {appointments.length === 0 && (
                                 <tr>
                                     <td colSpan={canDelete ? "7" : "6"}>
@@ -308,6 +320,37 @@ const MyAppointments = () => {
                     </table>
                 </div>
             </div>
+            {showDeleteModal && (
+                <div className="modal-container">
+                    <div className="modal">
+                        <h3>Eliminar turno</h3>
+
+                        <p>
+                            ¿Estás seguro de que deseas eliminar este turno?
+                        </p>
+
+                        <div className="modal-buttons">
+                            <button
+                                type="button"
+                                onClick={handleCloseDeleteModal}
+                            >
+                                Cancelar
+                            </button>
+
+                            <button
+                                type="button"
+                                className="delete-button"
+                                onClick={() => {
+                                    handleDeleteAppointment(appointmentToDelete);
+                                    handleCloseDeleteModal();
+                                }}
+                            >
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             {showCreateModal && (
                 <div className="modal-container">
                     <div className="modal">
