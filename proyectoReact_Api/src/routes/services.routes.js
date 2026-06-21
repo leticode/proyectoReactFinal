@@ -104,8 +104,8 @@ const deleteService = async (req, res) => {
 
 const router = Router();
 
-router.get('/', verifyToken, getAllServices);
-router.get('/:id', verifyToken, getServiceById);
+router.get('/', getAllServices);
+router.get('/:id', getServiceById);
 router.post('/', verifyToken, createService);
 router.put('/:id', verifyToken, updateService);
 router.delete('/:id', verifyToken, deleteService);

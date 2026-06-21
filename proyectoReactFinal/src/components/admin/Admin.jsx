@@ -23,10 +23,7 @@ const Admin = () => {
     const loadServices = async () => {
         try {
             const response = await fetch("http://localhost:3000/api/services", {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                method: "GET"
             });
             const data = await response.json();
 
