@@ -1,100 +1,346 @@
-/*import { Service } from "../models/Service.js";
-import { Appointment } from "../models/Appointment.js";
-import { WORKING_HOURS } from "../utils/schedule.js";
+import { Appointment } from "../models/Appointment.js"
+import { Professionals } from "../models/Professionals.js";
+import { Service } from "../models/Service.js";
+import User from "../models/User.js";
 
-//esto es mas que nada para que haya como un "tiempo de preparacion y limpieza" entre turnos
-//const BUFFER_TIME = 15; //asi es mayus pq very important no me vaya a olvidar de usarlo ash
+const appointmentGap = 20;
+const normalizeHour = (hour) => hour.slice(0, 5);
 
-//esta funcion es para pasar horas a minutos y asi
-function timeToMinutes(time) {
-    const [hours, minutes] = time.split(":").map(Number);
-    return hours * 60 + minutes;
-}
+const toMinutes = (h) => {
+    const [hh, mm] = h.split(":").map(Number);
+    return hh * 60 + mm;
+};
 
-//y esta es la inversa
-function minutesToTime(minutes) {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
+const getAppointmentEnd = (start, duration) => start + duration + appointmentGap;
 
-    return `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
-}
+const rangesOverlap = (startA, endA, startB, endB) => (
+    startA < endB && endA > startB
+);
 
-//funcion para obtener horarios disponibles
-export const getAvailableAppointments = async (req, res) => {
+export const generateSlots = (
+    workayStart,
+    workayEnd,
+    serviceDuration
+) => {
+    const slots = [];
+
+    const totalDuration =
+        serviceDuration + appointmentGap;
+
+    let current = workayStart * 60;
+    const end = workayEnd * 60;
+
+    while (current + totalDuration <= end) {
+        const hours = Math.floor(current / 60);
+        const minutes = current % 60;
+
+        slots.push(
+            `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`
+        );
+
+        current += totalDuration;
+    }
+
+    return slots;
+};
+
+export const createAppointment = async (req, res) => {
     try {
-        const { date, serviceId } = req.query;
-        //obtiene la fecha y el servicio enviados por el frontend
+        const {
+            date,
+            hour,
+            userId,
+            professionalId,
+            serviceId
+        } = req.body;
 
-        //esto es para encontrar el servicio por id
+        const customer = await User.findByPk(userId);
+
+        const loggedUser = req.user;
+
+        if (loggedUser.role === "superadmin") {
+            return res.status(403).json({
+                message: "El superadmin no puede crear turnos"
+            });
+        }
+
+        if (loggedUser.role === "customer" && loggedUser.id !== userId) {
+            return res.status(403).json({
+                message: "Solo podés crear turnos para tu propio usuario"
+            });
+        }
+
+        if (!customer || customer.role !== "customer") {
+            return res.status(400).json({
+                message: "Debes tener rol cliente para agendar"
+            });
+        }
+
+        const today = new Date().toISOString().split("T")[0]; //esto para q no saquen turno dias pasados
+
+        if (date < today) {
+            return res.status(400).json({
+                message: "No se pueden reservar turnos en fechas pasadas"
+            });
+        }
+
+        const appointmentDate = new Date(date + "T00:00:00");
+        const dayOfWeek = appointmentDate.getDay();
+
+        if (dayOfWeek === 0) {
+            return res.status(400).json({
+                message: "La clínica permanece cerrada los domingos"
+            });
+        }
+
         const service = await Service.findByPk(serviceId);
+
         if (!service) {
             return res.status(404).json({
                 message: "Servicio no encontrado"
             });
         }
 
+        const serviceDuration = service.duration;
+
+        const newStart = toMinutes(hour);
+        const newEnd = getAppointmentEnd(newStart, serviceDuration);
+
+        // traer turnos del profesional ese día
         const appointments = await Appointment.findAll({
-            where: {
-                date
+            where: { professionalId, date },
+            include: {
+                model: Service,
+                as: "service",
+                attributes: ["duration"]
             }
         });
 
-        const day = new Date(date).getUTCDay();
-        let startHour;
-        let endHour;
+        // validar solapamiento real
+        const hasOverlap = appointments.some(app => {
+            const existingStart = toMinutes(app.hour);
 
-        //para saber si es un dia de semana
-        if (day >= 1 && day <= 5) {
-            startHour = WORKING_HOURS.mondayToFriday.start;
-            endHour = WORKING_HOURS.mondayToFriday.end;
-        }
-        //saber si es dia sabado
-        if (day === 6) {
-            startHour = WORKING_HOURS.saturday.start;
-            endHour = WORKING_HOURS.saturday.end;
-        }
-        //y esto es para el domingo que la estetica no abre okay
-        if (day === 0) {
-            return res.json([]);
-        }
+            const existingEnd = getAppointmentEnd(
+                existingStart,
+                app.service.duration
+            );
 
-        //arrancamos con la generacion de turnos
-        const availableSlots = [];
-        const startMinutes = timeToMinutes(startHour);
-        const endMinutes = timeToMinutes(endHour);
-
-        for (
-            let current = startMinutes;
-            current + service.duration <= endMinutes;
-            current += 30
-        ) {
-            availableSlots.push(minutesToTime(current));
-        }
-
-        res.json({
-            date,
-            appointments,
-            availableSlots
+            return rangesOverlap(newStart, newEnd, existingStart, existingEnd);
         });
-        //devuelve esos datos para verificar que llegan correctamente
+
+        if (hasOverlap) {
+            return res.status(400).json({
+                message: "Horario ocupado"
+            });
+        }
+
+        const appointment = await Appointment.create({
+            date,
+            hour,
+            userId,
+            professionalId,
+            serviceId
+        });
+
+        return res.status(201).json(appointment);
+
+    }
+    catch (error) {
+        res.status(500).json({
+            message: error.message
+        })
+    }
+};
+
+export const getAvailableSlots = async (req, res) => {
+    try {
+        const { professionalId } = req.params;
+        const { date, serviceDuration } = req.query;
+
+        const professional = await Professionals.findByPk(professionalId);
+
+        if (!professional) {
+            return res.status(404).json({
+                message: "Profesional no encontrado"
+            });
+        }
+
+        //todos los slots
+        const allSlots = generateSlots(
+            professional.workayStart,
+            professional.workayEnd,
+            Number(serviceDuration)
+        );
+
+        //traigo los ocupados
+        const appointments = await Appointment.findAll({
+            where: {
+                professionalId,
+                date
+            },
+            include: {
+                model: Service,
+                as: "service",
+                attributes: ["duration"]
+            }
+        });
+
+        //filtro disponibilidad
+        const availableSlots = allSlots.filter(slot => {
+            const slotStart = toMinutes(slot);
+            const slotEnd = getAppointmentEnd(slotStart, Number(serviceDuration));
+
+            return !appointments.some(appointment => {
+                const appointmentStart = toMinutes(normalizeHour(appointment.hour));
+                const appointmentEnd = getAppointmentEnd(
+                    appointmentStart,
+                    appointment.service.duration
+                );
+
+                return rangesOverlap(slotStart, slotEnd, appointmentStart, appointmentEnd);
+            });
+        });
+
+        return res.json(availableSlots);
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+};
+//a partir de aca es para todo lo relacionado con el abm
+export const getAppointments = async (req, res) => {
+    try {
+        const { id, role } = req.user; //esto es para sacar del token udel user log
+        let where = {}; //el filtro q pasa por sequelize
+        //vacio trae TODOS los turnos
+        if (role === "customer") { //busca solo en el campo del user log
+            where = { userId: id };
+        }
+
+        const appointments = await Appointment.findAll({
+            where, include: [ //para traer datos relacionados
+                {
+                    model: User,
+                    as: "user",
+                    attributes: ["id", "email", "role"]
+                }, {
+                    model: Professionals,
+                    as: "professional",
+                    attributes: ["id", "firstName", "lastName"]
+                },
+                {
+                    model: Service,
+                    as: "service",
+                    attributes: ["id", "name", "duration"]
+                }
+            ],
+            order: [
+                ["date", "ASC"],
+                ["hour", "ASC"]
+            ]
+        });
+
+        res.json(appointments);
 
     } catch (error) {
         res.status(500).json({
             message: error.message
         });
     }
-    //por si algo fallo que no haga boom nada
 };
 
-
-//funcion para crear turnos
-export const createAppointment = async (req, res) => {
+export const updateAppointmentStatus = async (req, res) => {
     try {
-        console.log("BODY:", req.body);
+        const { id } = req.params;
+        const { status } = req.body;
+        const loggedUser = req.user;
+        const appointment = await Appointment.findByPk(id);
+        const professional = await Professionals.findOne({
+            where: {
+                userId: loggedUser.id
+            }
+        });
 
-        return res.json({ ok: true });
+        if (!appointment) {
+            return res.status(404).json({
+                message: "Turno no encontrado"
+            });
+        }
+
+        if (loggedUser.role === "superadmin") {
+            return res.status(403).json({
+                message: "El superadmin solo puede ver turnos"
+            });
+        }
+
+        if (loggedUser.role === "customer") {
+            if (appointment.userId !== loggedUser.id || status !== "cancelado") {
+                return res.status(403).json({
+                    message: "Solo podés cancelar tus propios turnos"
+                });
+            }
+        }
+
+        if (loggedUser.role === "professional" && appointment.professionalId !== professional?.id) {
+            return res.status(403).json({
+                message: "No podés modificar turnos de otro profesional"
+            });
+        }
+        appointment.status = status;
+
+        await appointment.save();
+
+        res.json({
+            message: "Estado actualizado", appointment
+        });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            message: error.message
+        });
     }
-};*/
+};
+
+export const deleteAppointment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const loggedUser = req.user;
+        const appointment = await Appointment.findByPk(id);
+        const professional = await Professionals.findOne({
+            where: {
+                userId: loggedUser.id
+            }
+        });
+
+        if (!appointment) {
+            return res.status(404).json({
+                message: "Turno no encontrado"
+            });
+        }
+
+        if (loggedUser.role === "superadmin" || loggedUser.role === "customer") {
+            return res.status(403).json({
+                message: "No tenes permiso para eliminar turnos"
+            });
+        }
+
+        if (loggedUser.role === "professional" && appointment.professionalId !== professional?.id) {
+            return res.status(403).json({
+                message: "No podés modificar turnos de otro profesional"
+            })
+        }
+
+        await appointment.destroy();
+
+        res.json({
+            message: "Turno eliminado"
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
