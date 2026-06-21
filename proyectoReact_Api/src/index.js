@@ -9,13 +9,13 @@ import cors from "cors";
 // importamos el array de servicios desde otro archivo para mantener este archivo prolijo y solo con cosas de express
 // import { services } from "./services/information.services.js";
 import { sequelize } from "./db.js";
-import { Service } from "./models/Service.js";
 import  User from "./models/User.js";
 import bcrypt from "bcrypt";
 import authRoutes from "./routes/auth.routes.js";
-import userRoutes from "./routes/users.routes.js"
-import professionalsRoutes from "./routes/professionals.routes.js"
-import "./models/Assosiations.js"
+import userRoutes from "./routes/users.routes.js";
+import servicesRoutes from "./routes/services.routes.js";
+import professionalsRoutes from "./routes/professionals.routes.js";
+import "./models/Assosiations.js";
 
 //creamos la aplicacion express donde app es nuestro servidor backend
 const app = express();
@@ -32,106 +32,6 @@ app.get("/", (req, res) => {
   res.send("Servidor funcionando");
 });
 
-
-// endpoint para obtener los servicios
-app.get("/api/services", async (req, res) => {
-  try {
-    const dbServices = await Service.findAll({ order: [["id", "ASC"]] }); // obtener un array con los registros
-    res.json(dbServices);
-  } catch (error) {
-    res.status(500).json({ message: "Error al obtener servicios", error: error.message });
-  }
-});
-
-// endpoint para obtener un solo servicio por id
-app.get("/api/services/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const serviceId = Number(id);
-
-    if (Number.isNaN(serviceId)) {
-      return res.status(400).json({ message: "El id del servicio debe ser un número" });
-    }
-
-    const service = await Service.findByPk(serviceId);
-
-    if (!service) {
-      return res.status(404).json({ message: "Servicio no encontrado" });
-    }
-
-    res.json(service);
-  } catch (error) {
-    res.status(500).json({ message: "Error al obtener el servicio", error: error.message });
-  }
-});
-
-// endpoint para crear un servicio
-app.post("/api/services", async (req, res) => {
-  try {
-    const service = await Service.create(req.body);
-
-    res.status(201).json(service);
-  } catch (error) {
-    res.status(500).json({
-      message: "Error al crear servicio",
-      error: error.message,
-    });
-  }
-});
-
-// endpoint para modificar un servicio por id
-app.put("/api/services/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const serviceId = Number(id);
-
-    if (Number.isNaN(serviceId)) {
-      return res.status(400).json({ message: "El id del servicio debe ser un número" });
-    }
-
-    const service = await Service.findByPk(serviceId);
-
-    if (!service) {
-      return res.status(404).json({ message: "Servicio no encontrado" });
-    }
-
-    await service.update(req.body);
-
-    res.json(service);
-  } catch (error) {
-    res.status(500).json({
-      message: "Error al modificar servicio",
-      error: error.message,
-    });
-  }
-});
-
-// endpoint para borrar un servicio por id
-app.delete("/api/services/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const serviceId = Number(id);
-
-    if (Number.isNaN(serviceId)) {
-      return res.status(400).json({ message: "El id del servicio debe ser un número" });
-    }
-
-    const service = await Service.findByPk(serviceId);
-
-    if (!service) {
-      return res.status(404).json({ message: "Servicio no encontrado" });
-    }
-
-    await service.destroy();
-
-    res.json({ message: "Servicio eliminado correctamente" });
-  } catch (error) {
-    res.status(500).json({
-      message: "Error al borrar servicio",
-      error: error.message,
-    });
-  }
-});
 
 //endopoint para profesionales
 
@@ -188,6 +88,7 @@ async function startServer() {
     //puse esto para usar la ruta de auth
     app.use(authRoutes);
     app.use("/api/user", userRoutes);
+    app.use("/api/services", servicesRoutes);
 
     app.listen(PORT, () => {
       console.log(`server listening on port ${PORT}`);

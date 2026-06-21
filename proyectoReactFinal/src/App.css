@@ -918,6 +918,20 @@ tbody{
   cursor: pointer;
 }
 
+.modal-container .cancel-btn,
+.modal-container .delete-btn {
+  font-family: var(--textFont);
+  font-size: 20px;
+  color: var(--variableUno);
+  background-color: var(--variableCuatro);
+  border: none;
+}
+
+.modal-container .cancel-btn:hover,
+.modal-container .delete-btn:hover {
+  background-color: var(--variableCinco);
+}
+
 .update-input {
   background-color: var(--variableUno);
   box-sizing: border-box;

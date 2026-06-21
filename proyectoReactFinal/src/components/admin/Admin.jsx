@@ -1,18 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { SERVICE_CATEGORIES_ARRAY } from "../../constants/serviceCategories";
+import { AuthenticationContext } from "../services/auth/authContextProvider";
 
 const Admin = () => {
+    const { token, handleUserLogout, user } = useContext(AuthenticationContext);
     const [serverMessage, setServerMessage] = useState("");
     const [services, setServices] = useState([]);
+    const [professionals, setProfessionals] = useState([]);
     const [modal, setModal] = useState(false);
     const [modifyID, setModifyID] = useState(0);
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [serviceIdToDelete, setServiceIdToDelete] = useState(null);
 
     const emptyService = {
         name: "",
         img: "",
         price: 0,
         description: "",
-        professional: "",
+        professionalId: "",
         duration: 0,
         category: "",
     };
@@ -21,7 +27,7 @@ const Admin = () => {
     const loadServices = async () => {
         try {
             const response = await fetch("http://localhost:3000/api/services", {
-                method: "GET",
+                method: "GET"
             });
             const data = await response.json();
 
@@ -36,8 +42,29 @@ const Admin = () => {
             setServerMessage("Error al conectar con el servidor");
         }
     };
+
+    const loadProfessionals = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/api/professionals", {
+                method: "GET"
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                setServerMessage(data.message || "error al traer profesionales");
+                return;
+            }
+
+            setProfessionals(data);
+        } catch (error) {
+            console.error(error);
+            setServerMessage("Error al conectar con el servidor");
+        }
+    };
+
     useEffect(() => {
         loadServices();
+        loadProfessionals();
     }, []);
 
     const handleChange = (e) => {
@@ -59,6 +86,7 @@ const Admin = () => {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify(newService),
                 }
@@ -71,6 +99,7 @@ const Admin = () => {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify(newService),
                 }
@@ -83,16 +112,23 @@ const Admin = () => {
 
     };
 
+    const handleOpenDeleteModal = (id) => {
+        setShowDeleteModal(true);
+        setServiceIdToDelete(id);
+    }
+
+    const handleCloseDeleteModal = () => {
+        setShowDeleteModal(false);
+        setServiceIdToDelete(null);
+    }
+
     const handleDelete = async (id) => {
-        const confirmDelete = window.confirm(
-            "¿Estás seguro de que quieres borrar este servicio?"
-        );
-
-        if (!confirmDelete) return;
-
         try {
             const response = await fetch(`http://localhost:3000/api/services/${id}`, {
                 method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
 
             const data = await response.json();
@@ -108,6 +144,7 @@ const Admin = () => {
 
             // setServices((prev) => prev.filter((service) => service.id !== id));
             loadServices();
+            handleCloseDeleteModal();
         } catch (error) {
             console.error(error);
             setServerMessage("Error al conectar con el servidor");
@@ -144,6 +181,33 @@ const Admin = () => {
                 <button className="notFound-btn" onClick={() => addService()}>
                     Agregar servicio
                 </button>
+
+
+                {showDeleteModal && (
+                    <div className="modal-container">
+                        <div className="modal">
+                            <h3>Confirmar eliminacion</h3>
+                            <p>
+                                ¿Seguro que deseas eliminar este servicio?
+                            </p>
+
+                            <div className="modal-buttons">
+                                <button
+                                    type="button"
+                                    className="cancel-btn"
+                                    onClick={handleCloseDeleteModal}
+                                >Cancelar
+                                </button>
+                                <button
+                                    type="button"
+                                    className="delete-btn"
+                                    onClick={() => handleDelete(serviceIdToDelete)}
+                                >Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {modal && (
                     <div className="modal-overlay" onClick={() => setModal(false)}>
@@ -221,13 +285,20 @@ const Admin = () => {
 
                                 <label>
                                     Profesional
-                                    <input
-                                        type="text"
-                                        name="professional"
-                                        value={newService.professional}
+                                    <select
+                                        name="professionalId"
+                                        value={newService.professionalId}
                                         onChange={handleChange}
-                                        placeholder="Profesional encargado del servicio"
-                                    />
+                                    >
+                                        <option value="" disabled>
+                                            Selecciona un profesional
+                                        </option>
+                                        {professionals.map((professional) => (
+                                            <option key={professional.id} value={professional.id}>
+                                                {professional.firstName + ' ' + professional.lastName}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </label>
 
                                 <label>
@@ -268,11 +339,11 @@ const Admin = () => {
                             </div>
 
                             <div className="card-actions">
-                                <button className="modal-title" onClick={() => modifyService(service.id)}>
+                                <button type="button" onClick={() => modifyService(service.id)}>
                                     Actualizar
                                 </button>
 
-                                <button className="modal-title" onClick={() => handleDelete(service.id)}>
+                                <button type="button" onClick={() => handleOpenDeleteModal(service.id)}>
                                     Eliminar
                                 </button>
                             </div>
