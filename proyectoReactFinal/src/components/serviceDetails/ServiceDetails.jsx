@@ -12,6 +12,7 @@ export default function ServiceDetails() {
   const [selectedProfessional, setSelectedProfessional] = useState(null);
   const [showProfessionalsModal, setShowProfessionalsModal] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [availableSlots, setAvailableSlots] = useState([]);
 
   useEffect(() => {
     fetch(`http://localhost:3000/api/services/${id}`)
@@ -23,6 +24,24 @@ export default function ServiceDetails() {
   if (!service) {
     return <NotFound />;
   }
+
+  const handleProfessionalSelect = async (professional) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/professionals/${professional.id}/available-slots`
+      );
+
+      const slots = await response.json();
+
+      setAvailableSlots(slots);
+      setSelectedProfessional(professional);
+      setShowProfessionalsModal(false);
+      setShowCalendar(true);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <section className="service-details">
@@ -64,16 +83,12 @@ export default function ServiceDetails() {
           {showProfessionalsModal && (
             <ProfessionalsModal
               onClose={() => setShowProfessionalsModal(false)}
-              onSelect={(professional) => {
-                setSelectedProfessional(professional);
-                setShowProfessionalsModal(false);
-                setShowCalendar(true);
-              }}
+              onSelect={handleProfessionalSelect}
             />
           )}{
             showCalendar && selectedProfessional && (
               <ServiceCalendar
-                serviceId={service.id}
+                service={service}
                 professionalId={selectedProfessional.id}
                 onClose={() => setShowCalendar(false)}
               />
