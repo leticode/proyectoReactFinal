@@ -12,6 +12,7 @@ import { sequelize } from "./db.js";
 import  User from "./models/User.js";
 import bcrypt from "bcrypt";
 import authRoutes from "./routes/auth.routes.js";
+import appointmentsRoutes from "./routes/appointment.routes.js"
 import userRoutes from "./routes/users.routes.js";
 import servicesRoutes from "./routes/services.routes.js";
 import professionalsRoutes from "./routes/professionals.routes.js";
@@ -36,6 +37,10 @@ app.get("/", (req, res) => {
 //endopoint para profesionales
 
 app.use("/api/professionals", professionalsRoutes);
+
+//endpoint para los appointments
+app.use("/api/professionals", professionalsRoutes);
+app.use("/api/appointments", appointmentsRoutes);
 
 // FIN ENDPOINTS ---------------
 
