@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const { handleUserLogout, user } = useContext(AuthenticationContext);
-  const [open, setOpen]= useState(false);
+  const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -47,8 +47,11 @@ const Layout = ({ children }) => {
               <NavLink to="/management" className={linkClass}>Gestion Usuarios</NavLink>
             </>
           )}
-          
-          <NavLink to="/myappointments" className={linkClass}>Mis Turnos</NavLink>
+          {(user?.role === "admin" || user?.role === "professional" || user?.role === "superadmin" || user?.role === "customer") && (
+            <NavLink to="/myappointments" className={linkClass}>
+              {user?.role === "admin" || user?.role === "superadmin" ? "Turnos" : "Mis Turnos"}
+            </NavLink>
+          )}
 
           <NavLink to="/home" className={linkClass}>
             Inicio
@@ -67,21 +70,21 @@ const Layout = ({ children }) => {
           </NavLink>
 
           <div className="user-menu">
-              <img src="/img/navbarImg/user-icon.webp" alt="Img navbar" className = "imgLogin" onClick={() => setOpen(!open)}/>
-                
-                {open && (
-                <div className="dropdown">
-                  {user ? (
-                    <button onClick={logout}>
-                          Cerrar sesion
-                      </button>
-                  ) : (
-                    <button onClick={login}>
-                          Iniciar Sesion
-                      </button>
-                  )}
-                </div>
+            <img src="/img/navbarImg/user-icon.webp" alt="Img navbar" className="imgLogin" onClick={() => setOpen(!open)} />
+
+            {open && (
+              <div className="dropdown">
+                {user ? (
+                  <button onClick={logout}>
+                    Cerrar sesion
+                  </button>
+                ) : (
+                  <button onClick={login}>
+                    Iniciar Sesion
+                  </button>
                 )}
+              </div>
+            )}
           </div>
 
         </nav>
