@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import { Professionals } from "../models/Professionals.js";
+import { Appointment } from "../models/Appointment.js";
 import { verifyRole, ValidateUserUpdate, validateCreateUser } from "../middleware/auth.validations.js";
 import bcrypt from "bcrypt";
 
@@ -116,7 +117,6 @@ export const updateUser = async (req, res) => {
 
     const previousRole = user.role;
 
-    //s alguno de los dos es indefinido o esta vacio usa el valor anterior
     user.email = email ?? user.email;
     user.role = role ?? user.role;
 
@@ -129,7 +129,7 @@ export const updateUser = async (req, res) => {
     if (role === "professional") {
         let professional = await Professionals.findOne({
             where: { userId: user.id }
-        })
+        });
 
         //si el profesional no existe lo crea
         if (!professional) {
@@ -153,6 +153,9 @@ export const updateUser = async (req, res) => {
         });
 
         if (professional) {
+            await Appointment.destroy({
+                where: { professionalId: professional.id }
+            });
             await professional.destroy();
         }
     }
