@@ -13,11 +13,7 @@ export const Appointment = sequelize.define(
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    startHour: {
-      type: DataTypes.TIME,
-      allowNull: false,
-    },
-    endHour: {
+    hour: {
       type: DataTypes.TIME,
       allowNull: false,
     },
@@ -34,11 +30,11 @@ export const Appointment = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    serviceId: {
+    professionalId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    professionalId: {
+    serviceId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     }

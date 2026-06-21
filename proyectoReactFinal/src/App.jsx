@@ -53,7 +53,7 @@ function App() {
             element={tokenValid(token) ? <Navigate to="/home" replace /> : <Login />} 
           />
           <Route path="/register" element={<Register/>}/>
-          <Route path="//myappointments" element={<MyAppointments/>}/>
+          <Route path="/myappointments" element={<MyAppointments/>}/>
 
           {/*misma validacion que en usermanagement pero incluyendo al professional*/}
           <Route element={<ProtectedRoutes allowedRoles={['superadmin','admin', 'professional']}/>}>

@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const { handleUserLogout, user } = useContext(AuthenticationContext);
-  const [open, setOpen]= useState(false);
+  const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ const Layout = ({ children }) => {
 
         {/* NAV DESKTOP */}
         <nav className="nav navbar">
-          {(user?.role === "admin" || user?.role === "professional" || user?.role === "superadmin") && (
+          {(user?.role === "admin" || user?.role === "superadmin") && (
             <>
               <NavLink to="/admin" className={linkClass}>Admin</NavLink>
             </>
@@ -47,8 +47,11 @@ const Layout = ({ children }) => {
               <NavLink to="/management" className={linkClass}>Gestion Usuarios</NavLink>
             </>
           )}
-          
-          <NavLink to="/myappointments" className={linkClass}>Mis Turnos</NavLink>
+          {(user?.role === "admin" || user?.role === "professional" || user?.role === "superadmin" || user?.role === "customer") && (
+            <NavLink to="/myappointments" className={linkClass}>
+              {user?.role !== "customer" ? "Turnos" : "Mis Turnos"}
+            </NavLink>
+          )}
 
           <NavLink to="/home" className={linkClass}>
             Inicio
@@ -67,21 +70,21 @@ const Layout = ({ children }) => {
           </NavLink>
 
           <div className="user-menu">
-              <img src="/img/navbarImg/user-icon.webp" alt="Img navbar" className = "imgLogin" onClick={() => setOpen(!open)}/>
-                
-                {open && (
-                <div className="dropdown">
-                  {user ? (
-                    <button onClick={logout}>
-                          Cerrar sesion
-                      </button>
-                  ) : (
-                    <button onClick={login}>
-                          Iniciar Sesion
-                      </button>
-                  )}
-                </div>
+            <img src="/img/navbarImg/user-icon.webp" alt="Img navbar" className="imgLogin" onClick={() => setOpen(!open)} />
+
+            {open && (
+              <div className="dropdown">
+                {user ? (
+                  <button onClick={logout}>
+                    Cerrar sesion
+                  </button>
+                ) : (
+                  <button onClick={login}>
+                    Iniciar Sesion
+                  </button>
                 )}
+              </div>
+            )}
           </div>
 
         </nav>
@@ -102,7 +105,7 @@ const Layout = ({ children }) => {
       {menuOpen && (
         <div className="mobile-menu">
 
-          {(user?.role === "admin" || user?.role === "professional" || user?.role === "superadmin") && (
+          {(user?.role === "admin" || user?.role === "superadmin") && (
             <>
               <NavLink to="/admin" className={linkClass}>Admin</NavLink>
             </>
@@ -112,6 +115,12 @@ const Layout = ({ children }) => {
             <>
               <NavLink to="/management" className={linkClass}>Gestion Usuarios</NavLink>
             </>
+          )}
+
+          {(user?.role === "admin" || user?.role === "professional" || user?.role === "superadmin" || user?.role === "customer") && (
+            <NavLink to="/myappointments" className={linkClass}>
+              {user?.role !== "customer" ? "Turnos" : "Mis Turnos"}
+            </NavLink>
           )}
 
           <NavLink to="/home" onClick={() => setMenuOpen(false)} className={linkClass}>
@@ -179,10 +188,10 @@ const Layout = ({ children }) => {
 
             <div className="column-footer">
               <h3 className="title-footer">HORARIOS</h3>
-              <p className="subtitle-footer">Lunes a Viernes</p>
+              <p className="subtitle-footer">Lunes a Sábados</p>
               <p className="text-footer">09:00 a 20:00</p>
-              <p className="subtitle-footer">Sábados</p>
-              <p className="text-footer">09:00 a 14:00</p>
+              <p className="subtitle-footer">Domingos</p>
+              <p className="text-footer">CERRADO</p>
             </div>
 
           </div>
