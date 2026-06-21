@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { SERVICE_CATEGORIES_ARRAY } from "../../constants/serviceCategories";
+import { AuthenticationContext } from "../services/auth/authContextProvider";
 
 const Admin = () => {
+    const { token, handleUserLogout, user } = useContext(AuthenticationContext);
     const [serverMessage, setServerMessage] = useState("");
     const [services, setServices] = useState([]);
     const [modal, setModal] = useState(false);
@@ -22,6 +24,9 @@ const Admin = () => {
         try {
             const response = await fetch("http://localhost:3000/api/services", {
                 method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
             const data = await response.json();
 
@@ -59,6 +64,7 @@ const Admin = () => {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify(newService),
                 }
@@ -71,6 +77,7 @@ const Admin = () => {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify(newService),
                 }
@@ -93,6 +100,9 @@ const Admin = () => {
         try {
             const response = await fetch(`http://localhost:3000/api/services/${id}`, {
                 method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
 
             const data = await response.json();
