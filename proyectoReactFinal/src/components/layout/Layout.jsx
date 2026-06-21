@@ -36,7 +36,7 @@ const Layout = ({ children }) => {
 
         {/* NAV DESKTOP */}
         <nav className="nav navbar">
-          {(user?.role === "admin" || user?.role === "professional" || user?.role === "superadmin") && (
+          {(user?.role === "admin" || user?.role === "superadmin") && (
             <>
               <NavLink to="/admin" className={linkClass}>Admin</NavLink>
             </>
@@ -105,7 +105,7 @@ const Layout = ({ children }) => {
       {menuOpen && (
         <div className="mobile-menu">
 
-          {(user?.role === "admin" || user?.role === "professional" || user?.role === "superadmin") && (
+          {(user?.role === "admin" || user?.role === "superadmin") && (
             <>
               <NavLink to="/admin" className={linkClass}>Admin</NavLink>
             </>
