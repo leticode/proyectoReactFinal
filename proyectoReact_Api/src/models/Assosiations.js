@@ -55,3 +55,12 @@ Service.belongsToMany(Professionals, {
   through: ProfessionalService,
   foreignKey: "serviceId",
 });
+
+Service.belongsTo(Professionals, {
+  foreignKey: "professionalId",
+  as: "professional",
+});
+
+Professionals.hasMany(Service, {
+  foreignKey: "professionalId",
+});
