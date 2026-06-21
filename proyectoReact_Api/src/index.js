@@ -15,6 +15,7 @@ import bcrypt from "bcrypt";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/users.routes.js"
 import professionalsRoutes from "./routes/professionals.routes.js"
+import appointmentsRoutes from "./routes/appointment.routes.js"
 import "./models/Assosiations.js"
 
 //creamos la aplicacion express donde app es nuestro servidor backend
@@ -136,6 +137,10 @@ app.delete("/api/services/:id", async (req, res) => {
 //endopoint para profesionales
 
 app.use("/api/professionals", professionalsRoutes);
+
+//endpoint para los appointments
+app.use("/api/professionals", professionalsRoutes);
+app.use("/api/appointments", appointmentsRoutes);
 
 // FIN ENDPOINTS ---------------
 
