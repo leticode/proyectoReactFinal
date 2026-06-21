@@ -10,6 +10,9 @@ const Admin = () => {
     const [modal, setModal] = useState(false);
     const [modifyID, setModifyID] = useState(0);
 
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [serviceIdToDelete, setServiceIdToDelete] = useState(null);
+
     const emptyService = {
         name: "",
         img: "",
@@ -109,13 +112,17 @@ const Admin = () => {
 
     };
 
+    const handleOpenDeleteModal = (id) => {
+        setShowDeleteModal(true);
+        setServiceIdToDelete(id);
+    }
+
+    const handleCloseDeleteModal = () => {
+        setShowDeleteModal(false);
+        setServiceIdToDelete(null);
+    }
+
     const handleDelete = async (id) => {
-        const confirmDelete = window.confirm(
-            "¿Estás seguro de que quieres borrar este servicio?"
-        );
-
-        if (!confirmDelete) return;
-
         try {
             const response = await fetch(`http://localhost:3000/api/services/${id}`, {
                 method: "DELETE",
@@ -137,6 +144,7 @@ const Admin = () => {
 
             // setServices((prev) => prev.filter((service) => service.id !== id));
             loadServices();
+            handleCloseDeleteModal();
         } catch (error) {
             console.error(error);
             setServerMessage("Error al conectar con el servidor");
@@ -173,6 +181,33 @@ const Admin = () => {
                 <button className="notFound-btn" onClick={() => addService()}>
                     Agregar servicio
                 </button>
+
+
+                {showDeleteModal && (
+                    <div className="modal-container">
+                        <div className="modal">
+                            <h3>Confirmar eliminacion</h3>
+                            <p>
+                                ¿Seguro que deseas eliminar este servicio?
+                            </p>
+
+                            <div className="modal-buttons">
+                                <button
+                                    type="button"
+                                    className="cancel-btn"
+                                    onClick={handleCloseDeleteModal}
+                                >Cancelar
+                                </button>
+                                <button
+                                    type="button"
+                                    className="delete-btn"
+                                    onClick={() => handleDelete(serviceIdToDelete)}
+                                >Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {modal && (
                     <div className="modal-overlay" onClick={() => setModal(false)}>
@@ -304,11 +339,11 @@ const Admin = () => {
                             </div>
 
                             <div className="card-actions">
-                                <button className="modal-title" onClick={() => modifyService(service.id)}>
+                                <button type="button" onClick={() => modifyService(service.id)}>
                                     Actualizar
                                 </button>
 
-                                <button className="modal-title" onClick={() => handleDelete(service.id)}>
+                                <button type="button" onClick={() => handleOpenDeleteModal(service.id)}>
                                     Eliminar
                                 </button>
                             </div>
