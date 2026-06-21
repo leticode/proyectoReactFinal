@@ -43,7 +43,7 @@ export default function ServiceDetails() {
           </p>
 
           <p>
-            <strong>Profesional:</strong> {service.professional}
+            <strong>Profesional:</strong> {service.professional?.firstName} {service.professional?.lastName}
           </p>
 
           <p>

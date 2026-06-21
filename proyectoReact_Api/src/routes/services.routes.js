@@ -1,11 +1,20 @@
 import { Router } from "express";
 import verifyToken from "../middleware/verifytoken.js";
 import { Service } from "../models/Service.js";
+import { Professionals } from "../models/Professionals.js";
 
 // endpoint para obtener los servicios
 const getAllServices = async (req, res) => {
   try {
-    const dbServices = await Service.findAll({ order: [["id", "ASC"]] }); // obtener un array con los registros
+    const dbServices = await Service.findAll({
+      order: [["id", "ASC"]],
+      include: [
+        {
+          model: Professionals,
+          as: "professional",
+        },
+      ],
+    }); // obtener un array con los registros
     res.json(dbServices);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener servicios", error: error.message });
@@ -22,7 +31,14 @@ const getServiceById = async (req, res) => {
       return res.status(400).json({ message: "El id del servicio debe ser un número" });
     }
 
-    const service = await Service.findByPk(serviceId);
+    const service = await Service.findByPk(serviceId, {
+      include: [
+        {
+          model: Professionals,
+          as: "professional",
+        },
+      ],
+    });
 
     if (!service) {
       return res.status(404).json({ message: "Servicio no encontrado" });

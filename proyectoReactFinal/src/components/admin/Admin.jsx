@@ -15,7 +15,7 @@ const Admin = () => {
         img: "",
         price: 0,
         description: "",
-        professional: "",
+        professionalId: "",
         duration: 0,
         category: "",
     };
@@ -251,12 +251,15 @@ const Admin = () => {
                                 <label>
                                     Profesional
                                     <select
-                                        name="professional"
-                                        value={newService.professional}
+                                        name="professionalId"
+                                        value={newService.professionalId}
                                         onChange={handleChange}
                                     >
+                                        <option value="" disabled>
+                                            Selecciona un profesional
+                                        </option>
                                         {professionals.map((professional) => (
-                                            <option key={professional.id} value={professional.firstName + ' ' + professional.lastName}>
+                                            <option key={professional.id} value={professional.id}>
                                                 {professional.firstName + ' ' + professional.lastName}
                                             </option>
                                         ))}
