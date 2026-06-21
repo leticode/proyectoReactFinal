@@ -6,6 +6,7 @@ const Admin = () => {
     const { token, handleUserLogout, user } = useContext(AuthenticationContext);
     const [serverMessage, setServerMessage] = useState("");
     const [services, setServices] = useState([]);
+    const [professionals, setProfessionals] = useState([]);
     const [modal, setModal] = useState(false);
     const [modifyID, setModifyID] = useState(0);
 
@@ -38,8 +39,29 @@ const Admin = () => {
             setServerMessage("Error al conectar con el servidor");
         }
     };
+
+    const loadProfessionals = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/api/professionals", {
+                method: "GET"
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                setServerMessage(data.message || "error al traer profesionales");
+                return;
+            }
+
+            setProfessionals(data);
+        } catch (error) {
+            console.error(error);
+            setServerMessage("Error al conectar con el servidor");
+        }
+    };
+
     useEffect(() => {
         loadServices();
+        loadProfessionals();
     }, []);
 
     const handleChange = (e) => {
@@ -228,13 +250,17 @@ const Admin = () => {
 
                                 <label>
                                     Profesional
-                                    <input
-                                        type="text"
+                                    <select
                                         name="professional"
                                         value={newService.professional}
                                         onChange={handleChange}
-                                        placeholder="Profesional encargado del servicio"
-                                    />
+                                    >
+                                        {professionals.map((professional) => (
+                                            <option key={professional.id} value={professional.firstName + ' ' + professional.lastName}>
+                                                {professional.firstName + ' ' + professional.lastName}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </label>
 
                                 <label>
