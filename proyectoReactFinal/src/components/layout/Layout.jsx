@@ -47,15 +47,16 @@ const Layout = ({ children }) => {
               <NavLink to="/management" className={linkClass}>Gestion Usuarios</NavLink>
             </>
           )}
+
+          <NavLink to="/home" className={linkClass}>
+            Inicio
+          </NavLink>
+
           {(user?.role === "admin" || user?.role === "professional" || user?.role === "superadmin" || user?.role === "customer") && (
             <NavLink to="/myappointments" className={linkClass}>
               {user?.role !== "customer" ? "Turnos" : "Mis Turnos"}
             </NavLink>
           )}
-
-          <NavLink to="/home" className={linkClass}>
-            Inicio
-          </NavLink>
 
           <NavLink to="/servicios" className={linkClass}>
             Servicios
@@ -117,15 +118,15 @@ const Layout = ({ children }) => {
             </>
           )}
 
+          <NavLink to="/home" onClick={() => setMenuOpen(false)} className={linkClass}>
+            Inicio
+          </NavLink>
+
           {(user?.role === "admin" || user?.role === "professional" || user?.role === "superadmin" || user?.role === "customer") && (
             <NavLink to="/myappointments" className={linkClass}>
               {user?.role !== "customer" ? "Turnos" : "Mis Turnos"}
             </NavLink>
           )}
-
-          <NavLink to="/home" onClick={() => setMenuOpen(false)} className={linkClass}>
-            Inicio
-          </NavLink>
 
           <NavLink to="/servicios" onClick={() => setMenuOpen(false)} className={linkClass}>
             Servicios
@@ -175,6 +176,9 @@ const Layout = ({ children }) => {
               <p className="text-footer">
                 Comprometidos con resaltar tu armonía natural.
               </p>
+              <a href="https://www.instagram.com/utnrosarioseu/" target="_blank">
+                <img className="instagram-icon" src="/img/footerImg/instagram-icon.webp" alt="logo-instagram" />
+              </a>
             </div>
 
             <div className="column-footer">

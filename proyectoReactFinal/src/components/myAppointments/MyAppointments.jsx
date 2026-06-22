@@ -103,6 +103,18 @@ const MyAppointments = () => {
         }
     }, [appointmentForm.professionalId, appointmentForm.date, appointmentForm.serviceId, services]);
 
+    const [showCancelModal, setShowCancelModal] = useState(false); //modal para el usuario al querer cancelqar turno
+    const [appointmentToCancel, setAppointmentToCancel] = useState(null);
+    const openCancelModal = (appointmentId) => {
+        setAppointmentToCancel(appointmentId);
+        setShowCancelModal(true);
+    };
+    const confirmCancelAppointment = () => {
+        handleUpdateStatus(appointmentToCancel, "cancelado");
+        setShowCancelModal(false);
+        setAppointmentToCancel(null);
+    };
+
     const [showDeleteModal, setShowDeleteModal] = useState(false); //modal para confirmar eliminacion de turno
     const [appointmentToDelete, setAppointmentToDelete] = useState(null);
 
@@ -279,7 +291,7 @@ const MyAppointments = () => {
                                                 "cancelado"
                                             ) : (
                                                 <button
-                                                    onClick={() => handleUpdateStatus(appointment.id, "cancelado")}
+                                                    onClick={() => openCancelModal(appointment.id)}
                                                 >
                                                     Cancelar
                                                 </button>
@@ -320,6 +332,31 @@ const MyAppointments = () => {
                     </table>
                 </div>
             </div>
+            {showCancelModal && (
+                <div className="modal-overlay">
+                    <div className="modal">
+                        <h3>Confirmar cancelación</h3>
+                        <p>
+                            ¿Estás seguro de que deseas cancelar este turno?
+                        </p>
+
+                        <div className="modal-buttons">
+                            <button onClick={confirmCancelAppointment}>
+                                Si
+                            </button>
+
+                            <button
+                                onClick={() => {
+                                    setShowCancelModal(false);
+                                    setAppointmentToCancel(null);
+                                }}
+                            >
+                                No
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             {showDeleteModal && (
                 <div className="modal-container">
                     <div className="modal">
