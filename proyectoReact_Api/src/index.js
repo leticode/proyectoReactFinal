@@ -39,8 +39,14 @@ app.get("/", (req, res) => {
 app.use("/api/professionals", professionalsRoutes);
 
 //endpoint para los appointments
-app.use("/api/professionals", professionalsRoutes);
 app.use("/api/appointments", appointmentsRoutes);
+
+//endpoints de auth
+app.use(authRoutes);
+app.use("/api/user", userRoutes);
+
+//endpoint de services
+app.use("/api/services", servicesRoutes);
 
 // FIN ENDPOINTS ---------------
 
@@ -89,11 +95,6 @@ async function startServer() {
 
     //ACA SE EJECUTABA LA FUNCION PARA CREAR ADMIN
     //await createSuperAdmin()
-
-    //puse esto para usar la ruta de auth
-    app.use(authRoutes);
-    app.use("/api/user", userRoutes);
-    app.use("/api/services", servicesRoutes);
 
     app.listen(PORT, () => {
       console.log(`server listening on port ${PORT}`);
