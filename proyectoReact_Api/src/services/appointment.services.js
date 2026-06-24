@@ -12,29 +12,29 @@ const toMinutes = (h) => {
 };
 
 const getAppointmentEnd = (start, duration) => start + duration + appointmentGap;
-
+//esto es para calcular el solaplamiento
 const rangesOverlap = (startA, endA, startB, endB) => (
     startA < endB && endA > startB
 );
-
+//aca generamos todos los posibles slots 
 export const generateSlots = (
-    workayStart,
+    workayStart, //hora que tomca cada cosa
     workayEnd,
     serviceDuration
 ) => {
-    const slots = [];
+    const slots = [];//array inicial
 
     const totalDuration =
         serviceDuration + appointmentGap;
 
     let current = workayStart * 60;
     const end = workayEnd * 60;
-
+    //
     while (current + totalDuration <= end) {
         const hours = Math.floor(current / 60);
         const minutes = current % 60;
 
-        slots.push(
+        slots.push(//agregamos el slot generado
             `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`
         );
 
@@ -46,7 +46,7 @@ export const generateSlots = (
 //funcion para crear turnos
 export const createAppointment = async (req, res) => {
     try {
-        const {
+        const {// 
             date,
             hour,
             userId,
@@ -71,19 +71,19 @@ export const createAppointment = async (req, res) => {
                 });
             }
         }
-
+        //aca permisos del super-admin
         if (loggedUser.role === "superadmin") {
             return res.status(403).json({
                 message: "El superadmin no puede crear turnos"
             });
         }
-
+        //verificacion de que el cliente cree un turno para si mismo
         if (loggedUser.role === "customer" && loggedUser.id !== userId) {
             return res.status(403).json({
                 message: "Solo podés crear turnos para tu propio usuario"
             });
         }
-
+        
         if (!customer || customer.role !== "customer") {
             return res.status(400).json({
                 message: "Debes tener rol cliente para agendar"
@@ -91,16 +91,16 @@ export const createAppointment = async (req, res) => {
         }
 
         const today = new Date().toISOString().split("T")[0]; //esto para q no saquen turno dias pasados
-
+        //si la fecha elegida es anterior al dia de hoy
         if (date < today) {
             return res.status(400).json({
                 message: "No se pueden reservar turnos en fechas pasadas"
             });
         }
-
+        //esto es por si el today automatico del calendario esta colocado en dia domingo
         const appointmentDate = new Date(date + "T00:00:00");
         const dayOfWeek = appointmentDate.getDay();
-
+        //esq antes lo probe sin y si se podia sacar turnos los domingos xd
         if (dayOfWeek === 0) {
             return res.status(400).json({
                 message: "La clínica permanece cerrada los domingos"
@@ -108,7 +108,7 @@ export const createAppointment = async (req, res) => {
         }
 
         const service = await Service.findByPk(serviceId);
-
+        //en caso de no encontrarse servicio
         if (!service) {
             return res.status(404).json({
                 message: "Servicio no encontrado"
@@ -116,7 +116,6 @@ export const createAppointment = async (req, res) => {
         }
 
         const serviceDuration = service.duration;
-
         const newStart = toMinutes(hour);
         const newEnd = getAppointmentEnd(newStart, serviceDuration);
 
