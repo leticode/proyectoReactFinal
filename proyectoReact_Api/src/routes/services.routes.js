@@ -14,7 +14,7 @@ const getAllServices = async (req, res) => {
           as: "professional",
         },
       ],
-    }); // obtener un array con los registros
+    }); 
     res.json(dbServices);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener servicios", error: error.message });

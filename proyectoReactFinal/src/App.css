@@ -423,7 +423,7 @@
 .dropdown button:hover {
   background-color: var(--variableUno);
 }
-/*LOGGIN WACHOOO*/
+/*LOGIN*/
 .login {
   height: 100vh;
   display: flex;
@@ -1220,7 +1220,7 @@ tbody{
 }
 
 .react-calendar__month-view__days__day--weekend {
-  color: black !important; /*el important es para que tome este y no el default*/
+  color: black !important;
 }
 .react-calendar__tile:disabled {
   background: #e6e6e6;

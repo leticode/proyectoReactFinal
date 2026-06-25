@@ -25,10 +25,8 @@ import './index.css';
 
 
 function App() {
-  //traemos el objeto user y el token del contexto para usarlo en los permsos
   const { token } = useContext(AuthenticationContext);
 
-  //en realidad deberiamos usar BrowserRouter pero x el momento lo dejamos asi(HashRouter) pq no tiene complejidad el proyecto (sirve para poder navegar entre paginas sin recargar)
   return (<>
     <HashRouter> 
       <ToastContainer
@@ -53,8 +51,10 @@ function App() {
             element={tokenValid(token) ? <Navigate to="/home" replace /> : <Login />} 
           />
           <Route path="/register" element={<Register/>}/>
-          <Route path="/myappointments" element={<MyAppointments/>}/>
-
+          
+          <Route element={<ProtectedRoutes allowedRoles={['superadmin','admin', 'professional', 'customer']}/>}>
+            <Route path="/myappointments" element={<MyAppointments/>}/>
+          </Route>
           {/*misma validacion que en usermanagement pero incluyendo al professional*/}
           <Route element={<ProtectedRoutes allowedRoles={['superadmin','admin', 'professional']}/>}>
               <Route path="/admin" element={<Admin />}/>

@@ -63,7 +63,6 @@ const UserManagement = () => {
         setUpdateUser(null);
     }
 
-    //handle general que va guardardando todos los inputs a medida que el usuario escribe
     const handleChange = (event) => {
         const { name, value } = event.target;
         setformUser({
@@ -72,10 +71,6 @@ const UserManagement = () => {
         });
     }
 
-    //peticion al back para tener todos los usuarios
-    //decdi hacerlo funcion al fetch en vez de ponerlo en el useefccte porq necesito usar la funcion
-    //de cragar usuarios en el useefecct y ademas en el creteuser si yo solo lo ponia en useefectt
-    //cuando se creaba un usuario habia que recargar la pagina
     const handleLoadUsers = () => {
         fetch("http://localhost:3000/api/user", {
             headers: {
@@ -90,7 +85,7 @@ const UserManagement = () => {
 
             return res.json();
         })
-        //guardamos en estado users los usuaros obtenidos
+
         .then((data) => {
             setUsers(data);
         })
@@ -98,31 +93,23 @@ const UserManagement = () => {
         .catch(() => toast.error("No se pudieron cargar los usuarios"));
     };
 
-    //permte ejecutar el codgo cuando se renderza el componente
     useEffect(() => {
-        //el token es valdo? si no lo es lo desloguea borra desde el localstorage y navega al login
         if (!tokenValid(token)) {
             handleUserLogout();
             navigate("/login");
         }
 
-        //ejecutamos la funcion para cargar los usuarios 
         handleLoadUsers();
 
     }, []);
 
     const handleCreateUser = async (event) => {
-        //evitamos que recarguen la pagina
         event.preventDefault();
 
         const validationErrors = ValidateUserManagement(formUser);
-        //valdamos que el formularo este bien antes de hacer el fetch
 
-        //object.keys guarda las propiedades y con .lenght cuenta la longtud del array donde si es mayor a cero 
-        // es porq tiene errores 
         if (Object.keys(validationErrors).length > 0) {
 
-            //aca se actualiza el estado con los errores validados
             setErrors({
                 email: validationErrors.email || "",
                 password: validationErrors.password || "",
@@ -145,7 +132,6 @@ const UserManagement = () => {
 
         .then((res) => {
             if (!res.ok) {
-                //corta la ejecucon throw
                 throw new Error('Error al crear usuario');
             }
 
@@ -153,9 +139,8 @@ const UserManagement = () => {
         })
         .then(() => {
 
-            //llamamos a la funcion de nuevo de traer los usuarios desp de crear el user
             handleLoadUsers()
-            //aca limpiamos los inputs desp de crear el usuario
+
             setformUser({
                 email: "",
                 password: "",
@@ -173,7 +158,6 @@ const UserManagement = () => {
         });
     }
 
-    //recibimos el usuario que queremos actualizar
     const handleUpdateUser = async (updateUser) => {
         const validationErrors = ValidateUserUpdate(updateUser);
 
@@ -190,12 +174,10 @@ const UserManagement = () => {
         fetch(`http://localhost:3000/api/user/${updateUser.id}`, {
             method: "PUT",
             headers: {
-                //le dice al back que le mando json
                 "Content-Type": "application/json",
-                //y aca mandamos el token para q verifique si le user esta autenticado
                 Authorization: `Bearer ${token}`
             },
-            //transformamos el body en json para que lo reciba el back con req.body
+
             body: JSON.stringify({
                 email: updateUser.email,
                 role: updateUser.role,
@@ -209,12 +191,11 @@ const UserManagement = () => {
             }
             return res.json();
         })
-        //con los datos devuketos por el back
         .then(() => {
             handleLoadUsers()
 
             setShowUpdateModal(false);
-            //limpiamos usuario en edicion
+
             setUpdateUser(null);
             toast.success("Usuario actualizado correctamente");
         })
@@ -370,11 +351,9 @@ const UserManagement = () => {
                                     <td>{u.email}</td>
                                     {user?.role === "superadmin" && (
                                         <>
-                                            <td>{u.role}</td> {/*mostramos rol */}
+                                            <td>{u.role}</td>
                                             <td>
-                                                {/*ternario donde si es profesioanl muestra nombre y apellido si no un guion */}
                                                 {u.role === "professional"
-                                                //esto lo trae desde el back con el nombre de professional
                                                     ? `${u.professional?.firstName || ""} ${u.professional?.lastName || ""}`
                                                     : "-"}
                                             </td>
@@ -427,13 +406,10 @@ const UserManagement = () => {
                                 <div className="edit-fields">
                                     <input className="update-input"
                                         type="email"
-                                        //vale el email guardado en el estado
                                         value={updateUser.email}
                                         onChange={(e) =>
-                                            //copiamos todas las propiedades del usuario 
                                             setUpdateUser({
                                                 ...updateUser,
-                                                //y solo cambiamos el email
                                                 email: e.target.value
                                             })
                                         }
