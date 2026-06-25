@@ -15,7 +15,6 @@ const Login = () =>{
     const [password, setPassword] = useState("");
     const [error, setError] = useState({email: false, password: false});
 
-    //el useRef sirve para obtener referencia directa a un elemento HTML real
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
 
@@ -36,8 +35,6 @@ const Login = () =>{
 
 		if (!verifyEmail(email)) {
 			setError({ email: true, password: false });
-            //focus() mueve automáticamente el cursor al input
-            //si el usuario no puso el email por ej
 			emailRef.current.focus();
 			return;
 		}
@@ -61,9 +58,8 @@ const Login = () =>{
 				}),
 			});
 
-            //aca en data guardamos lo del backend que viene en formato JSON y lo trasforma en objeto
             const data = await response.json(); 
-            //si devolvio error cortamos la funcion
+
             if (!response.ok) {
                 toast.error(data.message || "error al registrarse");
                 return;

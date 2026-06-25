@@ -225,10 +225,10 @@ export const getAvailableSlots = async (req, res) => {
 //a partir de aca es para todo lo relacionado con el abm
 export const getAppointments = async (req, res) => {
     try {
-        const { id, role } = req.user; //esto es para sacar del token udel user log
-        let where = {}; //el filtro q pasa por sequelize
-        //vacio trae TODOS los turnos
-        if (role === "customer") { //busca solo en el campo del user log
+        const { id, role } = req.user;
+        let where = {}; 
+
+        if (role === "customer") { 
             where = { userId: id };
         }
 

@@ -27,7 +27,6 @@ export const verifyRegister = (req, res, next) => {
         return res.status(400).json({ errors });
     }
 
-    //srve para pasar a otra funcion
     next();
 };
 

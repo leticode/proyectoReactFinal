@@ -70,17 +70,14 @@ const Register = ()=>{
 				}),
 			});
 
-            //aca en data guardamos lo del backend que viene en formato JSON y lo trasforma en objeto
             const data = await response.json();
 
-            //si devolvio error cortamos la funcion
             if (!response.ok) {
                 toast.error(data.message || "error al registrarse");
                 return;
             }
 
             toast.success("Usuario registrado con exito")
-            //si se registro bien lo mandamos al login
             navigate("/login");
 
         } catch (error) {

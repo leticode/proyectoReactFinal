@@ -6,13 +6,8 @@ import bcrypt from "bcrypt";
 
 export const getAllUsers = async (req, res) => {
     const allUsers = await User.findAll({
-        //anadi esto para que cuando en la tabla se muestren los usuarios
-        //os que sean professionales traigan el nombre y apellido
         include: [
             {
-                //basicamente aca le mandamos al front el modelo profesional
-                //llamado profesional asi despues puedo hacer un operador ternario para mostrar el campo
-                // de nombre y apellido cuando se aprete la opcion de profesional
                 model: Professionals,
                 as: "professional",
                 attributes: ["firstName", "lastName"]
@@ -35,7 +30,6 @@ export const getUserById = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-    //traemoslos datos del body con el rol por default y agregue el nombre y el apellido para el prof
     const { email, password, confirmPassword, role = "customer", firstName, lastName } = req.body;
 
     const errors = validateCreateUser(req.body);
@@ -74,7 +68,6 @@ export const createUser = async (req, res) => {
         role
     });
 
-    //esto podriamos hacer para guardar el profesional en la tabla profesional
     if (role === "professional") {
         await Professionals.create({
             firstName,
@@ -123,15 +116,11 @@ export const updateUser = async (req, res) => {
     //guardamos el usuario
     await user.save();
 
-    //aca si el rol seria profesion tendriamos q actualizar a tabla professional tamb
-    // Si es profesional, actualizar su ficha y si no es profesional pero lo querems cambiar a profesional
-    //tedriamos que crear su ficha
     if (role === "professional") {
         let professional = await Professionals.findOne({
             where: { userId: user.id }
         });
 
-        //si el profesional no existe lo crea
         if (!professional) {
             professional = await Professionals.create({
                 firstName,

@@ -1,13 +1,7 @@
 import express from "express";
-//importamos el puerto dede el archivo config.js para comodidad
-//y porq lo dice el pdf
 import { PORT } from "./config.js";
-
-// libreria cors para poder llamar a la api desde un origen distinto (localhost:5173 que es donde esta vite, vs. localhost:3000 que es donde corre este server)
 import cors from "cors";
 
-// importamos el array de servicios desde otro archivo para mantener este archivo prolijo y solo con cosas de express
-// import { services } from "./services/information.services.js";
 import { sequelize } from "./db.js";
 import  User from "./models/User.js";
 import bcrypt from "bcrypt";
@@ -18,24 +12,19 @@ import servicesRoutes from "./routes/services.routes.js";
 import professionalsRoutes from "./routes/professionals.routes.js";
 import "./models/Assosiations.js";
 
-//creamos la aplicacion express donde app es nuestro servidor backend
 const app = express();
 
-// habilitar CORS
 app.use(cors());
-
-// leer JSON del body, asi le paso en formato json el email y la contrasena al register en auth.services.js
 app.use(express.json());
+
 // ENDPOINTS ---------------
 
-// ruta root (entras a la url sin nada mas, es la ruta raiz)
 app.get("/", (req, res) => {
   res.send("Servidor funcionando");
 });
 
 
 //endopoint para profesionales
-
 app.use("/api/professionals", professionalsRoutes);
 
 //endpoint para los appointments
@@ -50,51 +39,10 @@ app.use("/api/services", servicesRoutes);
 
 // FIN ENDPOINTS ---------------
 
-// async function seedServices() {
-//   // Con esta funcion cargamos todos los servicios a la base de datos, en la tabla Service, usando lo que tenemos hardcodeado en information.services.js
-//   const count = await Service.count();
-//   if (count === 0) {
-//     // Si no tiene ningun registro en la tabla de servicios, quiere decir que nunca la inicializamos
-//     // Entonces cargamos todos los registros que tenemos en information.services.js
-//     // Como los nombres de los campos de services coinciden con los de la tabla que creamos, se puede hacer
-//     // facilmente con bulkCreate
-//     await Service.bulkCreate(services);
-//     console.log("Servicios iniciales cargados en la base");
-//   }
-// }
-
-/* FUNCION PARA CREAR EL ADMIN DONDE ME HASHEA LA CONTRASENA DEL ADMIN Y SI YA EXISTE ESE ADMIN
-//NO ME LO CREA LA COMENTO PORQ ESTA FUNCION SOLO SE TIENE Q EJECUTAR UNA VEZ
-//UNA VEZ QUE EL ADMIN SE CREO YA NO ME SIRVE
-
-  async function createSuperAdmin() {
-    const user = await User.findOne({
-        where: {
-            email: "luciromee@gmail.com"
-        }
-    });
-
-    if (!user) {
-        const hashedPassword = await bcrypt.hash("mondongo@@", 10);
-
-        await User.create({
-            email: "luciromee@gmail.com",
-            password: hashedPassword,
-            role: "superadmin"
-        })
-
-        console.log("Super Admin creado");
-    }
-}*/
-
 async function startServer() {
   try {
-    await sequelize.authenticate(); // conectarse a la base de datos, con los datos que estan definidos en db.js
-    await sequelize.sync(); // sincronizar las tablas (agregar las que faltan, modificar las que cambiaron, etc.) 
-    // await seedServices(); // si la tabla de servicios esta vacia, llenarla con los datos que tenemos hardcodeados en information.services.js 
-
-    //ACA SE EJECUTABA LA FUNCION PARA CREAR ADMIN
-    //await createSuperAdmin()
+    await sequelize.authenticate();
+    await sequelize.sync(); 
 
     app.listen(PORT, () => {
       console.log(`server listening on port ${PORT}`);
