@@ -80,6 +80,7 @@ const Admin = () => {
         e.preventDefault();
 
         if (modifyID == 0) {
+            console.log(newService);
             const response = await fetch(
                 "http://localhost:3000/api/services",
                 {
@@ -230,7 +231,11 @@ const Admin = () => {
                                         name="category"
                                         value={newService.category}
                                         onChange={handleChange}
+                                        required
                                     >
+                                        <option value="" disabled>
+                                            Selecciona una categoria
+                                        </option>
                                         {SERVICE_CATEGORIES_ARRAY.map((category) => (
                                             <option key={category.value} value={category.value}>
                                                 {category.name}
