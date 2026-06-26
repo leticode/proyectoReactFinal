@@ -139,11 +139,6 @@ const Admin = () => {
                 return;
             }
 
-            // Hay dos posibilidades para actualizar el array:
-            // 1. lo actrualizamos manualmente (Elimino el servicio borrado del array que estamos mostrando para que desaparezca del front)
-            // 2. lo volvemos a cargar desde el server (loadServices)
-
-            // setServices((prev) => prev.filter((service) => service.id !== id));
             loadServices();
             handleCloseDeleteModal();
         } catch (error) {
@@ -159,14 +154,6 @@ const Admin = () => {
 
     const modifyService = (id) => {
         const service = services.filter((s) => s.id == id)[0];
-
-        // let service=null;
-        // for (let i=0;i<services.length;i++) {
-        //     if (services[i].id == id) {
-        //         service=services[i];
-        //         break;
-        //     }
-        // }
 
         setNewService(service);
         setModifyID(id);

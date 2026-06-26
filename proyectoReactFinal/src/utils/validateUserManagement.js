@@ -1,5 +1,14 @@
 export const ValidateUserManagement = ((formUser) => {
     const errors = {};
+
+    if (!formUser.firstName?.trim()) {
+        errors.firstName = "El nombre es obligatorio";
+    }
+
+    if (!formUser.lastName?.trim()) {
+        errors.lastName = "El apellido es obligatorio";
+    }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!formUser.email || !emailRegex.test(formUser.email)) {
@@ -16,21 +25,18 @@ export const ValidateUserManagement = ((formUser) => {
         errors.confirmPassword = "Las contraseñas no coinciden";
     }
 
-    if(formUser.role === "professional"){
-        if (!formUser.firstName?.trim()) {
-            errors.firstName = "El nombre es obligatorio";
-        }
-
-        if (!formUser.lastName?.trim()) {
-            errors.lastName = "El apellido es obligatorio";
-        }
-    }
-
     return errors;
 });
 
 export const ValidateUserUpdate = (user) => {
     const errors = {};
+
+    if (!user.firstName?.trim()) {
+        errors.firstName = "El nombre es obligatorio";
+    }
+    if (!user.lastName?.trim()) {
+        errors.lastName = "El apellido es obligatorio";
+    }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -38,13 +44,5 @@ export const ValidateUserUpdate = (user) => {
         errors.email = "El email no es válido";
     }
 
-    if(user.role === "professional"){
-        if (!user.firstName?.trim()) {
-            errors.firstName = "El nombre es obligatorio";
-        }
-        if (!user.lastName?.trim()) {
-            errors.lastName = "El apellido es obligatorio";
-        }
-    }
     return errors;
 };

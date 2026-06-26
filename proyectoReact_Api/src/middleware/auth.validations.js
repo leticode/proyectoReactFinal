@@ -1,5 +1,14 @@
-export const validateRegister = ({ email, password, confirmPassword }) => {
+export const verifyRegister = (req, res, next) => {
+    const { firstName, lastName, email, password, confirmPassword } = req.body;
     const errors = {};
+
+    if (!firstName.trim()) {
+        errors.firstName = "El nombre es obligatorio";
+    }
+
+    if (!lastName.trim()) {
+        errors.lastName = "El apellido es obligatorio";
+    }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -17,21 +26,15 @@ export const validateRegister = ({ email, password, confirmPassword }) => {
         errors.confirmPassword = "No coinciden";
     }
 
-    return errors;
-};
-
-export const verifyRegister = (req, res, next) => {
-    const errors = validateRegister(req.body);
-
     if (Object.keys(errors).length > 0) {
         return res.status(400).json({ errors });
     }
 
-    //srve para pasar a otra funcion
     next();
 };
 
-export const validateLogin = ({ email, password }) => {
+export const verifyLogin = (req, res, next) => {
+    const {email, password } = req.body;
     const errors = {};
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -46,12 +49,6 @@ export const validateLogin = ({ email, password }) => {
         errors.password =
             "La contraseña debe tener al menos 7 caracteres y un carácter especial";
     }
-
-    return errors;
-};
-
-export const verifyLogin = (req, res, next) => {
-    const errors = validateLogin(req.body);
 
     if (Object.keys(errors).length > 0) {
         return res.status(400).json({ errors });
@@ -73,16 +70,37 @@ export const verifyRole = ((role) => {
     return errors;
 });
 
-export const validateCreateUser = ({email, password, confirmPassword, role, firstName, lastName}) => {
-    const errors = validateRegister({email, password, confirmPassword});
+export const validateCreateUser = ({firstName, lastName, email, password, confirmPassword, role}) => {
 
-    if (role === "professional") {
-        if (!firstName?.trim()) {
-            errors.firstName = "El nombre es obligatorio";
-        }
-        if (!lastName?.trim()) {
-            errors.lastName = "El apellido es obligatorio";
-        }
+    const errors = {};
+
+    if (!firstName?.trim()) {
+        errors.firstName = "El nombre es obligatorio";
+    }
+    if (!lastName?.trim()) {
+        errors.lastName = "El apellido es obligatorio";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email || !emailRegex.test(email)) {
+        errors.email = "El email no es válido";
+    }
+
+    const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>]).{7,}$/;
+
+    if (!password || !passwordRegex.test(password)) {
+        errors.password = "Contraseña inválida";
+    }
+
+    if (password !== confirmPassword) {
+        errors.confirmPassword = "No coinciden";
+    }
+    
+    const validRoles = ["customer", "professional", "admin", 'superadmin'];
+
+    if (!role || !validRoles.includes(role)) {
+        errors.role = "El rol no es válido";
     }
 
     return errors;
