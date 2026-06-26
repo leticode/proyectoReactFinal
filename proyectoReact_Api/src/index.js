@@ -11,6 +11,9 @@ import userRoutes from "./routes/users.routes.js";
 import servicesRoutes from "./routes/services.routes.js";
 import professionalsRoutes from "./routes/professionals.routes.js";
 import "./models/Assosiations.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 

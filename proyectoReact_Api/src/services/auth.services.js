@@ -68,7 +68,7 @@ export const loginUser = async (req, res) => {
         return res.status(401).send({ message: "Email y/o contraseña incorrecta" });
 
 
-    const JWTsecretKey = '2tup2pureSkin-2026'
+    const JWTsecretKey = process.env.JWT_SECRET
 
     const token = jwt.sign(
         {
