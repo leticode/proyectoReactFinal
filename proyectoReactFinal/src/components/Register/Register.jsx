@@ -1,81 +1,84 @@
 import { useState, useRef } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import verifyEmail from "../../utils/verifyEmail.js";
-import verifyPassword from "../../utils/verifyPassword.js";
+import { ValidateRegister } from "../../utils/validateForms.js";
 import { toast } from "react-toastify";
 
 const Register = ()=>{
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [error, setError] = useState({email: false, password: false, confirmPassword: false});
+    const [formRegister, setFormRegister] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+    });
 
+    const [error, setError] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+    });
+
+    const firstNameRef = useRef(null);
+    const lastNameRef = useRef(null);
     const emailRef = useRef(null)
     const passwordRef = useRef(null)
     const confirmPasswordRef = useRef(null)
 
-    const handleEmailChange = (event) => {
-        setEmail(event.target.value);
-        setError({ ...error, email: false });
-	
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormRegister({
+            ...formRegister,
+            [name]: value
+        });
     }
-
-    const handlePasswordChange = (event)=> {
-        setPassword(event.target.value);
-        setError({ ...error, password: false });
-	
-    }
-
-    const handleConfirmPasswordChange = (event) =>{
-        setConfirmPassword(event.target.value);
-        setError({...error, confirmPassword: false});
-    }
+   
     const handleSubmit = async (event) => {
 		event.preventDefault();
 
-		if (!verifyEmail(email)) {
-			setError({email: true, password: false, confirmPassword: false});
-			emailRef.current.focus();
-			return;
-		}
+		const validationErrors = ValidateRegister(formRegister);
+        if (Object.keys(validationErrors).length > 0) {
+            setError({
+                firstName: validationErrors.firstName || "",
+                lastName: validationErrors.lastName || "",
+                email: validationErrors.email || "",
+                password: validationErrors.password || "",
+                confirmPassword: validationErrors.confirmPassword || ""
+            })
 
-		if (!verifyPassword(password)) {
-			setError({email: false, password: true, confirmPassword: false});
-			passwordRef.current.focus();
-			return;
-		}
-
-        if (password !== confirmPassword) {
-
-            setError({email: false, password: false, confirmPassword: true});
-            confirmPasswordRef.current.focus();
             return;
         }
 
         try {
-            //hacemos una peticion HTTP al backend
 			const response = await fetch('http://localhost:3000/register', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					email,
-					password,
-                    confirmPassword,
-                    role: 'customer'
+                    ...formRegister,
+                    role: "customer"
 				}),
 			});
 
-            const data = await response.json();
+            const data = await response.json().catch(() => ({}));
 
             if (!response.ok) {
                 toast.error(data.message || "error al registrarse");
                 return;
             }
+
+            setFormRegister({
+                firstName: "",
+                lastName: "",
+                email: "",
+                password: "",
+                confirmPassword: ""
+            });
 
             toast.success("Usuario registrado con exito")
             navigate("/login");
@@ -96,39 +99,68 @@ const Register = ()=>{
                     <h1>Registrate</h1>
 
                     <div className="input-container">
+                        <label>Nombre</label>
+                        <input 
+                            name="firstName"
+                            ref={firstNameRef}
+                            type="text"
+                            placeholder="Ingresar Nombre"
+                            value={formRegister.firstName}
+                            onChange={handleChange}
+                        />
+                        {error.firstName && <p className="errors" >{error.firstName}</p>}
+                    </div>
+
+                    <div className="input-container">
+                        <label>Apellido</label>
+                        <input 
+                            name="lastName"
+                            ref={lastNameRef}
+                            type="text"
+                            placeholder="Ingresar apellido"
+                            value={formRegister.lastName}
+                            onChange={handleChange}
+                        />
+                        {error.lastName && <p className="errors" >{error.lastName}</p>}
+                    </div>
+
+                    <div className="input-container">
                         <label>Email</label>
                         <input
+                            name="email"
                             ref={emailRef}
                             type="email"
                             placeholder="Ingresar Email"
-                            value={email}
-                            onChange={handleEmailChange}
+                            value={formRegister.email}
+                            onChange={handleChange}
                         />
-                        {error.email && <p className="errors" >El email ingresado debe ser válido.</p>}
+                        {error.email && <p className="errors" >{error.email}</p>}
                     </div>    
 
                     <div className="input-container">
                         <label>Contraseña</label>
                         <input
+                            name="password"
                             ref={passwordRef}
                             type="password"
                             placeholder="Ingresar Contraseña"
-                            value={password}
-                            onChange={handlePasswordChange}
+                            value={formRegister.password}
+                            onChange={handleChange}
                         />
-                        {error.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres y un caracter especial.</p>}
+                        {error.password && <p className="errors" >{error.password}</p>}
                     </div>
 
                     <div className="input-container">
                     <label>Confirmar Contraseña</label>
                         <input
+                            name="confirmPassword"
                             ref={confirmPasswordRef}
                             type="password"
                             placeholder="Ingresar Contraseña"
-                            value={confirmPassword}
-                            onChange={handleConfirmPasswordChange}
+                            value={formRegister.confirmPassword}
+                            onChange={handleChange}
                         />
-                        {error.confirmPassword && <p className="errors" >La contraseña debe ser igual</p>}
+                        {error.confirmPassword && <p className="errors" >{error.confirmPassword}</p>}
                         
                     </div>
                     

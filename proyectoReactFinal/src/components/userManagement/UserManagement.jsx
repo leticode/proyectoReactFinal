@@ -11,21 +11,23 @@ const UserManagement = () => {
 
     const [users, setUsers] = useState([]);
     const [formUser, setformUser] = useState({
+        firstName: "",
+        lastName: "",
         email: "",
         password: "",
         confirmPassword: "",
-        role: "customer",
-        firstName: "",
-        lastName: ""
+        role: "customer"
     });
     const [errors, setErrors] = useState({
+        firstName: "",
+        lastName: "",
         email: "",
         password: "",
         confirmPassword: "",
-        firstName: "",
-        lastName: ""
     })
 
+    const firstNameRef = useRef(null);
+    const lastNameRef = useRef(null);
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
     const confirmPasswordRef = useRef(null);
@@ -45,7 +47,12 @@ const UserManagement = () => {
 
     const [updateUser, setUpdateUser] = useState(null);
     const [showUpdateModal, setShowUpdateModal] = useState(false);
-    const [updateErrors, setUpdateErrors] = useState({email: "", role: "", firstName: "", lastName: ""});
+    const [updateErrors, setUpdateErrors] = useState({
+        firstName: "", 
+        lastName: "", 
+        email: "", 
+        role: ""
+    });
 
     const handleOpenUpdateModal = (user) => {
         setShowUpdateModal(true);
@@ -53,10 +60,10 @@ const UserManagement = () => {
     }
     const handleCloseUpdateModal = () => {
         setUpdateErrors({
-            email: "",
-            role: "",
             firstName: "",
-            lastName: ""
+            lastName: "",
+            email: "",
+            role: ""
         });
 
         setShowUpdateModal(false);
@@ -111,11 +118,11 @@ const UserManagement = () => {
         if (Object.keys(validationErrors).length > 0) {
 
             setErrors({
+                firstName: validationErrors.firstName || "",
+                lastName: validationErrors.lastName || "",
                 email: validationErrors.email || "",
                 password: validationErrors.password || "",
-                confirmPassword: validationErrors.confirmPassword || "",
-                firstName: validationErrors.firstName || "",
-                lastName: validationErrors.lastName || ""
+                confirmPassword: validationErrors.confirmPassword || ""
             })
 
             return;
@@ -142,12 +149,12 @@ const UserManagement = () => {
             handleLoadUsers()
 
             setformUser({
+                firstName: "",
+                lastName: "",
                 email: "",
                 password: "",
                 confirmPassword: "",
-                role: "customer",
-                firstName: "",
-                lastName: ""
+                role: "customer"
             });
 
             toast.success("Usuario creado correctamente");
@@ -163,10 +170,10 @@ const UserManagement = () => {
 
         if (Object.keys(validationErrors).length > 0) {
             setUpdateErrors({
-                email: validationErrors.email || "",
-                role: validationErrors.role || "",
                 firstName: validationErrors.firstName || "",
-                lastName: validationErrors.lastName || ""
+                lastName: validationErrors.lastName || "",
+                email: validationErrors.email || "",
+                role: validationErrors.role || ""
             });
             return;
         }
@@ -179,10 +186,10 @@ const UserManagement = () => {
             },
 
             body: JSON.stringify({
-                email: updateUser.email,
-                role: updateUser.role,
                 firstName: updateUser.firstName,
-                lastName: updateUser.lastName
+                lastName: updateUser.lastName,
+                email: updateUser.email,
+                role: updateUser.role
             })
         })
         .then((res) => {
@@ -238,6 +245,31 @@ const UserManagement = () => {
                 <div className="management-container">
                     {user?.role === "superadmin" && (
                         <form onSubmit={handleCreateUser} noValidate>
+                            <div className="input-container">
+                                <label>Nombre</label>
+                                <input className="management-input"
+                                    name="firstName"
+                                    ref={firstNameRef}
+                                    type="text"
+                                    placeholder="Ingresar Nombre"
+                                    value={formUser.firstName}
+                                    onChange={handleChange}
+                                />
+                                {errors.firstName && <p className="errors" >{errors.firstName}</p>}
+                            </div>
+
+                            <div className="input-container">
+                                <label>Apellido</label>
+                                <input className="management-input"
+                                    name="lastName"
+                                    ref={lastNameRef}
+                                    type="text"
+                                    placeholder="Ingresar apellido"
+                                    value={formUser.lastName}
+                                    onChange={handleChange}
+                                />
+                                {errors.lastName && <p className="errors" >{errors.lastName}</p>}
+                            </div>
 
                             <div className="input-container">
                                 <label>Email</label>
@@ -249,7 +281,7 @@ const UserManagement = () => {
                                     value={formUser.email}
                                     onChange={handleChange}
                                 />
-                                {errors.email && <p className="errors" >El email ingresado debe ser válido.</p>}
+                                {errors.email && <p className="errors" >{errors.email}</p>}
                             </div>
 
                             <div className="input-container">
@@ -262,7 +294,7 @@ const UserManagement = () => {
                                     value={formUser.password}
                                     onChange={handleChange}
                                 />
-                                {errors.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres y un caracter especial.</p>}
+                                {errors.password && <p className="errors" >{errors.password}</p>}
                             </div>
 
                             <div className="input-container">
@@ -275,7 +307,7 @@ const UserManagement = () => {
                                     value={formUser.confirmPassword}
                                     onChange={handleChange}
                                 />
-                                {errors.confirmPassword && <p className="errors" >La contraseña debe ser igual</p>}
+                                {errors.confirmPassword && <p className="errors" >{errors.confirmPassword}</p>}
 
                             </div>
                             <div className="input-container">
@@ -290,37 +322,6 @@ const UserManagement = () => {
                                     <option value="admin">Admin</option>
 
                                 </select>
-
-                                {formUser?.role === "professional" && (
-                                    <>
-                                        <div className="input-container">
-                                            <label>Nombre</label>
-                                            <input
-                                                className="management-input"
-                                                type="text"
-                                                name="firstName"
-                                                placeholder="Ingresar Nombre"
-                                                value={formUser.firstName}
-                                                onChange={handleChange}
-                                            />
-                                        </div>
-                                        {errors.firstName && (<p className="errors">{errors.firstName}</p>)}
-
-                                        <div className="input-container">
-                                            <label>Apellido</label>
-                                            <input
-                                                className="management-input"
-                                                type="text"
-                                                placeholder="Ingresar Apelliido"
-                                                name="lastName"
-                                                value={formUser.lastName}
-                                                onChange={handleChange}
-                                            />
-                                        </div>
-                                        {errors.lastName && (<p className="errors">{errors.lastName}</p>)}
-                                        
-                                    </>
-                                )}
 
                             </div>
                             <button type="submit"> Agregar </button>
@@ -352,11 +353,7 @@ const UserManagement = () => {
                                     {user?.role === "superadmin" && (
                                         <>
                                             <td>{u.role}</td>
-                                            <td>
-                                                {u.role === "professional"
-                                                    ? `${u.professional?.firstName || ""} ${u.professional?.lastName || ""}`
-                                                    : "-"}
-                                            </td>
+                                            <td>{u.firstName} {u.lastName}</td>
                                             <td> {/*botones para editar o borrar*/}
                                                 <button className="edit-button"
                                                         onClick={() => handleOpenUpdateModal(u)}
@@ -403,6 +400,46 @@ const UserManagement = () => {
                             <div className="modal">
                                 <h3>Editar usuario</h3>
 
+                                <div className="professional-fields">
+                                    <div className="input-container">
+                                        <div className="name-container">
+                                            <label>Nombre</label>
+                                            <input
+                                                className="update-input"
+                                                type="text"
+                                                placeholder="Ingresar Nombre"
+                                                value={updateUser.firstName || ""}
+                                                onChange={(e) =>
+                                                    setUpdateUser({
+                                                        ...updateUser,
+                                                        firstName: e.target.value
+                                                    })
+                                                }
+                                            />
+                                        </div>
+                                    </div>
+                                    {updateErrors.firstName && (<p className="errors">{updateErrors.firstName}</p>)}
+
+                                    <div className="input-container">
+                                        <div className="name-container">
+                                            <label>Apellido</label>
+                                            <input
+                                                className="update-input"
+                                                type="text"
+                                                placeholder="Ingresar Apelliido"
+                                                value={updateUser.lastName || ""}
+                                                onChange={(e) =>
+                                                    setUpdateUser({
+                                                        ...updateUser,
+                                                        lastName: e.target.value
+                                                    })
+                                                }
+                                            />
+                                        </div>
+                                        {updateErrors.lastName && (<p className="errors">{updateErrors.lastName}</p>)}
+                                    </div>
+                                </div>
+
                                 <div className="edit-fields">
                                     <input className="update-input"
                                         type="email"
@@ -430,49 +467,7 @@ const UserManagement = () => {
                                     </select>
 
                                 </div>
-                                    {updateUser.role === "professional" && (
-                                        <>
-                                            <div className="professional-fields">
-                                                <div className="input-container">
-                                                    <div className="name-container">
-                                                        <label>Nombre</label>
-                                                        <input
-                                                            className="update-input"
-                                                            type="text"
-                                                            placeholder="Ingresar Nombre"
-                                                            value={updateUser.firstName || ""}
-                                                            onChange={(e) =>
-                                                                setUpdateUser({
-                                                                    ...updateUser,
-                                                                    firstName: e.target.value
-                                                                })
-                                                            }
-                                                        />
-                                                    </div>
-                                                </div>
-                                                {updateErrors.firstName && (<p className="errors">{updateErrors.firstName}</p>)}
-
-                                                <div className="input-container">
-                                                    <div className="name-container">
-                                                        <label>Apellido</label>
-                                                        <input
-                                                            className="update-input"
-                                                            type="text"
-                                                            placeholder="Ingresar Apelliido"
-                                                            value={updateUser.lastName || ""}
-                                                            onChange={(e) =>
-                                                                setUpdateUser({
-                                                                    ...updateUser,
-                                                                    lastName: e.target.value
-                                                                })
-                                                            }
-                                                        />
-                                                    </div>
-                                                    {updateErrors.lastName && (<p className="errors">{updateErrors.lastName}</p>)}
-                                                </div>
-                                            </div>
-                                        </> 
-                                    )}
+    
                                 <div className="modal-buttons">
                                     <button
                                         onClick={handleCloseUpdateModal}
@@ -484,7 +479,6 @@ const UserManagement = () => {
                                     </button>
                                 </div>
                                 {updateErrors.email && (<p className="errors">{updateErrors.email}</p>)}
-
                             </div>
                         </div>
                     )}
