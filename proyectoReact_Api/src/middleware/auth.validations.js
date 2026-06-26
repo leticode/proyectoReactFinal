@@ -70,15 +70,38 @@ export const verifyRole = ((role) => {
     return errors;
 });
 
-export const validateCreateUser = ({email, password, confirmPassword, role, firstName, lastName}) => {
-    const errors = validateRegister({email, password, confirmPassword});
+export const validateCreateUser = ({firstName, lastName, email, password, confirmPassword, role}) => {
+
+    const errors = {};
 
     if (!firstName?.trim()) {
-            errors.firstName = "El nombre es obligatorio";
-        }
-        if (!lastName?.trim()) {
-            errors.lastName = "El apellido es obligatorio";
-        }
+        errors.firstName = "El nombre es obligatorio";
+    }
+    if (!lastName?.trim()) {
+        errors.lastName = "El apellido es obligatorio";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email || !emailRegex.test(email)) {
+        errors.email = "El email no es válido";
+    }
+
+    const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>]).{7,}$/;
+
+    if (!password || !passwordRegex.test(password)) {
+        errors.password = "Contraseña inválida";
+    }
+
+    if (password !== confirmPassword) {
+        errors.confirmPassword = "No coinciden";
+    }
+    
+    const validRoles = ["customer", "professional", "admin", 'superadmin'];
+
+    if (!role || !validRoles.includes(role)) {
+        errors.role = "El rol no es válido";
+    }
 
     return errors;
 };

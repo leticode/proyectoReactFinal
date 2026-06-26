@@ -248,27 +248,27 @@ const UserManagement = () => {
                             <div className="input-container">
                                 <label>Nombre</label>
                                 <input className="management-input"
-                                    name="firstname"
+                                    name="firstName"
                                     ref={firstNameRef}
                                     type="text"
                                     placeholder="Ingresar Nombre"
                                     value={formUser.firstName}
                                     onChange={handleChange}
                                 />
-                                {errors.firstName && <p className="errors" >El email ingresado debe ser válido.</p>}
+                                {errors.firstName && <p className="errors" >{errors.firstName}</p>}
                             </div>
 
                             <div className="input-container">
                                 <label>Apellido</label>
                                 <input className="management-input"
-                                    name="lastname"
+                                    name="lastName"
                                     ref={lastNameRef}
                                     type="text"
                                     placeholder="Ingresar apellido"
                                     value={formUser.lastName}
                                     onChange={handleChange}
                                 />
-                                {errors.lastName && <p className="errors" >El email ingresado debe ser válido.</p>}
+                                {errors.lastName && <p className="errors" >{errors.lastName}</p>}
                             </div>
 
                             <div className="input-container">
@@ -281,7 +281,7 @@ const UserManagement = () => {
                                     value={formUser.email}
                                     onChange={handleChange}
                                 />
-                                {errors.email && <p className="errors" >El email ingresado debe ser válido.</p>}
+                                {errors.email && <p className="errors" >{errors.email}</p>}
                             </div>
 
                             <div className="input-container">
@@ -294,7 +294,7 @@ const UserManagement = () => {
                                     value={formUser.password}
                                     onChange={handleChange}
                                 />
-                                {errors.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres y un caracter especial.</p>}
+                                {errors.password && <p className="errors" >{errors.password}</p>}
                             </div>
 
                             <div className="input-container">
@@ -307,7 +307,7 @@ const UserManagement = () => {
                                     value={formUser.confirmPassword}
                                     onChange={handleChange}
                                 />
-                                {errors.confirmPassword && <p className="errors" >La contraseña debe ser igual</p>}
+                                {errors.confirmPassword && <p className="errors" >{errors.confirmPassword}</p>}
 
                             </div>
                             <div className="input-container">
