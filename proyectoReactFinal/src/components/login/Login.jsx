@@ -1,9 +1,6 @@
 import { useState, useRef, useContext } from "react";
-import React from "react";
 import { useNavigate } from "react-router-dom";
-//prueba untaria
-import  verifyEmail  from "../../utils/verifyEmail.js";
-import verifyPassword from "../../utils/verifyPassword.js";
+import  { validateLogin } from "../../utils/validateForms.js"
 import { AuthenticationContext } from "../services/auth/authContextProvider.jsx";
 import { toast } from "react-toastify";
 
@@ -11,39 +8,38 @@ const Login = () =>{
     const { handleUserLogin } = useContext(AuthenticationContext)
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState({email: false, password: false});
+    const [formLogin, setFormLogin] = useState({
+        email: "", 
+        password: ""
+    });
+    const [error, setError] = useState({
+        email: "", 
+        password: ""
+    });
 
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
 
-    const handleEmailChange = (event) => {
-        setEmail(event.target.value);
-        setError({ ...error, email: false });
-	
-    }
-
-    const handlePasswordChange = (event)=> {
-        setPassword(event.target.value);
-        setError({ ...error, password: false });
-	
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormLogin({
+            ...formLogin,
+            [name]: value
+        });
     }
 
     const handleSubmit = async (event) => {
 		event.preventDefault();
 
-		if (!verifyEmail(email)) {
-			setError({ email: true, password: false });
-			emailRef.current.focus();
-			return;
-		}
+        const validationErrors = validateLogin(formLogin);
+        if (Object.keys(validationErrors).length > 0) {
+            setError({
+                email: validationErrors.email || "",
+                password: validationErrors.password || "",
+            })
 
-		if (!verifyPassword(password)) {
-			setError({ email: false, password: true });
-			passwordRef.current.focus();
-			return;
-		}
+            return;
+        }
 
         try {
             //hacemos una peticion HTTP al backend
@@ -52,23 +48,22 @@ const Login = () =>{
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify({
-					email,
-					password,
-				}),
+				body: JSON.stringify(formLogin),
 			});
 
-            const data = await response.json(); 
+            const data = await response.json().catch(() => ({})); 
 
             if (!response.ok) {
-                toast.error(data.message || "error al registrarse");
+                toast.error(data.message || "error al iniciar sesion");
                 return;
             }
 
             handleUserLogin(data) //{token, user}
 
-            setEmail('');
-            setPassword('');
+            setFormLogin({
+                email: "",
+                password: ""
+            });
 
             toast.success("Sesion iniciada correctamente")
             navigate("/home");
@@ -90,29 +85,29 @@ const Login = () =>{
                     <div className="input-container">
                         <label>Email</label>
                         <input
+                            name="email"
                             ref={emailRef}
                             type="email"
                             placeholder="Ingresar Email"
-                            value={email}
-                            onChange={handleEmailChange}
+                            value={formLogin.email}
+                            onChange={handleChange}
                         />
-                        {error.email && <p className="errors" >El email ingresado debe ser válido.</p>}
+                        {error.email && <p className="errors" >{error.email}</p>}
                     </div>
 
                     <div className="input-container">
                         <label>Contraseña</label>
                         <input
+                            name="password"
                             ref={passwordRef}
                             type="password"
                             placeholder="Ingresar Contraseña"
-                            value={password}
-                            //onchange se ejecuta cada vez que el usuario cambiar el input 
-                            onChange={handlePasswordChange}
+                            value={formLogin.password}
+                            onChange={handleChange}
                         />
-                        {error.password && <p className="errors" >La contraseña debe tener al menos 7 caracteres y un caracter especial.</p>}
+                        {error.password && <p className="errors" >{error.password}</p>}
                     </div>
                     <button type="submit">Iniciar</button>
-
                     {/*si no tenes cuenta te redirige a la pagina del register*/}
                     <p className="register-text" onClick={() => navigate("/register")}>
                         ¿No tenes cuenta? Registrate

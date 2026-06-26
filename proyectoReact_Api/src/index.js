@@ -23,6 +23,32 @@ app.get("/", (req, res) => {
   res.send("Servidor funcionando");
 });
 
+/*const createSuperAdmin = async () => {
+  try {
+    const existingAdmin = await User.findOne({
+      where: { email: "luciromee@gmail.com" },
+    });
+
+    if (existingAdmin) {
+      console.log("Super admin ya existe");
+      return;
+    }
+
+    const hashedPassword = await bcrypt.hash("mondongo@@", 10);
+
+    await User.create({
+      firstName: "Super",
+      lastName: "Admin",
+      email: "luciromee@gmail.com",
+      password: hashedPassword,
+      role: "superadmin",
+    });
+
+    console.log("Super admin creado correctamente");
+  } catch (error) {
+    console.log("Error creando super admin:", error);
+  }
+};*/
 
 //endopoint para profesionales
 app.use("/api/professionals", professionalsRoutes);
@@ -44,6 +70,7 @@ async function startServer() {
     await sequelize.authenticate();
     await sequelize.sync(); 
 
+    //await createSuperAdmin();
     app.listen(PORT, () => {
       console.log(`server listening on port ${PORT}`);
     });

@@ -1,63 +1,57 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt" ;
 import jwt from "jsonwebtoken";
-import { validateRegister, validateLogin } from "../middleware/auth.validations.js";
 
 export const registerUser = async (req, res) => {
-    const {email, password, confirmPassword, role} = req.body;
+    const {firstName, lastName, email, password, confirmPassword, role} = req.body;
 
-    const errors = validateRegister({email, password, confirmPassword });
-        if (Object.keys(errors).length > 0) {
-            return res.status(400).json(
-                { errors, 
-                    message: "Datos inválidos" 
-                });
+    try{
+        const user = await User.findOne({
+            where: {
+                email
+            }
+        });
+
+        if (user){
+            return res.status(400).send({message: "Usuario existente"})
         }
 
-    const user = await User.findOne({
-        where: {
-            email
-        }
-    });
+        const saltRounds = 10;
 
-    if (user){
-        return res.status(400).send({message: "Usuario existente"})
+        const salt = await bcrypt.genSalt(saltRounds);
+
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const newUser = await User.create({
+            firstName,
+            lastName,
+            email,
+            password: hashedPassword,
+            role
+        });
+
+        return res.status(201).send({
+            message: "Usuario creado correctamente",
+            user: {
+                id: newUser.id,
+                firstName: newUser.firstName,
+                lastName: newUser.lastName,
+                email: newUser.email,
+                role: newUser.role
+            }
+        });
+    } catch(error)
+    {
+        console.error("Error al crear usuario:", error);
+        res.status(500).json({ message: "Error interno del servidor" });
     }
-
-    const saltRounds = 10;
-
-    const salt = await bcrypt.genSalt(saltRounds);
-
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const newUser = await User.create({
-        email,
-        password: hashedPassword,
-        role
-    });
-
-    return res.status(201).send({
-        message: "Usuario creado correctamente",
-        user: {
-            id: newUser.id,
-            email: newUser.email,
-            role: newUser.role
-        }
-    });
-
 
 }
 
 export const loginUser = async (req, res) => {
     const {email, password} = req.body;
 
-    const errors = validateLogin({email, password});
-    if (Object.keys(errors).length > 0) {
-        return res.status(400).json(
-            { errors }
-        );
-    }
-    // Busca el usuario por email
+    try{
     const user = await User.findOne({
         where: { email }
     });
@@ -90,9 +84,15 @@ export const loginUser = async (req, res) => {
         token,
         user: {
             id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
             email: user.email,
             role: user.role
         }
     });
-
+    } catch (error) 
+    {
+        console.error("Error en el login", error);
+        res.status(500).json({ message: "Error interno del servidor" });
+    }
 }
