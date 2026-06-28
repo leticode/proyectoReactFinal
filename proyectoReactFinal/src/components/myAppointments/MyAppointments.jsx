@@ -35,9 +35,9 @@ const MyAppointments = () => {
         { value: "cancelado", label: "cancelado" }
     ];
 
-    const formatStatus = (status) => (
+    /*const formatStatus = (status) => (
         status === "terminado" ? "finalizado" : status
-    );
+    );*/
 
     const handleLoadAppointments = () => {
         fetch("http://localhost:3000/api/appointments", {
@@ -247,7 +247,7 @@ const MyAppointments = () => {
     return (
         <>
             <h1>
-                {isCustomer ? "Mis Turnos" : "Turnos"}
+                {isCustomer || isProfessional ? "Mis Turnos" : "Turnos"}
             </h1>
 
             <div className="management">

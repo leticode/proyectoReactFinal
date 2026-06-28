@@ -6,7 +6,7 @@ const Admin = () => {
     const { token, handleUserLogout, user } = useContext(AuthenticationContext);
     const [serverMessage, setServerMessage] = useState("");
     const [services, setServices] = useState([]);
-    const [professionals, setProfessionals] = useState([]);
+    //const [professionals, setProfessionals] = useState([]);
     const [modal, setModal] = useState(false);
     const [modifyID, setModifyID] = useState(0);
 
@@ -18,7 +18,7 @@ const Admin = () => {
         img: "",
         price: 0,
         description: "",
-        professionalId: "",
+        //professionalId: "",
         duration: 0,
         category: "",
     };
@@ -43,7 +43,7 @@ const Admin = () => {
         }
     };
 
-    const loadProfessionals = async () => {
+    /*const loadProfessionals = async () => {
         try {
             const response = await fetch("http://localhost:3000/api/professionals", {
                 method: "GET"
@@ -60,11 +60,11 @@ const Admin = () => {
             console.error(error);
             setServerMessage("Error al conectar con el servidor");
         }
-    };
+    };*/
 
     useEffect(() => {
         loadServices();
-        loadProfessionals();
+        //loadProfessionals();
     }, []);
 
     const handleChange = (e) => {
@@ -269,7 +269,7 @@ const Admin = () => {
                                         placeholder="Descripcion del servicio"
                                     />
                                 </label>
-
+                                {/* 
                                 <label>
                                     Profesional
                                     <select
@@ -286,7 +286,7 @@ const Admin = () => {
                                             </option>
                                         ))}
                                     </select>
-                                </label>
+                                </label>*/}
 
                                 <label>
                                     Duración

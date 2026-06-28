@@ -1,19 +1,19 @@
 import { Router } from "express";
 import verifyToken from "../middleware/verifytoken.js";
 import { Service } from "../models/Service.js";
-import { Professionals } from "../models/Professionals.js";
+//import { Professionals } from "../models/Professionals.js";
 
 // endpoint para obtener los servicios
 const getAllServices = async (req, res) => {
   try {
     const dbServices = await Service.findAll({
       order: [["id", "ASC"]],
-      include: [
+      /*include: [
         {
           model: Professionals,
           as: "professional",
         },
-      ],
+      ],*/
     }); 
     res.json(dbServices);
   } catch (error) {
@@ -32,12 +32,12 @@ const getServiceById = async (req, res) => {
     }
 
     const service = await Service.findByPk(serviceId, {
-      include: [
+      /*include: [
         {
           model: Professionals,
           as: "professional",
         },
-      ],
+      ],*/
     });
 
     if (!service) {
