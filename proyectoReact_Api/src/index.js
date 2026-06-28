@@ -71,7 +71,7 @@ app.use("/api/user", userRoutes);
 //endpoint de services
 app.use("/api/services", servicesRoutes);
 
-app.use("/api/cagetories", async (req, res) => {
+app.use("/api/categories", async (req, res) => {
   try {
     const dbServices = await Category.findAll({}); 
     res.json(dbServices);
