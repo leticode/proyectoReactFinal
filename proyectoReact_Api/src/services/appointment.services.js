@@ -1,9 +1,9 @@
 import { Appointment } from "../models/Appointment.js"
-import { Professionals } from "../models/Professionals.js";
+//import { Professionals } from "../models/Professionals.js";
 import { Service } from "../models/Service.js";
 import User from "../models/User.js";
 
-const appointmentGap = 20;
+//const appointmentGap = 20;
 const normalizeHour = (hour) => hour.slice(0, 5);
 
 const toMinutes = (h) => {
@@ -11,7 +11,7 @@ const toMinutes = (h) => {
     return hh * 60 + mm;
 };
 
-const getAppointmentEnd = (start, duration) => start + duration + appointmentGap;
+const getAppointmentEnd = (start, duration) => start + duration /*+ appointmentGap*/;
 //esto es para calcular el solaplamiento
 const rangesOverlap = (startA, endA, startB, endB) => (
     startA < endB && endA > startB
@@ -25,7 +25,7 @@ export const generateSlots = (
     const slots = [];//array inicial
 
     const totalDuration =
-        serviceDuration + appointmentGap;
+        serviceDuration/* + appointmentGap*/;
 
     let current = workayStart * 60;
     const end = workayEnd * 60;
@@ -58,7 +58,7 @@ export const createAppointment = async (req, res) => {
 
         const loggedUser = req.user;
         //professional solo pueda crear turnos para si mismo
-        if (loggedUser.role === "professional"){ //si el rol de usuario es professional
+        if (loggedUser.role === "professional") { //si el rol de usuario es professional
             //hacemos que el id corresponda al loggedUser
             const professional = await Professionals.findOne({
                 where: {
@@ -83,7 +83,7 @@ export const createAppointment = async (req, res) => {
                 message: "Solo podés crear turnos para tu propio usuario"
             });
         }
-        
+
         if (!customer || customer.role !== "customer") {
             return res.status(400).json({
                 message: "Debes tener rol cliente para agendar"
@@ -226,10 +226,19 @@ export const getAvailableSlots = async (req, res) => {
 export const getAppointments = async (req, res) => {
     try {
         const { id, role } = req.user;
-        let where = {}; 
+        let where = {};
 
-        if (role === "customer") { 
+        if (role === "customer") {
             where = { userId: id };
+        }
+        if (role === "professional") {
+            const professional = await Professionals.findOne({
+                where: { userId: id }
+            });
+
+            where = {
+                professionalId: professional.id
+            };
         }
 
         const appointments = await Appointment.findAll({

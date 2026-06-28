@@ -1,66 +1,44 @@
 import User from "./User.js";
-import { Professionals } from "./Professionals.js";
 import { Appointment } from "./Appointment.js";
 import { Service } from "./Service.js";
-import { ProfessionalService } from "./ProfessionalService.js";
+import { Category } from "./Category.js";
 
-//cliente <-> turno
-Appointment.belongsTo(User, {
-  foreignKey: "userId",
-  as: "user",
-});
-
+//customer <-> appointment
 User.hasMany(Appointment, {
   foreignKey: "userId",
+  as: "appointments"
 });
 
-//professional <-> turno
-Appointment.belongsTo(Professionals, {
-  foreignKey: "professionalId",
-  as: "professional",
-});
-
-Professionals.hasMany(Appointment, {
-  foreignKey: "professionalId",
-});
-
-//servicio <-> turno
-Appointment.belongsTo(Service, {
-  foreignKey: "serviceId",
-  as: "service",
-});
-
-Service.hasMany(Appointment, {
-  foreignKey: "serviceId",
-});
-
-//usuario <-> professional
-Professionals.belongsTo(User, {
+Appointment.belongsTo(User, {
   foreignKey: "userId",
-  as: "user",
+  as: "customer"
 });
 
-User.hasOne(Professionals, {
-  foreignKey: "userId",
+//professional <-> appointment
+User.hasMany(Appointment, {
+  foreignKey: "professionalId",
+  as: "professionalAppointments"
+});
+
+Appointment.belongsTo(User, {
+  foreignKey: "professionalId",
   as: "professional"
 });
 
-//professional <-> servicio
-Professionals.belongsToMany(Service, {
-  through: ProfessionalService,
-  foreignKey: "professionalId",
+// categories -> service 
+Category.hasMany(Service, {
+  foreignKey: "categoryId",
 });
 
-Service.belongsToMany(Professionals, {
-  through: ProfessionalService,
-  foreignKey: "serviceId",
+Service.belongsTo(Category, {
+  foreignKey: "categoryId",
 });
 
-Service.belongsTo(Professionals, {
-  foreignKey: "professionalId",
-  as: "professional",
+//service <-> appointment
+Service.hasMany(Appointment, {
+  foreignKey: "serviceId"
 });
 
-Professionals.hasMany(Service, {
-  foreignKey: "professionalId",
+Appointment.belongsTo(Service, {
+  foreignKey: "serviceId"
 });

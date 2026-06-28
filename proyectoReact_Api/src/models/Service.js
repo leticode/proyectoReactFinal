@@ -16,11 +16,6 @@ export const Service = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    category: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      defaultValue: 'CF',
-    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -33,7 +28,7 @@ export const Service = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    duration:{
+    duration: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -41,12 +36,13 @@ export const Service = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    professionalId: {
+    categoryId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-    },
+      allowNull: false
+    }
   },
   {
     tableName: "services",
+    timestamps: false
   }
 );
