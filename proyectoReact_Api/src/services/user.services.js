@@ -1,5 +1,5 @@
 import User from "../models/User.js";
-import { Professionals } from "../models/Professionals.js";
+//import { Professionals } from "../models/Professionals.js";
 import { Appointment } from "../models/Appointment.js";
 import { verifyRole, ValidateUserUpdate, validateCreateUser } from "../middleware/auth.validations.js";
 import bcrypt from "bcrypt";

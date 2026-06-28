@@ -1,4 +1,4 @@
-import { Professionals } from "../models/Professionals.js";
+//import { Professionals } from "../models/Professionals.js";
 import { generateSlots } from "../services/appointment.services.js";
 
 export const getAvailableSlots = async (req, res) => {
