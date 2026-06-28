@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { SERVICE_CATEGORIES_ARRAY } from "../../constants/serviceCategories";
 import { AuthenticationContext } from "../services/auth/authContextProvider";
+import { toast } from "react-toastify";
 
 const Admin = () => {
     const { token, handleUserLogout, user } = useContext(AuthenticationContext);
@@ -99,6 +100,35 @@ const Admin = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        let error = false;
+        if (newService.categoryId == 0) {
+            toast.error("Elija una categoria");
+            error = true;
+        }
+        if (newService.name.trim().length == 0) {
+            toast.error("El nombre no puede estar vacio");
+            error = true;
+        }
+        if (newService.description.trim().length == 0) {
+            toast.error("La descripcion no puede estar vacio");
+            error = true;
+        }
+        if (newService.img.trim().length == 0) {
+            toast.error("La url de la imagen no puede estar vacia");
+            error = true;
+        }
+        if (newService.duration <= 0) {
+            toast.error("La duracion no puede ser 0 ni negativa");
+            error = true;
+        }
+        if (newService.price <= 0) {
+            toast.error("El precio no puede ser 0 ni negativo");
+            error = true;
+        }
+        if (error) {
+            return;
+        }
 
         if (modifyID == 0) {
             console.log(newService);
