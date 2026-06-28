@@ -163,7 +163,6 @@ const Admin = () => {
             const data = await response.json();
         }
         setModal(false);
-        setNewService(emptyService);
         loadServices();
 
     };
@@ -203,6 +202,7 @@ const Admin = () => {
     };
 
     const addService = () => {
+        setNewService(emptyService);
         setModifyID(0);
         setModal(true);
     }
