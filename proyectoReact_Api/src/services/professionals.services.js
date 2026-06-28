@@ -5,11 +5,15 @@ export const getAvailableSlots = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const professional = await Professionals.findByPk(id);
-
+        const professional = await User.findByPk(id);
         if (!professional) {
             return res.status(404).json({
                 message: "Profesional no encontrado"
+            });
+        }
+        if (professional.role != "professional") {
+            return res.status(500).json({
+                message: "Ese id no corresponde a un profesional"
             });
         }
 
@@ -30,7 +34,7 @@ export const getAvailableSlots = async (req, res) => {
 export const getProfessionals = async (req, res) => {
     try {
         const professionals = await User.findAll({
-            where: {role: "professional"}
+            where: { role: "professional" }
         });
 
         res.json(professionals);
