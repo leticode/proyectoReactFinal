@@ -19,7 +19,7 @@ const rangesOverlap = (startA, endA, startB, endB) => (
 //aca generamos todos los posibles slots 
 export const generateSlots = (
     workDayStart, //hora que tomca cada cosa
-    workDayayEnd,
+    workDayEnd,
     serviceDuration
 ) => {
     const slots = [];//array inicial
@@ -27,9 +27,9 @@ export const generateSlots = (
     const totalDuration =
         serviceDuration + appointmentGap;
 
-    let current = workDayayStart * 60;
-    const end = workDayayEnd * 60;
-    //
+    let current = workDayStart * 60;
+    const end = workDayEnd * 60;
+    
     while (current + totalDuration <= end) {
         const hours = Math.floor(current / 60);
         const minutes = current % 60;
