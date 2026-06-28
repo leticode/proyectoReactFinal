@@ -98,9 +98,7 @@ const Admin = () => {
         }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
+    const fieldsHaveErrors = () => {
         let error = false;
         if (newService.categoryId == 0) {
             toast.error("Elija una categoria");
@@ -126,7 +124,13 @@ const Admin = () => {
             toast.error("El precio no puede ser 0 ni negativo");
             error = true;
         }
-        if (error) {
+        return error;
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (fieldsHaveErrors()) {
             return;
         }
 
