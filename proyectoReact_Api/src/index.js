@@ -16,6 +16,7 @@ import "./models/Service.js";
 import "./models/Appointment.js";
 import "./models/Category.js";
 import "./models/Assosiations.js";
+import { Category } from "./models/Category.js";
 
 dotenv.config();
 
@@ -69,6 +70,16 @@ app.use("/api/user", userRoutes);
 
 //endpoint de services
 app.use("/api/services", servicesRoutes);
+
+app.use("/api/cagetories", async (req, res) => {
+  try {
+    const dbServices = await Category.findAll({}); 
+    res.json(dbServices);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener categorias", error: error.message });
+  }
+});
+
 
 // FIN ENDPOINTS ---------------
 
