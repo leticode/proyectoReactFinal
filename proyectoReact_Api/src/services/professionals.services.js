@@ -1,4 +1,4 @@
-//import { Professionals } from "../models/Professionals.js";
+import User from "../models/User.js";
 import { generateSlots } from "../services/appointment.services.js";
 
 export const getAvailableSlots = async (req, res) => {
@@ -29,9 +29,11 @@ export const getAvailableSlots = async (req, res) => {
 
 export const getProfessionals = async (req, res) => {
     try {
-        const professional = await Professionals.findAll();
+        const professionals = await User.findAll({
+            where: {role: "professional"}
+        });
 
-        res.json(professional);
+        res.json(professionals);
     } catch (error) {
         res.status(500).json(error);
     }
