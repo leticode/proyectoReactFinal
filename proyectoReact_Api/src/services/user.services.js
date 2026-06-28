@@ -67,8 +67,8 @@ export const createUser = async (req, res) => {
             await Professionals.create({
                 firstName,
                 lastName,
-                workayStart: 9,
-                workayEnd: 20,
+                workDayStart: 9,
+                workDayEnd: 20,
                 userId: newUser.id,
             });
         }
@@ -128,8 +128,8 @@ export const updateUser = async (req, res) => {
                 professional = await Professionals.create({
                     firstName,
                     lastName,
-                    workayStart: 9,
-                    workayEnd: 20,
+                    workDayStart: 9,
+                    workDayEnd: 20,
                     userId: user.id
                 });
             } else {

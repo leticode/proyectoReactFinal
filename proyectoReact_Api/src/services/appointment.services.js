@@ -3,7 +3,7 @@ import { Appointment } from "../models/Appointment.js"
 import { Service } from "../models/Service.js";
 import User from "../models/User.js";
 
-//const appointmentGap = 20;
+const appointmentGap = 20;
 const normalizeHour = (hour) => hour.slice(0, 5);
 
 const toMinutes = (h) => {
@@ -11,24 +11,24 @@ const toMinutes = (h) => {
     return hh * 60 + mm;
 };
 
-const getAppointmentEnd = (start, duration) => start + duration /*+ appointmentGap*/;
+const getAppointmentEnd = (start, duration) => start + duration + appointmentGap;
 //esto es para calcular el solaplamiento
 const rangesOverlap = (startA, endA, startB, endB) => (
     startA < endB && endA > startB
 );
 //aca generamos todos los posibles slots 
 export const generateSlots = (
-    workayStart, //hora que tomca cada cosa
-    workayEnd,
+    workDayStart, //hora que tomca cada cosa
+    workDayayEnd,
     serviceDuration
 ) => {
     const slots = [];//array inicial
 
     const totalDuration =
-        serviceDuration/* + appointmentGap*/;
+        serviceDuration + appointmentGap;
 
-    let current = workayStart * 60;
-    const end = workayEnd * 60;
+    let current = workDayayStart * 60;
+    const end = workDayayEnd * 60;
     //
     while (current + totalDuration <= end) {
         const hours = Math.floor(current / 60);
@@ -46,7 +46,7 @@ export const generateSlots = (
 //funcion para crear turnos
 export const createAppointment = async (req, res) => {
     try {
-        const {// 
+        const {
             date,
             hour,
             userId,
@@ -54,7 +54,7 @@ export const createAppointment = async (req, res) => {
             serviceId
         } = req.body;
 
-        const customer = await User.findByPk(userId);
+        const customer = await User.findByPk(userId);//agregar por rol
 
         const loggedUser = req.user;
         //professional solo pueda crear turnos para si mismo
@@ -180,8 +180,8 @@ export const getAvailableSlots = async (req, res) => {
 
         //todos los slots
         const allSlots = generateSlots(
-            professional.workayStart,
-            professional.workayEnd,
+            professional.workDayStart,
+            professional.workDayEnd,
             Number(serviceDuration)
         );
 
