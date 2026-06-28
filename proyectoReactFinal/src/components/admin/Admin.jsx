@@ -21,7 +21,7 @@ const Admin = () => {
         description: "",
         //professionalId: "",
         duration: 0,
-        category: "",
+        categoryId: 0,
     };
     const [newService, setNewService] = useState(emptyService);
 
@@ -236,17 +236,17 @@ const Admin = () => {
                                 <label>
                                     Categoría
                                     <select
-                                        name="category"
-                                        value={newService.category}
+                                        name="categoryId"
+                                        value={newService.categoryId}
                                         onChange={handleChange}
                                         required
                                     >
-                                        <option value="" disabled>
+                                        <option value={0} disabled>
                                             Selecciona una categoria
                                         </option>
-                                        {SERVICE_CATEGORIES_ARRAY.map((category) => (
-                                            <option key={category.value} value={category.value}>
-                                                {category.name}
+                                        {categories.map((category) => (
+                                            <option key={category.id} value={category.id}>
+                                                {category.category}
                                             </option>
                                         ))}
                                     </select>

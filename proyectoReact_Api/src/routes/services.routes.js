@@ -53,16 +53,10 @@ const getServiceById = async (req, res) => {
 // endpoint para crear un servicio
 const createService = async (req, res) => {
   try {
-    if (!req.body.category) {
-      return res.status(400).json({
-        message: "La categorÃ­a del servicio es obligatoria",
-      });
-    }
-
-    const service = await Service.create(req.body);
-
-    res.status(201).json(service);
+      const service = await Service.create(req.body);
+      res.status(201).json(service);
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       message: "Error al crear servicio",
       error: error.message,
