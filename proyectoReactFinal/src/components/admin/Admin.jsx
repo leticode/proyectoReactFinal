@@ -6,6 +6,7 @@ const Admin = () => {
     const { token, handleUserLogout, user } = useContext(AuthenticationContext);
     const [serverMessage, setServerMessage] = useState("");
     const [services, setServices] = useState([]);
+    const [categories, setCategories] = useState([]);
     //const [professionals, setProfessionals] = useState([]);
     const [modal, setModal] = useState(false);
     const [modifyID, setModifyID] = useState(0);
@@ -43,6 +44,25 @@ const Admin = () => {
         }
     };
 
+    const loadCategories = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/api/categories", {
+                method: "GET"
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                setServerMessage(data.message || "error al traer categorias");
+                return;
+            }
+
+            setCategories(data);
+        } catch (error) {
+            console.error(error);
+            setServerMessage("Error al conectar con el servidor");
+        }
+    };
+
     /*const loadProfessionals = async () => {
         try {
             const response = await fetch("http://localhost:3000/api/professionals", {
@@ -64,6 +84,7 @@ const Admin = () => {
 
     useEffect(() => {
         loadServices();
+        loadCategories();
         //loadProfessionals();
     }, []);
 
