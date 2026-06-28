@@ -8,7 +8,6 @@ const Layout = ({ children }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { handleUserLogout, user } = useContext(AuthenticationContext);
   const [open, setOpen] = useState(false);
-
   const navigate = useNavigate();
 
   const logout = () => {
@@ -21,6 +20,10 @@ const Layout = ({ children }) => {
     navigate("/login")
   };
 
+  const profile = () => {
+    setOpen(false);
+    navigate("/myprofile");
+  };
   const linkClass = ({ isActive }) =>
     isActive ? "link active" : "link";
 
@@ -71,17 +74,35 @@ const Layout = ({ children }) => {
           </NavLink>
 
           <div className="user-menu">
-            <img src="/img/navbarImg/user-icon.webp" alt="Img navbar" className="imgLogin" onClick={() => setOpen(!open)} />
+            <div className="user-info" onClick={() => setOpen(!open)}>
+              <img
+                src="/img/navbarImg/user-icon.webp"
+                alt="Usuario"
+                className="imgLogin"
+              />
+
+              {user && (
+                <span className="user-name">
+                  Hola, {user.firstName}
+                </span>
+              )}
+            </div>
 
             {open && (
               <div className="dropdown">
                 {user ? (
-                  <button onClick={logout}>
-                    Cerrar sesion
-                  </button>
+                  <>
+                    <button onClick={profile}>
+                      Mi perfil
+                    </button>
+
+                    <button onClick={logout}>
+                      Cerrar sesión
+                    </button>
+                  </>
                 ) : (
                   <button onClick={login}>
-                    Iniciar Sesion
+                    Iniciar sesión
                   </button>
                 )}
               </div>
@@ -141,25 +162,34 @@ const Layout = ({ children }) => {
           </NavLink>
 
           {user ? (
-            <button
-              className="mobile-menu-btn"
-              onClick={() => {
-                logout();
-                setMenuOpen(false);
-              }}
-            >
-              Cerrar sesion
-            </button>
-          ) : (
-            <NavLink
-              to="/login"
-              onClick={() => setMenuOpen(false)}
-              className={linkClass}
-            >
-              Iniciar sesion
-            </NavLink>
-          )}
+            <>
+              <NavLink
+                to="/myprofile"
+                onClick={() => setMenuOpen(false)}
+                className={linkClass}
+              >
+                Mi perfil
+              </NavLink>
 
+              <button
+                className="mobile-menu-btn"
+                onClick={() => {
+                  logout();
+                  setMenuOpen(false);
+                }}
+              >
+                Cerrar sesión
+              </button>
+            </>
+            ) : (
+              <NavLink
+                to="/login"
+                onClick={() => setMenuOpen(false)}
+                className={linkClass}
+              >
+                Iniciar sesión
+              </NavLink>
+            )}
         </div>
       )}
 

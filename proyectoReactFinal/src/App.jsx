@@ -19,6 +19,7 @@ import tokenValid from './components/services/auth/auth.token';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoutes from './components/protectedRoutes/ProtectedRoutes';
+import Profile from './components/Profile/Profile';
 
 import './App.css';
 import './index.css';
@@ -39,23 +40,20 @@ function App() {
       />
       <Layout>
         <Routes>
-          <Route path='/' element={<Navigate to='home' />} /> {/*redirige*/}
+          <Route path='/' element={<Navigate to='home' />} /> 
           <Route path="/home" element={<Home />} />
           <Route path="/servicios" element={<Services />} />
           <Route path="/services/:id" element={<ServiceDetails />} />
           <Route path="/aboutUs" element={<AboutUs />} />
           <Route path="/contact" element={<Contact />} />
-          {/*para cuando el token es valido el usuario no vaya a login porq no es necesario*/}
-          <Route 
-            path="/login" 
-            element={tokenValid(token) ? <Navigate to="/home" replace /> : <Login />} 
-          />
+          <Route path="/myprofile" element={tokenValid(token) ? <Profile /> : <Navigate to="/login" replace />}/>
+          <Route path="/login" element={tokenValid(token) ? <Navigate to="/home" replace /> : <Login />}/>
           <Route path="/register" element={<Register/>}/>
           
           <Route element={<ProtectedRoutes allowedRoles={['superadmin','admin', 'professional', 'customer']}/>}>
             <Route path="/myappointments" element={<MyAppointments/>}/>
           </Route>
-          {/*misma validacion que en usermanagement pero incluyendo al professional*/}
+
           <Route element={<ProtectedRoutes allowedRoles={['superadmin','admin', 'professional']}/>}>
               <Route path="/admin" element={<Admin />}/>
           </Route>

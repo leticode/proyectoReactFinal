@@ -44,3 +44,40 @@ export const ValidateRegister = ((formRegister) =>{
 
     return errors;
 })
+export const ValidateUpdateProfile = ((formProfile) => {
+    const errors = {};
+
+    if (!formProfile.firstName?.trim()) {
+        errors.firstName = "El nombre es obligatorio";
+    }
+
+    if (!formProfile.lastName?.trim()) {
+        errors.lastName = "El apellido es obligatorio";
+    }
+
+    return errors;
+});
+
+export const ValidateChangePassword = ((formProfile) => {
+    const errors = {};
+
+    const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>]).{7,}$/;
+
+    if (!formProfile.currentPassword) {
+        errors.currentPassword = "La contraseña actual es obligatoria";
+    }
+
+    if (formProfile.newPassword && formProfile.currentPassword === formProfile.newPassword){
+        errors.newPassword = "La contraseña nueva no puede ser igual a la anterior";
+    }
+
+    if (!passwordRegex.test(formProfile.newPassword)) {
+        errors.newPassword = "La contraseña debe tener al menos 7 caracteres y un caracter especial";
+    }
+
+    if (formProfile.newPassword !== formProfile.confirmPassword) {
+        errors.confirmPassword = "Las contraseñas no coinciden";
+    }
+
+    return errors;
+})
