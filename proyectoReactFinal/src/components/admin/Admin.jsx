@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import { SERVICE_CATEGORIES_ARRAY } from "../../constants/serviceCategories";
 import { AuthenticationContext } from "../services/auth/authContextProvider";
 import { toast } from "react-toastify";
 
