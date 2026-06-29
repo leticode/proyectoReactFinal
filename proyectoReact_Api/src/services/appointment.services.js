@@ -180,8 +180,10 @@ export const getAvailableSlots = async (req, res) => {
 
         //todos los slots
         const allSlots = generateSlots(
-            professional.workDayStart,
-            professional.workDayEnd,
+            //professional.workDayStart,
+            //professional.workDayEnd,
+            user.workDayStart,
+            user.workDayEnd,
             Number(serviceDuration)
         );
 
