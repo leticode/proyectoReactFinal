@@ -1,37 +1,40 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import {
-  SERVICE_CATEGORY_DICTIONARY,
-  SERVICE_CATEGORIES_ARRAY,
-} from "../../constants/serviceCategories";
 
 export default function Services() {
   const [filtro, setFiltro] = useState("Todos");
   const [services, setServices] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/services")
-      .then((res) => res.json())
-      .then((data) => setServices(data))
+    Promise.all([
+      fetch("http://localhost:3000/api/services").then((res) => res.json()),
+      fetch("http://localhost:3000/api/categories").then((res) => res.json()),
+    ])
+      .then(([servicesData, categoriesData]) => {
+        setServices(servicesData);
+        setCategories(categoriesData);
+      })
       .catch((err) => console.error(err));
   }, []);
 
+  const selectedCategory = categories.find((category) => category.id === filtro);
+
   return (
     <section className="servicios">
-      <h2>{filtro=="Todos"?"Todos":SERVICE_CATEGORY_DICTIONARY[filtro].name}</h2>
+      <h2>{filtro === "Todos" ? "Todos" : selectedCategory?.category ?? "Categoría"}</h2>
 
       <div className="contenedor-servicios">
         <div className="filter">
 
           <button onClick={() => setFiltro("Todos")}>Todos</button>
 
-          {/* Crear los botones de todas las categorias */}
-          {SERVICE_CATEGORIES_ARRAY.map((category) => (
+          {categories.map((category) => (
             <button
-              key={category.value}
-              onClick={() => setFiltro(category.value)}
+              key={category.id}
+              onClick={() => setFiltro(category.id)}
             >
-              {category.name}
+              {category.category}
             </button>
           ))}
         </div>
@@ -40,7 +43,7 @@ export default function Services() {
           {services
             .filter(
               (service) =>
-                filtro === "Todos" || service.category == filtro
+                filtro === "Todos" || service.categoryId === filtro
             )
             .map((service) => (
               <Link
@@ -50,7 +53,7 @@ export default function Services() {
               >
                 <div className="img-container">
                   <img src={service.img} alt={service.name} />
-                  <p className="titulo">{service.name}</p>
+                  <p className="service-title">{service.name}</p>
                 </div>
               </Link>
             ))}
