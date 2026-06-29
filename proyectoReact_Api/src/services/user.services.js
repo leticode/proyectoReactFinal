@@ -64,12 +64,9 @@ export const createUser = async (req, res) => {
         });
 
         if (role === "professional") {
-            await Professionals.create({
-                firstName,
-                lastName,
+            await User.create({
                 workDayStart: 9,
                 workDayEnd: 20,
-                userId: newUser.id,
             });
         }
 
@@ -111,15 +108,17 @@ export const updateUser = async (req, res) => {
             });
         }
 
-        const previousRole = user.role;
+        //const previousRole = user.role;
 
+        user.firstName = firstName ?? user.firstName;
+        user.lastName = lastName ?? user.lastName;
         user.email = email ?? user.email;
         user.role = role ?? user.role;
 
         //guardamos el usuario
         await user.save();
 
-        if (role === "professional") {
+        /*if (role === "professional") {
             let professional = await Professionals.findOne({
                 where: { userId: user.id }
             });
@@ -150,7 +149,7 @@ export const updateUser = async (req, res) => {
                 });
                 await professional.destroy();
             }
-        }
+        }*/
 
         res.json({
             message: "Usuario actualizado",
@@ -175,7 +174,7 @@ export const deleteUser = async (req, res) => {
             })
         }
 
-        if (user.role === "professional") {
+        /*if (user.role === "professional") {
             const professional = await Professionals.findOne({
                 where: {
                     userId: user.id
@@ -185,7 +184,7 @@ export const deleteUser = async (req, res) => {
             if (professional) {
                 await professional.destroy();
             }
-        }
+        }*/
 
         await user.destroy();
 
