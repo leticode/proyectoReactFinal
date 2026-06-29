@@ -3,7 +3,7 @@ import { Appointment } from "../models/Appointment.js"
 import { Service } from "../models/Service.js";
 import User from "../models/User.js";
 
-//const appointmentGap = 20;
+const appointmentGap = 20;
 const normalizeHour = (hour) => hour.slice(0, 5);
 
 const toMinutes = (h) => {
@@ -11,25 +11,25 @@ const toMinutes = (h) => {
     return hh * 60 + mm;
 };
 
-const getAppointmentEnd = (start, duration) => start + duration /*+ appointmentGap*/;
+const getAppointmentEnd = (start, duration) => start + duration + appointmentGap;
 //esto es para calcular el solaplamiento
 const rangesOverlap = (startA, endA, startB, endB) => (
     startA < endB && endA > startB
 );
 //aca generamos todos los posibles slots 
 export const generateSlots = (
-    workayStart, //hora que tomca cada cosa
-    workayEnd,
+    workDayStart, //hora que tomca cada cosa
+    workDayEnd,
     serviceDuration
 ) => {
     const slots = [];//array inicial
 
     const totalDuration =
-        serviceDuration/* + appointmentGap*/;
+        serviceDuration + appointmentGap;
 
-    let current = workayStart * 60;
-    const end = workayEnd * 60;
-    //
+    let current = workDayStart * 60;
+    const end = workDayEnd * 60;
+
     while (current + totalDuration <= end) {
         const hours = Math.floor(current / 60);
         const minutes = current % 60;
@@ -46,7 +46,7 @@ export const generateSlots = (
 //funcion para crear turnos
 export const createAppointment = async (req, res) => {
     try {
-        const {// 
+        const {
             date,
             hour,
             userId,
@@ -54,16 +54,24 @@ export const createAppointment = async (req, res) => {
             serviceId
         } = req.body;
 
-        const customer = await User.findByPk(userId);
+        const customer = await User.findByPk(userId);//agregar por rol
+        if (loggedUser.role !== "customer") {
+            return res.status(500).json({
+                message: "Este id no corresponde a un customer"
+            });
+        }
 
         const loggedUser = req.user;
         //professional solo pueda crear turnos para si mismo
         if (loggedUser.role === "professional") { //si el rol de usuario es professional
             //hacemos que el id corresponda al loggedUser
-            const professional = await Professionals.findOne({
+            const professional = await User.findOne({
                 where: {
-                    userId: loggedUser.id
+                    user: loggedUser.id
                 }
+                /*where: {
+                    user: loggedUser.id
+                }*/
             });//cuando intente crear un turnos apra un id q no es suya, saltara este mensaje
             if (professional.id !== Number(professionalId)) {
                 return res.status(403).json({
@@ -121,7 +129,8 @@ export const createAppointment = async (req, res) => {
 
         // traer turnos del profesional ese día
         const appointments = await Appointment.findAll({
-            where: { professionalId, date },
+            where: {role: "professional"},
+            //where: { professionalId, date },
             include: {
                 model: Service,
                 as: "service",
@@ -180,8 +189,10 @@ export const getAvailableSlots = async (req, res) => {
 
         //todos los slots
         const allSlots = generateSlots(
-            professional.workayStart,
-            professional.workayEnd,
+            //professional.workDayStart,
+            //professional.workDayEnd,
+            user.workDayStart,
+            user.workDayEnd,
             Number(serviceDuration)
         );
 
