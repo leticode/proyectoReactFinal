@@ -5,7 +5,6 @@ const ProfessionalsModal = ({ onClose, onSelect }) => {
     const [professionals, setProfessionals] = useState([]);
     const [showCalendar, setShowCalendar] = useState(false);
 
-    //esto es para traer a los profesionales y asi poder mostrarlos
     useEffect(() => {
         fetch("http://localhost:3000/api/professionals")
             .then((res) => res.json())

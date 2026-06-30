@@ -42,7 +42,6 @@ const Login = () =>{
         }
 
         try {
-            //hacemos una peticion HTTP al backend
 			const response = await fetch('http://localhost:3000/login', {
 				method: 'POST',
 				headers: {
@@ -58,7 +57,7 @@ const Login = () =>{
                 return;
             }
 
-            handleUserLogin(data) //{token, user}
+            handleUserLogin(data)
 
             setFormLogin({
                 email: "",
@@ -108,7 +107,6 @@ const Login = () =>{
                         {error.password && <p className="errors" >{error.password}</p>}
                     </div>
                     <button type="submit">Iniciar</button>
-                    {/*si no tenes cuenta te redirige a la pagina del register*/}
                     <p className="register-text" onClick={() => navigate("/register")}>
                         ¿No tenes cuenta? Registrate
                     </p>

@@ -20,7 +20,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoutes from './components/protectedRoutes/ProtectedRoutes';
 import Profile from './components/Profile/Profile';
-
 import './App.css';
 import './index.css';
 

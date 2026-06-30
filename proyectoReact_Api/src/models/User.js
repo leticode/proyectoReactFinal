@@ -30,7 +30,7 @@ const User = sequelize.define("user", {
     allowNull: false,
     defaultValue: userRole.CUSTOMER,
   },
-  workDayStart: {//cuando vos cambien el rol de esa persona solo modicas eso (rol) user > prof solicito horario
+  workDayStart: {
     type: DataTypes.INTEGER,
     allowNull: true
   },

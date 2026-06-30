@@ -2,9 +2,7 @@ import { Router } from "express";
 import verifyToken from "../middleware/verifytoken.js";
 import { Service } from "../models/Service.js";
 import { Category } from "../models/Category.js";
-//import { Professionals } from "../models/Professionals.js";
 
-// endpoint para obtener los servicios
 const getAllServices = async (req, res) => {
   try {
     const dbServices = await Service.findAll({
@@ -22,7 +20,6 @@ const getAllServices = async (req, res) => {
   }
 };
 
-// endpoint para obtener un solo servicio por id
 const getServiceById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -51,7 +48,6 @@ const getServiceById = async (req, res) => {
   }
 };
 
-// endpoint para crear un servicio
 const createService = async (req, res) => {
   try {
       const service = await Service.create(req.body);
@@ -65,7 +61,6 @@ const createService = async (req, res) => {
   }
 };
 
-// endpoint para modificar un servicio por id
 const updateService = async (req, res) => {
   try {
     const { id } = req.params;
@@ -92,7 +87,6 @@ const updateService = async (req, res) => {
   }
 };
 
-// endpoint para borrar un servicio por id
 const deleteService = async (req, res) => {
   try {
     const { id } = req.params;
@@ -126,7 +120,5 @@ router.get('/:id', getServiceById);
 router.post('/', verifyToken, createService);
 router.put('/:id', verifyToken, updateService);
 router.delete('/:id', verifyToken, deleteService);
-
-
 
 export default router;

@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&family=Charmonman:wght@700&display=swap');
-/* LO QUE AFECTA A TODO EL CODIGO (*, BODY, VARIABLES, LINKS, ETIQUETAS, ESPECIFICAS)*/
 
-/* VARIABLES */
 :root{
   --variableUno: #F2F0F0;
   --variableDos: #D9C1B8;
@@ -35,7 +33,6 @@ main{
   min-height: 95vh;
 }
 
-/*Footer styles*/
 .footer{
   width: auto;
   padding: 50px 70px 30px;

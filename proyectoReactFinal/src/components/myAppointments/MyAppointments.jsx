@@ -35,10 +35,6 @@ const MyAppointments = () => {
         { value: "cancelado", label: "cancelado" }
     ];
 
-    /*const formatStatus = (status) => (
-        status === "terminado" ? "finalizado" : status
-    );*/
-
     const handleLoadAppointments = () => {
         fetch("http://localhost:3000/api/appointments", {
             headers: {
@@ -103,7 +99,7 @@ const MyAppointments = () => {
         }
     }, [appointmentForm.professionalId, appointmentForm.date, appointmentForm.serviceId, services]);
 
-    const [showCancelModal, setShowCancelModal] = useState(false); //modal para el usuario al querer cancelqar turno
+    const [showCancelModal, setShowCancelModal] = useState(false);
     const [appointmentToCancel, setAppointmentToCancel] = useState(null);
     const openCancelModal = (appointmentId) => {
         setAppointmentToCancel(appointmentId);
@@ -115,7 +111,7 @@ const MyAppointments = () => {
         setAppointmentToCancel(null);
     };
 
-    const [showDeleteModal, setShowDeleteModal] = useState(false); //modal para confirmar eliminacion de turno
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [appointmentToDelete, setAppointmentToDelete] = useState(null);
 
     const handleOpenDeleteModal = (appointmentId) => {
@@ -183,12 +179,14 @@ const MyAppointments = () => {
                 serviceId: Number(appointmentForm.serviceId)
             })
         })
-            .then((res) => {
+            .then(async (res) => {
+                const data = await res.json();
+
                 if (!res.ok) {
-                    throw new Error("No se pudo crear el turno");
+                    throw new Error(data.message);
                 }
 
-                return res.json();
+                return data;
             })
             .then(() => {
                 handleLoadAppointments();
@@ -263,9 +261,10 @@ const MyAppointments = () => {
                             <tr>
                                 <th className="th-fecha">Fecha</th>
                                 <th>Hora</th>
-                                <th>Email</th>
+                                {!isCustomer && <th>Email</th>}
+                                {!isCustomer && <th>Nombre</th>}
                                 <th>Servicio</th>
-                                <th>Profesional</th>
+                                {!isProfessional && <th>Profesional</th>}
                                 <th>Estado</th>
                                 {canDelete && <th></th>}
                             </tr>
@@ -276,16 +275,25 @@ const MyAppointments = () => {
                                 <tr key={appointment.id}>
                                     <td>{appointment.date}</td>
                                     <td>{appointment.hour?.slice(0, 5)}</td>
-                                    <td>{appointment.user?.email}</td>
-                                    <td>{appointment.service?.name}</td>
-                                    <td>
-                                        {appointment.professional
-                                            ? `${appointment.professional.firstName} ${appointment.professional.lastName}`
+                                    {!isCustomer && <td>{appointment.customer?.email}</td>}
+                                    {!isCustomer && <td>
+                                        {appointment.customer
+                                            ? `${appointment.customer.firstName} ${appointment.customer.lastName}`
                                             : "-"}
-                                    </td>
+                                    </td>}
+
+                                    <td>{appointment.service?.name}</td>
+                                    {!isProfessional &&
+                                        <td>
+                                            {appointment.professional
+                                                ? `${appointment.professional.firstName} ${appointment.professional.lastName}`
+                                                : "-"}
+                                        </td>
+                                    }
+
                                     <td>
                                         {isSuperadmin ? (
-                                            formatStatus(appointment.status)
+                                            appointment.status
                                         ) : isCustomer ? (
                                             appointment.status === "cancelado" ? (
                                                 "cancelado"

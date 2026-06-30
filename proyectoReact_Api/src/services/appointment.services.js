@@ -1,9 +1,7 @@
 import { Appointment } from "../models/Appointment.js"
-//import { Professionals } from "../models/Professionals.js";
 import { Service } from "../models/Service.js";
 import User from "../models/User.js";
 
-const appointmentGap = 20;
 const normalizeHour = (hour) => hour.slice(0, 5);
 
 const toMinutes = (h) => {
@@ -11,21 +9,20 @@ const toMinutes = (h) => {
     return hh * 60 + mm;
 };
 
-const getAppointmentEnd = (start, duration) => start + duration + appointmentGap;
-//esto es para calcular el solaplamiento
+const getAppointmentEnd = (start, duration) => start + duration;
+
 const rangesOverlap = (startA, endA, startB, endB) => (
     startA < endB && endA > startB
 );
-//aca generamos todos los posibles slots 
+
 export const generateSlots = (
-    workDayStart, //hora que tomca cada cosa
+    workDayStart,
     workDayEnd,
     serviceDuration
 ) => {
-    const slots = [];//array inicial
+    const slots = [];
 
-    const totalDuration =
-        serviceDuration + appointmentGap;
+    const totalDuration = serviceDuration;
 
     let current = workDayStart * 60;
     const end = workDayEnd * 60;
@@ -34,7 +31,7 @@ export const generateSlots = (
         const hours = Math.floor(current / 60);
         const minutes = current % 60;
 
-        slots.push(//agregamos el slot generado
+        slots.push(
             `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`
         );
 
@@ -43,9 +40,11 @@ export const generateSlots = (
 
     return slots;
 };
-//funcion para crear turnos
+
 export const createAppointment = async (req, res) => {
     try {
+        const loggedUser = req.user;
+
         const {
             date,
             hour,
@@ -54,38 +53,37 @@ export const createAppointment = async (req, res) => {
             serviceId
         } = req.body;
 
-        const customer = await User.findByPk(userId);//agregar por rol
-        if (loggedUser.role !== "customer") {
+        const customer = await User.findByPk(userId);
+
+        if (!customer || customer.role !== "customer") {
             return res.status(500).json({
                 message: "Este id no corresponde a un customer"
             });
         }
 
-        const loggedUser = req.user;
-        //professional solo pueda crear turnos para si mismo
-        if (loggedUser.role === "professional") { //si el rol de usuario es professional
-            //hacemos que el id corresponda al loggedUser
-            const professional = await User.findOne({
-                where: {
-                    user: loggedUser.id
-                }
-                /*where: {
-                    user: loggedUser.id
-                }*/
-            });//cuando intente crear un turnos apra un id q no es suya, saltara este mensaje
-            if (professional.id !== Number(professionalId)) {
-                return res.status(403).json({
-                    message: "Solo podés crear turnos para vos mismo"
-                });
-            }
+        const professional = await User.findByPk(professionalId);
+
+        if (!professional || professional.role !== "professional") {
+            return res.status(400).json({
+                message: "El profesional no existe"
+            });
         }
-        //aca permisos del super-admin
+
+        if (
+            loggedUser.role === "professional" &&
+            loggedUser.id !== Number(professionalId)
+        ) {
+            return res.status(403).json({
+                message: "Solo podés crear turnos para vos mismo"
+            });
+        }
+
         if (loggedUser.role === "superadmin") {
             return res.status(403).json({
                 message: "El superadmin no puede crear turnos"
             });
         }
-        //verificacion de que el cliente cree un turno para si mismo
+
         if (loggedUser.role === "customer" && loggedUser.id !== userId) {
             return res.status(403).json({
                 message: "Solo podés crear turnos para tu propio usuario"
@@ -98,17 +96,18 @@ export const createAppointment = async (req, res) => {
             });
         }
 
-        const today = new Date().toISOString().split("T")[0]; //esto para q no saquen turno dias pasados
-        //si la fecha elegida es anterior al dia de hoy
+        const today = new Date().toISOString().split("T")[0];
+
         if (date < today) {
             return res.status(400).json({
                 message: "No se pueden reservar turnos en fechas pasadas"
             });
         }
-        //esto es por si el today automatico del calendario esta colocado en dia domingo
+
         const appointmentDate = new Date(date + "T00:00:00");
+
         const dayOfWeek = appointmentDate.getDay();
-        //esq antes lo probe sin y si se podia sacar turnos los domingos xd
+
         if (dayOfWeek === 0) {
             return res.status(400).json({
                 message: "La clínica permanece cerrada los domingos"
@@ -116,7 +115,6 @@ export const createAppointment = async (req, res) => {
         }
 
         const service = await Service.findByPk(serviceId);
-        //en caso de no encontrarse servicio
         if (!service) {
             return res.status(404).json({
                 message: "Servicio no encontrado"
@@ -127,10 +125,8 @@ export const createAppointment = async (req, res) => {
         const newStart = toMinutes(hour);
         const newEnd = getAppointmentEnd(newStart, serviceDuration);
 
-        // traer turnos del profesional ese día
         const appointments = await Appointment.findAll({
-            where: {role: "professional"},
-            //where: { professionalId, date },
+            where: { professionalId, date },
             include: {
                 model: Service,
                 as: "service",
@@ -138,7 +134,6 @@ export const createAppointment = async (req, res) => {
             }
         });
 
-        // validar solapamiento real
         const hasOverlap = appointments.some(app => {
             const existingStart = toMinutes(app.hour);
 
@@ -179,24 +174,20 @@ export const getAvailableSlots = async (req, res) => {
         const { professionalId } = req.params;
         const { date, serviceDuration } = req.query;
 
-        const professional = await Professionals.findByPk(professionalId);
+        const professional = await User.findByPk(professionalId);
 
-        if (!professional) {
+        if (!professional || professional.role !== "professional") {
             return res.status(404).json({
                 message: "Profesional no encontrado"
             });
         }
 
-        //todos los slots
         const allSlots = generateSlots(
-            //professional.workDayStart,
-            //professional.workDayEnd,
-            user.workDayStart,
-            user.workDayEnd,
+            professional.workDayStart,
+            professional.workDayEnd,
             Number(serviceDuration)
         );
 
-        //traigo los ocupados
         const appointments = await Appointment.findAll({
             where: {
                 professionalId,
@@ -209,7 +200,6 @@ export const getAvailableSlots = async (req, res) => {
             }
         });
 
-        //filtro disponibilidad
         const availableSlots = allSlots.filter(slot => {
             const slotStart = toMinutes(slot);
             const slotEnd = getAppointmentEnd(slotStart, Number(serviceDuration));
@@ -233,7 +223,7 @@ export const getAvailableSlots = async (req, res) => {
         });
     }
 };
-//a partir de aca es para todo lo relacionado con el abm
+
 export const getAppointments = async (req, res) => {
     try {
         const { id, role } = req.user;
@@ -242,26 +232,34 @@ export const getAppointments = async (req, res) => {
         if (role === "customer") {
             where = { userId: id };
         }
-        if (role === "professional") {
-            const professional = await Professionals.findOne({
-                where: { userId: id }
-            });
 
+        if (role === "professional") {
             where = {
-                professionalId: professional.id
+                professionalId: id
             };
         }
 
         const appointments = await Appointment.findAll({
-            where, include: [ //para traer datos relacionados
+            where, include: [
                 {
                     model: User,
-                    as: "user",
-                    attributes: ["id", "email", "role"]
-                }, {
-                    model: Professionals,
+                    as: "customer",
+                    attributes: [
+                        "id",
+                        "firstName",
+                        "lastName",
+                        "email",
+                        "role"
+                    ]
+                },
+                {
+                    model: User,
                     as: "professional",
-                    attributes: ["id", "firstName", "lastName"]
+                    attributes: [
+                        "id",
+                        "firstName",
+                        "lastName"
+                    ]
                 },
                 {
                     model: Service,
@@ -274,7 +272,6 @@ export const getAppointments = async (req, res) => {
                 ["hour", "ASC"]
             ]
         });
-
         res.json(appointments);
 
     } catch (error) {
@@ -290,11 +287,6 @@ export const updateAppointmentStatus = async (req, res) => {
         const { status } = req.body;
         const loggedUser = req.user;
         const appointment = await Appointment.findByPk(id);
-        const professional = await Professionals.findOne({
-            where: {
-                userId: loggedUser.id
-            }
-        });
 
         if (!appointment) {
             return res.status(404).json({
@@ -316,7 +308,7 @@ export const updateAppointmentStatus = async (req, res) => {
             }
         }
 
-        if (loggedUser.role === "professional" && appointment.professionalId !== professional?.id) {
+        if (loggedUser.role === "professional" && appointment.professionalId !== loggedUser.id) {
             return res.status(403).json({
                 message: "No podés modificar turnos de otro profesional"
             });
@@ -341,11 +333,6 @@ export const deleteAppointment = async (req, res) => {
         const { id } = req.params;
         const loggedUser = req.user;
         const appointment = await Appointment.findByPk(id);
-        const professional = await Professionals.findOne({
-            where: {
-                userId: loggedUser.id
-            }
-        });
 
         if (!appointment) {
             return res.status(404).json({
@@ -359,7 +346,7 @@ export const deleteAppointment = async (req, res) => {
             });
         }
 
-        if (loggedUser.role === "professional" && appointment.professionalId !== professional?.id) {
+        if (loggedUser.role === "professional" && appointment.professionalId !== loggedUser.id) {
             return res.status(403).json({
                 message: "No podés eliminar turnos de otro profesional"
             })

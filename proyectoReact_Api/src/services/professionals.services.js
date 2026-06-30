@@ -18,10 +18,8 @@ export const getAvailableSlots = async (req, res) => {
         }
 
         const slots = generateSlots(
-            //professional.workDayStart,
-            //professional.workDayEnd,
-            user.workDayStart,
-            user.workDayEnd,
+            professional.workDayStart,
+            professional.workDayEnd,
         );
 
         res.json(slots);

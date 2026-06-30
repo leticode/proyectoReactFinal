@@ -25,8 +25,6 @@ export default function ServiceDetails() {
     return <NotFound />;
   }
 
-  //Traer los turnos disponibles del profesional seleccionado
-
   const handleProfessionalSelect = async (professional) => {
     try {
       const response = await fetch(

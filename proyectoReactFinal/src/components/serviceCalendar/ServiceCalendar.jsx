@@ -1,4 +1,3 @@
-//use la libreria react-calendar para hacer todo el visual del calendario
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { useContext, useState, useEffect } from "react";
@@ -30,12 +29,12 @@ function ServiceCalendar({ service, professionalId, onClose }) {
     }, [fecha, professionalId]);
 
     const handleConfirmAppointment = async () => {
-        try {//toast por si el usuario no esta logueado
+        try {
             if (!user) {
                 toast.error("Debes iniciar sesión para reservar");
                 return;
             }
-            //por no seleccionar horario
+
             if (!selectedHour) {
                 toast.error("Seleccione un horario");
                 return;
