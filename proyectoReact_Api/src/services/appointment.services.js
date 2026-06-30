@@ -129,8 +129,7 @@ export const createAppointment = async (req, res) => {
 
         // traer turnos del profesional ese día
         const appointments = await Appointment.findAll({
-            where: {role: "professional"},
-            //where: { professionalId, date },
+            where: { professionalId, date },
             include: {
                 model: Service,
                 as: "service",
