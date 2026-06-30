@@ -57,8 +57,8 @@ export const createUser = async (req, res) => {
 
         //por default
         if (role === "professional") {
-            workDayStart = 8;
-            workDayEnd = 18;
+            workDayStart = 9;
+            workDayEnd = 20;
         }
 
         const newUser = await User.create({
