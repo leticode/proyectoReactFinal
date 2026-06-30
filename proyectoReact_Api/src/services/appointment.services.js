@@ -11,21 +11,20 @@ const toMinutes = (h) => {
     return hh * 60 + mm;
 };
 
-const getAppointmentEnd = (start, duration) => start + duration + appointmentGap;
-//esto es para calcular el solaplamiento
+const getAppointmentEnd = (start, duration) => start + duration;
+
 const rangesOverlap = (startA, endA, startB, endB) => (
     startA < endB && endA > startB
 );
-//aca generamos todos los posibles slots 
+
 export const generateSlots = (
-    workDayStart, //hora que tomca cada cosa
+    workDayStart,
     workDayEnd,
     serviceDuration
 ) => {
-    const slots = [];//array inicial
+    const slots = [];
 
-    const totalDuration =
-        serviceDuration + appointmentGap;
+    const totalDuration = serviceDuration;
 
     let current = workDayStart * 60;
     const end = workDayEnd * 60;
