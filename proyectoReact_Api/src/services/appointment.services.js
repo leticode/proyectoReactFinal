@@ -186,12 +186,9 @@ export const getAvailableSlots = async (req, res) => {
             });
         }
 
-        //todos los slots
         const allSlots = generateSlots(
-            //professional.workDayStart,
-            //professional.workDayEnd,
-            user.workDayStart,
-            user.workDayEnd,
+            professional.workDayStart,
+            professional.workDayEnd,
             Number(serviceDuration)
         );
 
