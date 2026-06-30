@@ -122,6 +122,13 @@ export const updateUser = async (req, res) => {
         user.lastName = lastName ?? user.lastName;
         user.email = email ?? user.email;
         user.role = role ?? user.role;
+        if (user.role === "professional") {
+            user.workDayStart ??= 9;
+            user.workDayEnd ??= 20;
+        } else {
+            user.workDayStart = null;
+            user.workDayEnd = null;
+        }
 
         //guardamos el usuario
         await user.save();
