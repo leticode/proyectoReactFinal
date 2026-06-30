@@ -249,15 +249,26 @@ export const getAppointments = async (req, res) => {
         }
 
         const appointments = await Appointment.findAll({
-            where, include: [ //para traer datos relacionados
+            where, include: [
                 {
                     model: User,
-                    as: "user",
-                    attributes: ["id", "email", "role"]
-                }, {
-                    model: Professionals,
+                    as: "customer",
+                    attributes: [
+                        "id",
+                        "firstName",
+                        "lastName",
+                        "email",
+                        "role"
+                    ]
+                },
+                {
+                    model: User,
                     as: "professional",
-                    attributes: ["id", "firstName", "lastName"]
+                    attributes: [
+                        "id",
+                        "firstName",
+                        "lastName"
+                    ]
                 },
                 {
                     model: Service,
@@ -270,7 +281,6 @@ export const getAppointments = async (req, res) => {
                 ["hour", "ASC"]
             ]
         });
-
         res.json(appointments);
 
     } catch (error) {
