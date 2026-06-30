@@ -54,26 +54,26 @@ export const createAppointment = async (req, res) => {
             serviceId
         } = req.body;
 
-        const customer = await User.findByPk(userId);//agregar por rol
-        if (loggedUser.role !== "customer") {
+        const customer = await User.findByPk(userId);
+
+        if (!customer || customer.role !== "customer") {
             return res.status(500).json({
                 message: "Este id no corresponde a un customer"
             });
         }
 
-        const loggedUser = req.user;
-        //professional solo pueda crear turnos para si mismo
-        if (loggedUser.role === "professional") { //si el rol de usuario es professional
-            //hacemos que el id corresponda al loggedUser
-            const professional = await User.findOne({
-                where: {
-                    user: loggedUser.id
-                }
-                /*where: {
-                    user: loggedUser.id
-                }*/
-            });//cuando intente crear un turnos apra un id q no es suya, saltara este mensaje
-            if (professional.id !== Number(professionalId)) {
+        const professional = await User.findByPk(professionalId);
+
+        if (!professional || professional.role !== "professional") {
+            return res.status(400).json({
+                message: "El profesional no existe"
+            });
+        }
+
+        if (
+            loggedUser.role === "professional" &&
+            loggedUser.id !== Number(professionalId)
+        ) {
                 return res.status(403).json({
                     message: "Solo podés crear turnos para vos mismo"
                 });
