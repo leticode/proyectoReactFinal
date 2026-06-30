@@ -87,7 +87,6 @@ const Profile = () => {
                 firstName: formProfile.firstName,
                 lastName: formProfile.lastName
             });
-            navigate("/home")
             toast.success("Datos actualizados correctamente");
 
         } catch (error) {
@@ -161,6 +160,8 @@ const Profile = () => {
                 throw new Error(data.message || "Error al eliminar usuario");
             }
 
+            handleUserLogout();
+            navigate("/home")
             setShowModal(false);
             toast.success("Usuario eliminado correctamente");
 
@@ -266,7 +267,7 @@ const Profile = () => {
                                 </button>
                                 <button
                                     className="delete-btn"
-                                    onClick={handleDeleteAccount}
+                                    onClick={() => handleDeleteAccount(user.id)}
                                 > Eliminar
                                 </button>
                             </div>
