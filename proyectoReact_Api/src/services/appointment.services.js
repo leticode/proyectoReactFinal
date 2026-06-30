@@ -45,6 +45,7 @@ export const generateSlots = (
 //funcion para crear turnos
 export const createAppointment = async (req, res) => {
     try {
+        const loggedUser = req.user;
         const {
             date,
             hour,
