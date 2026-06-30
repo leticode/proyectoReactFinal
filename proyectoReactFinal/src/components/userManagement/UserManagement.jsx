@@ -32,7 +32,6 @@ const UserManagement = () => {
     const passwordRef = useRef(null);
     const confirmPasswordRef = useRef(null);
 
-    //para mostrar el modal y guardar el id donde no se va a eliminar
     const [showModal, setShowModal] = useState(false);
     const [userDelete, setUserDelete] = useState(null);
 

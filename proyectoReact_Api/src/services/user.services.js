@@ -196,3 +196,96 @@ export const deleteUser = async (req, res) => {
         res.status(500).json({message: error.message});
     }
 };
+/*PROFILE FETCHS */
+export const updateProfile = async (req, res) => {
+    const { id } = req.params;
+    const { firstName, lastName } = req.body;
+
+    try {
+        const errors = ValidateUpdateProfile({ firstName, lastName});
+
+        if (Object.keys(errors).length > 0) {
+            return res.status(400).json({
+                errors,
+                message: "Datos inválidos"
+            });
+        }
+
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "Usuario no encontrado"
+            });
+        }
+
+        user.firstName = firstName ?? user.firstName;
+        user.lastName = lastName ?? user.lastName;
+
+        await user.save();
+
+        return res.status(200).json({
+            message: "Datos personales actualizados",
+            user: {
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email
+            }
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            message: "Error interno del servidor"
+        });
+    }
+};
+
+export const changePassword = async (req, res) => {
+    const { id } = req.params;
+    const { currentPassword, newPassword } = req.body;
+
+    try {
+
+        const errors = ValidateChangePassword({ currentPassword, newPassword });
+        if (Object.keys(errors).length > 0) {
+            return res.status(400).json({
+                errors,
+                message: "Datos invalidos"
+            });
+        }
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "Usuario no encontrado"
+            });
+        }
+
+        const isMatch = await bcrypt.compare(
+            currentPassword,
+            user.password
+        );
+
+        if (!isMatch) {
+            return res.status(400).json({
+                message: "La contraseña actual es incorrecta"
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        user.password = hashedPassword;
+
+        await user.save();
+
+        return res.status(200).json({
+            message: "Contraseña actualizada correctamente"
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            message: "Error interno del servidor"
+        });
+    }
+};
