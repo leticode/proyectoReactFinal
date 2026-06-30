@@ -215,7 +215,7 @@ const Layout = ({ children }) => {
               <h3 className="title-footer">EXPLORAR</h3>
               <NavLink to="/home" className="link-footer">Inicio</NavLink>
               {(user?.role === "admin" || user?.role === "professional" || user?.role === "superadmin" || user?.role === "customer") && (
-                <NavLink to="/myappointments" className={linkClass}>
+                <NavLink to="/myappointments" className="link-footer">
                   {user?.role !== "customer" ? "Turnos" : "Mis Turnos"}
                 </NavLink>
               )}
