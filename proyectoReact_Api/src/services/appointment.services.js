@@ -322,7 +322,7 @@ export const updateAppointmentStatus = async (req, res) => {
             }
         }
 
-        if (loggedUser.role === "professional" && appointment.professionalId !== professional?.id) {
+        if (loggedUser.role === "professional" && appointment.professionalId !== loggedUser.id) {
             return res.status(403).json({
                 message: "No podés modificar turnos de otro profesional"
             });
@@ -365,7 +365,7 @@ export const deleteAppointment = async (req, res) => {
             });
         }
 
-        if (loggedUser.role === "professional" && appointment.professionalId !== professional?.id) {
+        if (loggedUser.role === "professional" && appointment.professionalId !== loggedUser.id) {
             return res.status(403).json({
                 message: "No podés eliminar turnos de otro profesional"
             })
