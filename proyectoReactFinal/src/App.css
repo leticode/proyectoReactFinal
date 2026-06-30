@@ -365,11 +365,12 @@
   }
   
   /* CARD */
-  .card {
-    position: relative;
-    border-radius: 15px;
-    overflow: hidden; /*Si algo se sale del contenedor, se oculta*/
-  }
+.card {
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  height: fit-content;
+}
   
   .card img {
     width: 100%;

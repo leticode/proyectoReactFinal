@@ -32,7 +32,7 @@ function App() {
     <HashRouter> 
       <ToastContainer
         position="top-right"
-        autoClose={4500}
+        autoClose={2500}
         newestOnTop
         closeOnClick
         pauseOnFocusLoss={false}

@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
-import { SERVICE_CATEGORIES_ARRAY } from "../../constants/serviceCategories";
 import { AuthenticationContext } from "../services/auth/authContextProvider";
+import { toast } from "react-toastify";
 
 const Admin = () => {
     const { token, handleUserLogout, user } = useContext(AuthenticationContext);
     const [serverMessage, setServerMessage] = useState("");
     const [services, setServices] = useState([]);
+    const [categories, setCategories] = useState([]);
     //const [professionals, setProfessionals] = useState([]);
     const [modal, setModal] = useState(false);
     const [modifyID, setModifyID] = useState(0);
@@ -20,7 +21,7 @@ const Admin = () => {
         description: "",
         //professionalId: "",
         duration: 0,
-        category: "",
+        categoryId: 0,
     };
     const [newService, setNewService] = useState(emptyService);
 
@@ -37,6 +38,25 @@ const Admin = () => {
             }
 
             setServices(data);
+        } catch (error) {
+            console.error(error);
+            setServerMessage("Error al conectar con el servidor");
+        }
+    };
+
+    const loadCategories = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/api/categories", {
+                method: "GET"
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                setServerMessage(data.message || "error al traer categorias");
+                return;
+            }
+
+            setCategories(data);
         } catch (error) {
             console.error(error);
             setServerMessage("Error al conectar con el servidor");
@@ -64,6 +84,7 @@ const Admin = () => {
 
     useEffect(() => {
         loadServices();
+        loadCategories();
         //loadProfessionals();
     }, []);
 
@@ -76,10 +97,44 @@ const Admin = () => {
         }));
     };
 
+    const fieldsHaveErrors = () => {
+        let error = false;
+        if (newService.categoryId == 0) {
+            toast.error("Elija una categoria");
+            error = true;
+        }
+        if (newService.name.trim().length == 0) {
+            toast.error("El nombre no puede estar vacio");
+            error = true;
+        }
+        if (newService.description.trim().length == 0) {
+            toast.error("La descripcion no puede estar vacio");
+            error = true;
+        }
+        if (newService.img.trim().length == 0) {
+            toast.error("La url de la imagen no puede estar vacia");
+            error = true;
+        }
+        if (newService.duration <= 0) {
+            toast.error("La duracion no puede ser 0 ni negativa");
+            error = true;
+        }
+        if (newService.price <= 0) {
+            toast.error("El precio no puede ser 0 ni negativo");
+            error = true;
+        }
+        return error;
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (fieldsHaveErrors()) {
+            return;
+        }
+
         if (modifyID == 0) {
+            console.log(newService);
             const response = await fetch(
                 "http://localhost:3000/api/services",
                 {
@@ -107,7 +162,6 @@ const Admin = () => {
             const data = await response.json();
         }
         setModal(false);
-        setNewService(emptyService);
         loadServices();
 
     };
@@ -147,6 +201,7 @@ const Admin = () => {
     };
 
     const addService = () => {
+        setNewService(emptyService);
         setModifyID(0);
         setModal(true);
     }
@@ -214,13 +269,17 @@ const Admin = () => {
                                 <label>
                                     Categoría
                                     <select
-                                        name="category"
-                                        value={newService.category}
+                                        name="categoryId"
+                                        value={newService.categoryId}
                                         onChange={handleChange}
+                                        required
                                     >
-                                        {SERVICE_CATEGORIES_ARRAY.map((category) => (
-                                            <option key={category.value} value={category.value}>
-                                                {category.name}
+                                        <option value={0} disabled>
+                                            Selecciona una categoria
+                                        </option>
+                                        {categories.map((category) => (
+                                            <option key={category.id} value={category.id}>
+                                                {category.category}
                                             </option>
                                         ))}
                                     </select>

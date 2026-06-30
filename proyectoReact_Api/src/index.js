@@ -9,13 +9,14 @@ import authRoutes from "./routes/auth.routes.js";
 import appointmentsRoutes from "./routes/appointment.routes.js"
 import userRoutes from "./routes/users.routes.js";
 import servicesRoutes from "./routes/services.routes.js";
-//import professionalsRoutes from "./routes/professionals.routes.js";
+import professionalsRoutes from "./routes/professionals.routes.js";
 import dotenv from "dotenv";
 import "./models/User.js";
 import "./models/Service.js";
 import "./models/Appointment.js";
 import "./models/Category.js";
 import "./models/Assosiations.js";
+import { Category } from "./models/Category.js";
 
 dotenv.config();
 
@@ -58,7 +59,7 @@ app.get("/", (req, res) => {
 };*/
 
 //endopoint para profesionales
-//app.use("/api/professionals", professionalsRoutes);
+app.use("/api/professionals", professionalsRoutes);
 
 //endpoint para los appointments
 app.use("/api/appointments", appointmentsRoutes);
@@ -69,6 +70,16 @@ app.use("/api/user", userRoutes);
 
 //endpoint de services
 app.use("/api/services", servicesRoutes);
+
+app.use("/api/categories", async (req, res) => {
+  try {
+    const dbServices = await Category.findAll({}); 
+    res.json(dbServices);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener categorias", error: error.message });
+  }
+});
+
 
 // FIN ENDPOINTS ---------------
 
