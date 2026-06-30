@@ -178,9 +178,9 @@ export const getAvailableSlots = async (req, res) => {
         const { professionalId } = req.params;
         const { date, serviceDuration } = req.query;
 
-        const professional = await Professionals.findByPk(professionalId);
+        const professional = await User.findByPk(professionalId);
 
-        if (!professional) {
+        if (!professional || professional.role !== "professional") {
             return res.status(404).json({
                 message: "Profesional no encontrado"
             });
@@ -239,12 +239,8 @@ export const getAppointments = async (req, res) => {
             where = { userId: id };
         }
         if (role === "professional") {
-            const professional = await Professionals.findOne({
-                where: { userId: id }
-            });
-
             where = {
-                professionalId: professional.id
+                professionalId: id
             };
         }
 
