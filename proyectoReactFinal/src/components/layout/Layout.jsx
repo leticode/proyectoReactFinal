@@ -29,15 +29,11 @@ const Layout = ({ children }) => {
 
   return (
     <>
-      {/* HEADER */}
       <header className="header">
-
-        {/* LOGO */}
         <NavLink to="/home" className="logo">
           PURE SKIN
         </NavLink>
 
-        {/* NAV DESKTOP */}
         <nav className="nav navbar">
           {(user?.role === "admin" || user?.role === "superadmin") && (
             <>
@@ -111,7 +107,6 @@ const Layout = ({ children }) => {
 
         </nav>
 
-        {/* HAMBURGUESA */}
         <button
           className="menu-btn"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -123,7 +118,6 @@ const Layout = ({ children }) => {
 
       </header>
 
-      {/* MENU MOBILE */}
       {menuOpen && (
         <div className="mobile-menu">
 
@@ -181,22 +175,20 @@ const Layout = ({ children }) => {
                 Cerrar sesión
               </button>
             </>
-            ) : (
-              <NavLink
-                to="/login"
-                onClick={() => setMenuOpen(false)}
-                className={linkClass}
-              >
-                Iniciar sesión
-              </NavLink>
-            )}
+          ) : (
+            <NavLink
+              to="/login"
+              onClick={() => setMenuOpen(false)}
+              className={linkClass}
+            >
+              Iniciar sesión
+            </NavLink>
+          )}
         </div>
       )}
 
-      {/* CONTENIDO */}
       <main>{children}</main>
 
-      {/* FOOTER */}
       <footer className="footer">
         <div className="footer-container">
           <div className="footer-top">

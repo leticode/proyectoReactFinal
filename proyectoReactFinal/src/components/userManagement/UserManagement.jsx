@@ -330,8 +330,8 @@ const UserManagement = () => {
                 
                 <div className="management-container">
                     <table>
-                        <thead> {/*encabezado*/}
-                            <tr> {/*row*/} 
+                        <thead>
+                            <tr>
                                 <th>Email</th>
                                 {user?.role === "superadmin" && (
                                     <>
@@ -345,7 +345,6 @@ const UserManagement = () => {
                         </thead>
 
                         <tbody>
-                            {/*mapeamos users por cada usuario con su id ceramos una fila*/}
                             {users.map((u) => (
                                 <tr key={u.id}>
                                     <td>{u.email}</td>
@@ -353,7 +352,7 @@ const UserManagement = () => {
                                         <>
                                             <td>{u.role}</td>
                                             <td>{u.firstName} {u.lastName}</td>
-                                            <td> {/*botones para editar o borrar*/}
+                                            <td>
                                                 <button className="edit-button"
                                                         onClick={() => handleOpenUpdateModal(u)}
                                                 >Editar</button>

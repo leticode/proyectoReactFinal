@@ -56,14 +56,12 @@ export const loginUser = async (req, res) => {
         where: { email }
     });
 
-    // Si no existe, devuelve error 401 (No autorizado)
     if (!user)
         return res.status(401).send({ message: "Usuario no existente" });
 
 
     const comparison = await bcrypt.compare(password, user.password);
 
-    // Si no coinciden, devuelve error 401
     if (!comparison)
         return res.status(401).send({ message: "Email y/o contraseña incorrecta" });
 

@@ -55,7 +55,6 @@ export const createUser = async (req, res) => {
         let workDayStart = null;
         let workDayEnd = null;
 
-        //por default
         if (role === "professional") {
             workDayStart = 9;
             workDayEnd = 20;
@@ -130,7 +129,6 @@ export const updateUser = async (req, res) => {
             user.workDayEnd = null;
         }
 
-        //guardamos el usuario
         await user.save();
 
         res.json({
@@ -166,7 +164,6 @@ export const deleteUser = async (req, res) => {
     }
 };
 
-/*PROFILE FETCHS */
 export const updateProfile = async (req, res) => {
     const { id } = req.params;
     const { firstName, lastName } = req.body;

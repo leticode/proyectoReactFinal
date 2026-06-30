@@ -7,7 +7,6 @@ const Admin = () => {
     const [serverMessage, setServerMessage] = useState("");
     const [services, setServices] = useState([]);
     const [categories, setCategories] = useState([]);
-    //const [professionals, setProfessionals] = useState([]);
     const [modal, setModal] = useState(false);
     const [modifyID, setModifyID] = useState(0);
 
@@ -19,7 +18,6 @@ const Admin = () => {
         img: "",
         price: 0,
         description: "",
-        //professionalId: "",
         duration: 0,
         categoryId: 0,
     };
@@ -63,29 +61,9 @@ const Admin = () => {
         }
     };
 
-    /*const loadProfessionals = async () => {
-        try {
-            const response = await fetch("http://localhost:3000/api/professionals", {
-                method: "GET"
-            });
-            const data = await response.json();
-
-            if (!response.ok) {
-                setServerMessage(data.message || "error al traer profesionales");
-                return;
-            }
-
-            setProfessionals(data);
-        } catch (error) {
-            console.error(error);
-            setServerMessage("Error al conectar con el servidor");
-        }
-    };*/
-
     useEffect(() => {
         loadServices();
         loadCategories();
-        //loadProfessionals();
     }, []);
 
     const handleChange = (e) => {
@@ -328,25 +306,7 @@ const Admin = () => {
                                         placeholder="Descripcion del servicio"
                                     />
                                 </label>
-                                {/* 
-                                <label>
-                                    Profesional
-                                    <select
-                                        name="professionalId"
-                                        value={newService.professionalId}
-                                        onChange={handleChange}
-                                    >
-                                        <option value="" disabled>
-                                            Selecciona un profesional
-                                        </option>
-                                        {professionals.map((professional) => (
-                                            <option key={professional.id} value={professional.id}>
-                                                {professional.firstName + ' ' + professional.lastName}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </label>*/}
-
+                                
                                 <label>
                                     Duración
                                     <input

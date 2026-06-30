@@ -31,7 +31,7 @@ export const generateSlots = (
         const hours = Math.floor(current / 60);
         const minutes = current % 60;
 
-        slots.push(//agregamos el slot generado
+        slots.push(
             `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`
         );
 
@@ -134,7 +134,6 @@ export const createAppointment = async (req, res) => {
             }
         });
 
-        // validar solapamiento real
         const hasOverlap = appointments.some(app => {
             const existingStart = toMinutes(app.hour);
 
