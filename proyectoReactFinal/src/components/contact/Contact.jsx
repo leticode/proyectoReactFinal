@@ -19,7 +19,7 @@ function Contact() {
 
           <p><strong> Teléfono:</strong> (346) 455-9467</p>
 
-          <p><strong> Email:</strong> luciromee@gmail.com</p>
+          <p><strong> Email:</strong> tecnicaturas@frro.utn.edu.ar</p>
 
           <p><strong> Horarios:</strong></p>
 
