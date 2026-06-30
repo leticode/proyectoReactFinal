@@ -1,9 +1,7 @@
 import { Appointment } from "../models/Appointment.js"
-//import { Professionals } from "../models/Professionals.js";
 import { Service } from "../models/Service.js";
 import User from "../models/User.js";
 
-const appointmentGap = 20;
 const normalizeHour = (hour) => hour.slice(0, 5);
 
 const toMinutes = (h) => {
@@ -42,10 +40,11 @@ export const generateSlots = (
 
     return slots;
 };
-//funcion para crear turnos
+
 export const createAppointment = async (req, res) => {
     try {
         const loggedUser = req.user;
+
         const {
             date,
             hour,
@@ -74,18 +73,17 @@ export const createAppointment = async (req, res) => {
             loggedUser.role === "professional" &&
             loggedUser.id !== Number(professionalId)
         ) {
-                return res.status(403).json({
-                    message: "Solo podés crear turnos para vos mismo"
-                });
-            }
+            return res.status(403).json({
+                message: "Solo podés crear turnos para vos mismo"
+            });
         }
-        //aca permisos del super-admin
+
         if (loggedUser.role === "superadmin") {
             return res.status(403).json({
                 message: "El superadmin no puede crear turnos"
             });
         }
-        //verificacion de que el cliente cree un turno para si mismo
+
         if (loggedUser.role === "customer" && loggedUser.id !== userId) {
             return res.status(403).json({
                 message: "Solo podés crear turnos para tu propio usuario"
@@ -98,17 +96,18 @@ export const createAppointment = async (req, res) => {
             });
         }
 
-        const today = new Date().toISOString().split("T")[0]; //esto para q no saquen turno dias pasados
-        //si la fecha elegida es anterior al dia de hoy
+        const today = new Date().toISOString().split("T")[0];
+
         if (date < today) {
             return res.status(400).json({
                 message: "No se pueden reservar turnos en fechas pasadas"
             });
         }
-        //esto es por si el today automatico del calendario esta colocado en dia domingo
+
         const appointmentDate = new Date(date + "T00:00:00");
+
         const dayOfWeek = appointmentDate.getDay();
-        //esq antes lo probe sin y si se podia sacar turnos los domingos xd
+
         if (dayOfWeek === 0) {
             return res.status(400).json({
                 message: "La clínica permanece cerrada los domingos"
@@ -116,7 +115,6 @@ export const createAppointment = async (req, res) => {
         }
 
         const service = await Service.findByPk(serviceId);
-        //en caso de no encontrarse servicio
         if (!service) {
             return res.status(404).json({
                 message: "Servicio no encontrado"
@@ -127,7 +125,6 @@ export const createAppointment = async (req, res) => {
         const newStart = toMinutes(hour);
         const newEnd = getAppointmentEnd(newStart, serviceDuration);
 
-        // traer turnos del profesional ese día
         const appointments = await Appointment.findAll({
             where: { professionalId, date },
             include: {
@@ -192,7 +189,6 @@ export const getAvailableSlots = async (req, res) => {
             Number(serviceDuration)
         );
 
-        //traigo los ocupados
         const appointments = await Appointment.findAll({
             where: {
                 professionalId,
@@ -205,7 +201,6 @@ export const getAvailableSlots = async (req, res) => {
             }
         });
 
-        //filtro disponibilidad
         const availableSlots = allSlots.filter(slot => {
             const slotStart = toMinutes(slot);
             const slotEnd = getAppointmentEnd(slotStart, Number(serviceDuration));
@@ -229,7 +224,7 @@ export const getAvailableSlots = async (req, res) => {
         });
     }
 };
-//a partir de aca es para todo lo relacionado con el abm
+
 export const getAppointments = async (req, res) => {
     try {
         const { id, role } = req.user;
@@ -238,6 +233,7 @@ export const getAppointments = async (req, res) => {
         if (role === "customer") {
             where = { userId: id };
         }
+
         if (role === "professional") {
             where = {
                 professionalId: id
@@ -292,11 +288,6 @@ export const updateAppointmentStatus = async (req, res) => {
         const { status } = req.body;
         const loggedUser = req.user;
         const appointment = await Appointment.findByPk(id);
-        const professional = await Professionals.findOne({
-            where: {
-                userId: loggedUser.id
-            }
-        });
 
         if (!appointment) {
             return res.status(404).json({
@@ -343,11 +334,6 @@ export const deleteAppointment = async (req, res) => {
         const { id } = req.params;
         const loggedUser = req.user;
         const appointment = await Appointment.findByPk(id);
-        const professional = await Professionals.findOne({
-            where: {
-                userId: loggedUser.id
-            }
-        });
 
         if (!appointment) {
             return res.status(404).json({
