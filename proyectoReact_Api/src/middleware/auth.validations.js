@@ -71,7 +71,6 @@ export const verifyRole = ((role) => {
 });
 
 export const validateCreateUser = ({firstName, lastName, email, password, confirmPassword, role}) => {
-
     const errors = {};
 
     if (!firstName?.trim()) {
@@ -96,7 +95,7 @@ export const validateCreateUser = ({firstName, lastName, email, password, confir
     if (password !== confirmPassword) {
         errors.confirmPassword = "No coinciden";
     }
-    
+
     const validRoles = ["customer", "professional", "admin", 'superadmin'];
 
     if (!role || !validRoles.includes(role)) {
@@ -108,6 +107,13 @@ export const validateCreateUser = ({firstName, lastName, email, password, confir
 
 export const ValidateUserUpdate = ({ email, role, firstName, lastName }) => {
     const errors = {};
+
+    if (!firstName?.trim()) {
+        errors.firstName = "El nombre es obligatorio";
+    }
+    if (!lastName?.trim()) {
+        errors.lastName = "El apellido es obligatorio";
+    }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -121,15 +127,43 @@ export const ValidateUserUpdate = ({ email, role, firstName, lastName }) => {
         errors.role = "El rol no es válido";
     }
 
-    //validacion por si es profesional y se le agrega el nombre y el apellido
-    if (role === "professional") {
-        if (!firstName?.trim()) {
-            errors.firstName = "El nombre es obligatorio";
-        }
-        if (!lastName?.trim()) {
-            errors.lastName = "El apellido es obligatorio";
-        }
+    return errors;
+};
+
+export const ValidateUpdateProfile = ({firstName, lastName}) => {
+    const errors = {}
+
+    if (!firstName?.trim()) {
+        errors.firstName = "El nombre es obligatorio";
+    }
+    if (!lastName?.trim()) {
+        errors.lastName = "El apellido es obligatorio";
     }
 
     return errors;
-};
+}
+
+export const ValidateChangePassword = ({currentPassword, newPassword, confirmPassword}) => {
+    const errors = {};
+
+    const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>]).{7,}$/;
+
+    if (!currentPassword) {
+        errors.currentPassword = "La contraseña actual es obligatoria";
+    }
+
+    if (newPassword) {
+        if (currentPassword === newPassword) {
+            errors.newPassword = "La contraseña nueva no puede ser igual a la anterior";
+        }
+
+        if (!passwordRegex.test(newPassword)) {
+            errors.newPassword = "La contraseña debe tener al menos 7 caracteres y un caracter especial";
+        }
+    }
+
+    if (newPassword && confirmPassword && newPassword !== confirmPassword) {
+        errors.confirmPassword = "Las contraseñas no coinciden";
+    }
+    return errors;
+}
