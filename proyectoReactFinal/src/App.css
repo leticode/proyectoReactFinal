@@ -79,7 +79,6 @@
   background-color: var(--variableDos);
   transition: all 0.3s;
 }
-/* ANIMACION DEL BTN CUANDO SE ABRE (SI, EN CSS QUEDA LARGUISIMO Y NO SABIA COMO HACERLO) */
 .menu-line.open:nth-child(1) {
   transform: rotate(45deg) translateY(6px);
 }
@@ -107,7 +106,6 @@
 }
 
 /* SERVICIOS */
-
 .servicios {
   padding: 20px;
   text-align: center;
@@ -115,6 +113,8 @@
 
 .servicios h2 {
   color: var(--variableCinco);
+  font-family: var(--textFont);
+  font-size: 30px;
   margin-bottom: 20px;
 }
 
@@ -129,19 +129,21 @@
   display: flex;
   justify-content: start;
   gap: 10px;
-  overflow-x: auto; /*No sabia como hacer scroll y consulte con la ia, esto hace que cuando se desborda horizontalmente el contenido se genere automaticamente scroll en horizontal*/
+  overflow-x: auto;
   padding: 10px;
   background-color: var(--variableUno);
   border-radius: 15px;
 }
 
 .filter button {
-  flex: 0 0 auto; /*Forma resumida (que desconocia) sin complicar tanto para que el elemento conserve su tamano*/
+  flex: 0 0 auto;
   border: none;
   padding: 8px 12px;
   border-radius: 20px;
   background: var(--variableDos);
   color: var(--variableCinco);
+  font-family: var(--textFont);
+  font-size: 18px;
 }
 
 /* MUESTRA LOS SERVICIOS A PARTIR DEL MAPEO  */
@@ -174,7 +176,6 @@
 }
 
 /*DETALLE SERVICIOS*/
-
 .service-details {
   padding: 2rem;
   font-family: var(--textFont);
@@ -239,7 +240,6 @@
 }
 
 /*SERVICIOS PARTE ADMINISTRADOR*/
-
 .services-grid {
     margin-top: 2rem;
     display: grid;
@@ -388,43 +388,58 @@
   }
 }
 
-.user-menu {
+/*botones del perfil layout*/
+.user-menu{
   position: relative;
-  display: inline-block;
 }
-.dropdown {
-  position: absolute;
-  top: 120%;
-  right: 0;
+
+.user-info{
   display: flex;
-  flex-direction: column;
-  min-width: 160px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 8px 25px var(--variableDos);
-  z-index: 1000;
+  align-items: center;
+  gap: .6rem;
+  cursor: pointer;
 }
+
+.user-name{
+  color: var(--variableCuatro);
+  font-family: var(--textFont);
+  font-size: 18px;
+  white-space: nowrap;
+}
+
 .imgLogin{
   cursor: pointer;
 }
+.dropdown{
+  position: absolute;
+  top: 110%;
+  right: 0;
+  width: 180px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px var(--variableDos);
+  overflow: hidden;
+  z-index: 100;
+}
 
-.dropdown button {
+.dropdown button{
   width: 100%;
-  padding: 12px 16px;
   border: none;
   color: var(--variableCuatro);
-  background-color: white;
+  background: transparent;
+  padding: 12px 16px;
   text-align: left;
-  font-size: 17px;
-  font-family: var(--textFont);
   cursor: pointer;
+  font-family: var(--textFont);
+  font-size: 17px;
   transition: background-color 0.2s;
 }
 
-.dropdown button:hover {
+.dropdown button:hover{
   background-color: var(--variableUno);
 }
-/*LOGIN*/
+
+/*LOGIN Y REGISTER*/
 .login {
   height: 100vh;
   display: flex;

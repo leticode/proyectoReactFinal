@@ -1,7 +1,6 @@
 import User from "../models/User.js";
-//import { Professionals } from "../models/Professionals.js";
 import { Appointment } from "../models/Appointment.js";
-import { verifyRole, ValidateUserUpdate, validateCreateUser } from "../middleware/auth.validations.js";
+import { verifyRole, ValidateUserUpdate, validateCreateUser, ValidateChangePassword, ValidateUpdateProfile } from "../middleware/auth.validations.js";
 import bcrypt from "bcrypt";
 
 export const getAllUsers = async (req, res) => {
@@ -33,7 +32,6 @@ export const createUser = async (req, res) => {
             })
         }
 
-        //verfcamos que le rol exsta para cuando lo creen desde postman o bruno
         const roleErrors = verifyRole(role);
         if (roleErrors.length > 0) {
             return res.status(400).json({
@@ -52,23 +50,26 @@ export const createUser = async (req, res) => {
             return res.status(400).send({ message: "Usuario existente" })
         }
 
-        //hasheamos la ocntrasena
         const hashedPassword = await bcrypt.hash(password, 10);
+ 
+        let workDayStart = null;
+        let workDayEnd = null;
+
+        //por default
+        if (role === "professional") {
+            workDayStart = 8;
+            workDayEnd = 18;
+        }
 
         const newUser = await User.create({
             firstName, 
             lastName, 
             email,
             password: hashedPassword,
-            role
+            role,
+            workDayStart,
+            workDayEnd
         });
-
-        if (role === "professional") {
-            await User.create({
-                workDayStart: 9,
-                workDayEnd: 20,
-            });
-        }
 
         return res.status(201).send({
             message: "Usuario creado correctamente",
@@ -80,6 +81,7 @@ export const createUser = async (req, res) => {
                 role: newUser.role
             }
         });
+
     } catch(error)
     {
         console.error("Error al crear usuario", error);
@@ -101,14 +103,20 @@ export const updateUser = async (req, res) => {
             });
         }
 
+        const roleErrors = verifyRole(role);
+        if (roleErrors.length > 0) {
+            return res.status(400).json({
+                errors: { role: roleErrors },
+                message: "Datos invalidos"
+            })
+        }
+
         const user = await User.findByPk(id);
         if (!user) {
             return res.status(404).json({
                 message: "el usuario no existe"
             });
         }
-
-        //const previousRole = user.role;
 
         user.firstName = firstName ?? user.firstName;
         user.lastName = lastName ?? user.lastName;
@@ -117,39 +125,6 @@ export const updateUser = async (req, res) => {
 
         //guardamos el usuario
         await user.save();
-
-        /*if (role === "professional") {
-            let professional = await Professionals.findOne({
-                where: { userId: user.id }
-            });
-
-            if (!professional) {
-                professional = await Professionals.create({
-                    firstName,
-                    lastName,
-                    workDayStart: 9,
-                    workDayEnd: 20,
-                    userId: user.id
-                });
-            } else {
-
-                professional.firstName = firstName;
-                professional.lastName = lastName;
-
-                await professional.save();
-            }
-        } else if (previousRole === "professional") {
-            const professional = await Professionals.findOne({
-                where: { userId: user.id }
-            });
-
-            if (professional) {
-                await Appointment.destroy({
-                    where: { professionalId: professional.id }
-                });
-                await professional.destroy();
-            }
-        }*/
 
         res.json({
             message: "Usuario actualizado",
@@ -174,18 +149,6 @@ export const deleteUser = async (req, res) => {
             })
         }
 
-        /*if (user.role === "professional") {
-            const professional = await Professionals.findOne({
-                where: {
-                    userId: user.id
-                }
-            })
-
-            if (professional) {
-                await professional.destroy();
-            }
-        }*/
-
         await user.destroy();
 
         res.json({
@@ -196,6 +159,7 @@ export const deleteUser = async (req, res) => {
         res.status(500).json({message: error.message});
     }
 };
+
 /*PROFILE FETCHS */
 export const updateProfile = async (req, res) => {
     const { id } = req.params;
