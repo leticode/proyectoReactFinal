@@ -36,9 +36,11 @@ Service.belongsTo(Category, {
 
 //service <-> appointment
 Service.hasMany(Appointment, {
-  foreignKey: "serviceId"
+  foreignKey: "serviceId",
+  as: "appointments"
 });
 
 Appointment.belongsTo(Service, {
-  foreignKey: "serviceId"
+  foreignKey: "serviceId",
+  as:"service"
 });
