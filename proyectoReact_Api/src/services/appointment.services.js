@@ -187,6 +187,18 @@ export const getAvailableSlots = async (req, res) => {
             professional.workDayEnd,
             Number(serviceDuration)
         );
+        const today = new Date().toISOString().split("T")[0];
+
+        let validSlots = allSlots;
+
+        if (date === today) {
+            const now = new Date();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+            validSlots = allSlots.filter(slot => {
+                return toMinutes(slot) > currentMinutes;
+            });
+        }
 
         const appointments = await Appointment.findAll({
             where: {
