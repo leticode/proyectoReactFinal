@@ -212,7 +212,7 @@ export const getAvailableSlots = async (req, res) => {
             }
         });
 
-        const availableSlots = allSlots.filter(slot => {
+        const availableSlots = validSlots.filter(slot => {
             const slotStart = toMinutes(slot);
             const slotEnd = getAppointmentEnd(slotStart, Number(serviceDuration));
 
@@ -325,12 +325,42 @@ export const updateAppointmentStatus = async (req, res) => {
                 message: "No podés modificar turnos de otro profesional"
             });
         }
+
+        if (appointment.status === "cancelado") {
+            return res.status(400).json({
+                message: "Los turnos cancelados no pueden modificarse"
+            });
+        }
+
+        if (appointment.status === "terminado") {
+            return res.status(400).json({
+                message: "Los turnos terminados no pueden modificarse"
+            });
+        }
+
+        const now = new Date();
+
+        const appointmentDateTime = new Date(
+            `${appointment.date}T${appointment.hour}`
+        );
+
+        if (status === "terminado" && appointmentDateTime > now) {
+            return res.status(400).json({
+                message: "El turno todavía no finalizó"
+            });
+        }
+
+        if (status === "en curso" && appointmentDateTime > now){
+            return res.status(400).json({
+                message: "El turno todavía no empezó"
+            });
+        }
         appointment.status = status;
 
         await appointment.save();
 
         res.json({
-            message: "Estado actualizado", appointment
+            message: "Estado del turno actualizado correctamente", appointment
         });
 
     } catch (error) {
@@ -354,7 +384,7 @@ export const deleteAppointment = async (req, res) => {
 
         if (loggedUser.role === "superadmin" || loggedUser.role === "customer") {
             return res.status(403).json({
-                message: "No tenes permiso para eliminar turnos"
+                message: "No tenés permitido eliminar turnos"
             });
         }
 
@@ -367,7 +397,7 @@ export const deleteAppointment = async (req, res) => {
         await appointment.destroy();
 
         res.json({
-            message: "Turno eliminado"
+            message: "Turno eliminado correctamente"
         });
 
     } catch (error) {
