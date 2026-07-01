@@ -239,19 +239,20 @@ const Profile = () => {
                     </section>
                 </form>
             </div>
-
-            <div className="delete-account-card">
-                <p>
-                    Una vez eliminada tu cuenta, esta acción no se puede deshacer.
-                </p>
-                <button
-                    type="button"
-                    className="delete-btn"
-                    onClick={() => handleOpenModal(user.id)}
-                >
-                    Eliminar cuenta
-                </button>
-            </div>
+            {user.role !== 'superadmin' && (
+                <div className="delete-account-card">
+                    <p>
+                        Una vez eliminada tu cuenta, esta acción no se puede deshacer.
+                    </p>
+                    <button
+                        type="button"
+                        className="delete-btn"
+                        onClick={() => handleOpenModal(user.id)}
+                    >
+                        Eliminar cuenta
+                    </button>
+                </div>
+            )}
                 {showModal && (
                     <div className="modal-container">
                         <div className="modal">
