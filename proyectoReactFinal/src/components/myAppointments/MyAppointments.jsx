@@ -307,7 +307,7 @@ const MyAppointments = () => {
                                         ) : appointment.status === "cancelado" ? (
                                             "cancelado"
                                         ) : (<select
-                                                value={appointment.status}
+                                            value={appointment.status}
                                             onChange={(e) => {
                                                 if (e.target.value === "cancelado") {
                                                     openCancelModal(appointment.id);
@@ -315,13 +315,13 @@ const MyAppointments = () => {
                                                     handleUpdateStatus(appointment.id, e.target.value);
                                                 }
                                             }}
-                                            >
-                                                {statusOptions.map((status) => (
-                                                    <option key={status.value} value={status.value}>
-                                                        {status.label}
-                                                    </option>
-                                                ))}
-                                            </select>
+                                        >
+                                            {statusOptions.map((status) => (
+                                                <option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </option>
+                                            ))}
+                                        </select>
                                         )}
                                     </td>
                                     {canDelete && (
