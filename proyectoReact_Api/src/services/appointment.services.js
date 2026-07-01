@@ -55,17 +55,17 @@ export const createAppointment = async (req, res) => {
 
         const customer = await User.findByPk(userId);
 
-        if (!customer || customer.role !== "customer") {
-            return res.status(500).json({
-                message: "Este id no corresponde a un customer"
-            });
-        }
-
         const professional = await User.findByPk(professionalId);
 
         if (!professional || professional.role !== "professional") {
             return res.status(400).json({
                 message: "El profesional no existe"
+            });
+        }
+
+        if (!customer || customer.role !== "customer") {
+            return res.status(400).json({
+                message: "Debes tener rol cliente para agendar"
             });
         }
 
@@ -87,12 +87,6 @@ export const createAppointment = async (req, res) => {
         if (loggedUser.role === "customer" && loggedUser.id !== userId) {
             return res.status(403).json({
                 message: "Solo podés crear turnos para tu propio usuario"
-            });
-        }
-
-        if (!customer || customer.role !== "customer") {
-            return res.status(400).json({
-                message: "Debes tener rol cliente para agendar"
             });
         }
 
@@ -187,6 +181,7 @@ export const getAvailableSlots = async (req, res) => {
             professional.workDayEnd,
             Number(serviceDuration)
         );
+
         const today = new Date().toISOString().split("T")[0];
 
         let validSlots = allSlots;
@@ -355,6 +350,7 @@ export const updateAppointmentStatus = async (req, res) => {
                 message: "El turno todavía no empezó"
             });
         }
+
         appointment.status = status;
 
         await appointment.save();
