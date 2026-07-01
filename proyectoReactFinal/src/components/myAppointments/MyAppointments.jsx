@@ -262,7 +262,7 @@ const MyAppointments = () => {
                                 <th className="th-fecha">Fecha</th>
                                 <th>Hora</th>
                                 {!isCustomer && <th>Email</th>}
-                                {!isCustomer && <th>Nombre</th>}
+                                {!isCustomer && <th>Cliente</th>}
                                 <th>Servicio</th>
                                 {!isProfessional && <th>Profesional</th>}
                                 <th>Estado</th>
