@@ -1,110 +1,3 @@
-.header {
-  height: 80px;
-  background-color: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-
-  border-radius: 10px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 0 40px;
-
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.logo {
-  font-size: 28px;
-  font-style: italic;
-  color: var(--variableCinco);
-  text-decoration: none;
-}
-
-.link {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  transition: all 0.3s;
-  color: var(--variableTres);
-  text-decoration: none;
-}
-
-.link:hover {
-  color: var(--variableDos);
-}
-
-.link.active {
-  color: var(--variableUno);
-  font-weight: 600;
-}
-
-.navbar {
-  display: none;
-}
-
-.imgLogin {
-  width: 24px;
-  height: 24px;
-  display: block;
-}
-
-.menu-btn {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.mobile-menu-btn {
-  background: none;
-  border: none;
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-  text-decoration: none;
-  color: var(--variableTres);
-  font-size: 18px;
-}
-
-.menu-line {
-  display: block;
-  height: 2px;
-  width: 24px;
-  background-color: var(--variableDos);
-  transition: all 0.3s;
-}
-
-.menu-line.open:nth-child(1) {
-  transform: rotate(45deg) translateY(6px);
-}
-
-.menu-line.open:nth-child(2) {
-  opacity: 0;
-}
-
-.menu-line.open:nth-child(3) {
-  transform: rotate(-45deg) translateY(-6px);
-}
-
-.mobile-menu {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  padding: 32px 0;
-  background-color: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--variableUno);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  font-family: inherit;
-  font-size: 12px;
-}
-
 .servicios {
   padding: 20px;
   text-align: center;
@@ -1356,8 +1249,6 @@ tbody {
 
 .modal-content {
   background: var(--variableUno);
-  width: 90%;
-  max-width: 500px;
   padding: 2rem;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -1370,11 +1261,12 @@ tbody {
 .professionals-list {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1rem;
 }
 
 .professional-card {
-  width: 100%;
+  width: 50%;
   padding: .1rem;
   border: 1px solid var(--variableTres);
   border-radius: 12px;
@@ -1385,7 +1277,7 @@ tbody {
 }
 
 .professional-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(93, 63, 50, 0.494);
 }
 
