@@ -262,7 +262,7 @@ const MyAppointments = () => {
                                 <th className="th-fecha">Fecha</th>
                                 <th>Hora</th>
                                 {!isCustomer && <th>Email</th>}
-                                {!isCustomer && <th>Nombre</th>}
+                                {!isCustomer && <th>Cliente</th>}
                                 <th>Servicio</th>
                                 {!isProfessional && <th>Profesional</th>}
                                 <th>Estado</th>
@@ -304,17 +304,24 @@ const MyAppointments = () => {
                                                     Cancelar
                                                 </button>
                                             )
-                                        ) : (
-                                            <select
-                                                value={appointment.status}
-                                                onChange={(e) => handleUpdateStatus(appointment.id, e.target.value)}
-                                            >
-                                                {statusOptions.map((status) => (
-                                                    <option key={status.value} value={status.value}>
-                                                        {status.label}
-                                                    </option>
-                                                ))}
-                                            </select>
+                                        ) : appointment.status === "cancelado" ? (
+                                            "cancelado"
+                                        ) : (<select
+                                            value={appointment.status}
+                                            onChange={(e) => {
+                                                if (e.target.value === "cancelado") {
+                                                    openCancelModal(appointment.id);
+                                                } else {
+                                                    handleUpdateStatus(appointment.id, e.target.value);
+                                                }
+                                            }}
+                                        >
+                                            {statusOptions.map((status) => (
+                                                <option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </option>
+                                            ))}
+                                        </select>
                                         )}
                                     </td>
                                     {canDelete && (
