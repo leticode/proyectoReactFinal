@@ -180,6 +180,7 @@ const Admin = () => {
     const addService = () => {
         setNewService(emptyService);
         setModifyID(0);
+        setValidationErrors({});
         setModal(true);
     }
 
@@ -188,6 +189,7 @@ const Admin = () => {
 
         setNewService(service);
         setModifyID(id);
+        setValidationErrors({});
         setModal(true);
     }
 
