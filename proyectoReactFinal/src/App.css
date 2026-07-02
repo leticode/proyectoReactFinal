@@ -566,7 +566,8 @@ input:focus {
   text-align: left;
 }
 
-.modal-form input {
+.modal-form input,
+.modal-form select {
   width: 100%;
   box-sizing: border-box;
   border: 1px solid #d9d9d9;
