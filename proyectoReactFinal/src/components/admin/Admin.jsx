@@ -9,6 +9,7 @@ const Admin = () => {
     const [categories, setCategories] = useState([]);
     const [modal, setModal] = useState(false);
     const [modifyID, setModifyID] = useState(0);
+    const [validationErrors, setValidationErrors] = useState({});
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [serviceIdToDelete, setServiceIdToDelete] = useState(null);
@@ -76,32 +77,30 @@ const Admin = () => {
     };
 
     const fieldsHaveErrors = () => {
-        let error = false;
+        const newErrors = {};
+
         if (newService.categoryId == 0) {
-            toast.error("Elija una categoria");
-            error = true;
-        }
+            newErrors.categoryId = "Elija una categoria";
+        } 
         if (newService.name.trim().length == 0) {
-            toast.error("El nombre no puede estar vacio");
-            error = true;
+            newErrors.name = "El nombre no puede estar vacio";
         }
         if (newService.description.trim().length == 0) {
-            toast.error("La descripcion no puede estar vacio");
-            error = true;
+            newErrors.description = "La descripcion no puede estar vacio";
         }
         if (newService.img.trim().length == 0) {
-            toast.error("La url de la imagen no puede estar vacia");
-            error = true;
+            newErrors.img = "La url de la imagen no puede estar vacia";
         }
         if (newService.duration <= 0) {
-            toast.error("La duracion no puede ser 0 ni negativa");
-            error = true;
+            newErrors.duration = "La duracion no puede ser 0 ni negativa";
         }
         if (newService.price <= 0) {
-            toast.error("El precio no puede ser 0 ni negativo");
-            error = true;
+            newErrors.duration = "El precio no puede ser 0 ni negativo";
         }
-        return error;
+
+        setValidationErrors(newErrors);
+        const hasErrors = Object.keys(newErrors).length > 0; 
+        return hasErrors;        
     }
 
     const handleSubmit = async (e) => {
@@ -261,6 +260,7 @@ const Admin = () => {
                                             </option>
                                         ))}
                                     </select>
+                                    {validationErrors.categoryId && <p>{validationErrors.categoryId}</p>}
                                 </label>
 
                                 <label>
@@ -272,6 +272,7 @@ const Admin = () => {
                                         onChange={handleChange}
                                         placeholder="Nombre del servicio"
                                     />
+                                    {validationErrors.name && <p>{validationErrors.name}</p>}
                                 </label>
 
                                 <label>
@@ -283,6 +284,7 @@ const Admin = () => {
                                         onChange={handleChange}
                                         placeholder="URL de la imagen"
                                     />
+                                    {validationErrors.img && <p>{validationErrors.img}</p>}
                                 </label>
 
                                 <label>
@@ -294,6 +296,7 @@ const Admin = () => {
                                         onChange={handleChange}
                                         placeholder="Precio del servicio"
                                     />
+                                    {validationErrors.price && <p>{validationErrors.price}</p>}
                                 </label>
 
                                 <label>
@@ -305,6 +308,7 @@ const Admin = () => {
                                         onChange={handleChange}
                                         placeholder="Descripcion del servicio"
                                     />
+                                    {validationErrors.description && <p>{validationErrors.description}</p>}
                                 </label>
                                 
                                 <label>
@@ -316,6 +320,7 @@ const Admin = () => {
                                         onChange={handleChange}
                                         placeholder="Duracion del servicio"
                                     />
+                                    {validationErrors.duration && <p>{validationErrors.duration}</p>}
                                 </label>
 
                                 <div className="modal-actions">
