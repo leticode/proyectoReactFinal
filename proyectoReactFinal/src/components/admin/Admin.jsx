@@ -95,7 +95,7 @@ const Admin = () => {
             newErrors.duration = "La duracion no puede ser 0 ni negativa";
         }
         if (newService.price <= 0) {
-            newErrors.duration = "El precio no puede ser 0 ni negativo";
+            newErrors.price = "El precio no puede ser 0 ni negativo";
         }
 
         setValidationErrors(newErrors);
@@ -262,7 +262,7 @@ const Admin = () => {
                                             </option>
                                         ))}
                                     </select>
-                                    {validationErrors.categoryId && <p>{validationErrors.categoryId}</p>}
+                                    {validationErrors.categoryId && <p className="validationError">{validationErrors.categoryId}</p>}
                                 </label>
 
                                 <label>
@@ -274,7 +274,7 @@ const Admin = () => {
                                         onChange={handleChange}
                                         placeholder="Nombre del servicio"
                                     />
-                                    {validationErrors.name && <p>{validationErrors.name}</p>}
+                                    {validationErrors.name && <p className="validationError">{validationErrors.name}</p>}
                                 </label>
 
                                 <label>
@@ -286,7 +286,7 @@ const Admin = () => {
                                         onChange={handleChange}
                                         placeholder="URL de la imagen"
                                     />
-                                    {validationErrors.img && <p>{validationErrors.img}</p>}
+                                    {validationErrors.img && <p className="validationError">{validationErrors.img}</p>}
                                 </label>
 
                                 <label>
@@ -298,7 +298,7 @@ const Admin = () => {
                                         onChange={handleChange}
                                         placeholder="Precio del servicio"
                                     />
-                                    {validationErrors.price && <p>{validationErrors.price}</p>}
+                                    {validationErrors.price && <p className="validationError">{validationErrors.price}</p>}
                                 </label>
 
                                 <label>
@@ -310,7 +310,7 @@ const Admin = () => {
                                         onChange={handleChange}
                                         placeholder="Descripcion del servicio"
                                     />
-                                    {validationErrors.description && <p>{validationErrors.description}</p>}
+                                    {validationErrors.description && <p className="validationError">{validationErrors.description}</p>}
                                 </label>
                                 
                                 <label>
@@ -322,7 +322,7 @@ const Admin = () => {
                                         onChange={handleChange}
                                         placeholder="Duracion del servicio"
                                     />
-                                    {validationErrors.duration && <p>{validationErrors.duration}</p>}
+                                    {validationErrors.duration && <p className="validationError">{validationErrors.duration}</p>}
                                 </label>
 
                                 <div className="modal-actions">

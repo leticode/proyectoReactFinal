@@ -598,6 +598,10 @@ input:focus {
   background: rgba(0, 0, 0, 0.04);
 }
 
+.validationError{
+  color: red;
+}
+
 .home-main {
   width: 100%;
   min-height: 100vh;
