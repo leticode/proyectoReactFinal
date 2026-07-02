@@ -170,6 +170,12 @@ export const getAvailableSlots = async (req, res) => {
 
         const professional = await User.findByPk(professionalId);
 
+        console.log({
+            professionalId,
+            date,
+            serviceDuration
+        });
+
         if (!professional || professional.role !== "professional") {
             return res.status(404).json({
                 message: "Profesional no encontrado"
@@ -181,19 +187,6 @@ export const getAvailableSlots = async (req, res) => {
             professional.workDayEnd,
             Number(serviceDuration)
         );
-
-        const today = new Date().toISOString().split("T")[0];
-
-        let validSlots = allSlots;
-
-        if (date === today) {
-            const now = new Date();
-            const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-            validSlots = allSlots.filter(slot => {
-                return toMinutes(slot) > currentMinutes;
-            });
-        }
 
         const appointments = await Appointment.findAll({
             where: {
@@ -207,7 +200,7 @@ export const getAvailableSlots = async (req, res) => {
             }
         });
 
-        const availableSlots = validSlots.filter(slot => {
+        const availableSlots = allSlots.filter(slot => {
             const slotStart = toMinutes(slot);
             const slotEnd = getAppointmentEnd(slotStart, Number(serviceDuration));
 
@@ -222,6 +215,7 @@ export const getAvailableSlots = async (req, res) => {
             });
         });
 
+        console.log("Disponibles:", availableSlots);
         return res.json(availableSlots);
 
     } catch (error) {
@@ -345,7 +339,7 @@ export const updateAppointmentStatus = async (req, res) => {
             });
         }
 
-        if (status === "en curso" && appointmentDateTime > now){
+        if (status === "en curso" && appointmentDateTime > now) {
             return res.status(400).json({
                 message: "El turno todavía no empezó"
             });
