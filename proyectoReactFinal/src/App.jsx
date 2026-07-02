@@ -53,7 +53,7 @@ function App() {
             <Route path="/myappointments" element={<MyAppointments/>}/>
           </Route>
 
-          <Route element={<ProtectedRoutes allowedRoles={['superadmin','admin', 'professional']}/>}>
+          <Route element={<ProtectedRoutes allowedRoles={['superadmin','admin']}/>}>
               <Route path="/admin" element={<Admin />}/>
           </Route>
     
